@@ -24,17 +24,15 @@ class _SplashScreenState extends State<SplashScreen> {
     _route(); // Call the navigation function
   }
 
-
-
   void _route() async {
     await Future.delayed(Duration(seconds: 2));
 
     bool loggedIn = await Get.find<AuthController>().isLoggedIn();
 
     if (loggedIn) {
-      Get.offNamed(RouteHelper.getDashboardRoute()); //  remove splash from stack
+      Get.offNamed(RouteHelper.getDashboardRoute()); // remove splash from stack
     } else {
-      Get.offNamed(RouteHelper.getLoginRoute()); //  remove splash from stack
+      Get.offNamed(RouteHelper.getLoginRoute()); // remove splash from stack
     }
   }
 

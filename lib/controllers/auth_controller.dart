@@ -124,7 +124,7 @@ class AuthController extends GetxController implements GetxService {
           await Future.delayed(Duration(seconds: 1), () {});
           // TODO : Hidden for deployment
           showCustomSnackBar(
-              "${responseData['message']} OTP: ${responseData['OTP']}",
+              "${responseData['message']}",
               isError: false,
               isSuccess: true);
           Get.toNamed(RouteHelper.getVerifyOtpRoute(phone));

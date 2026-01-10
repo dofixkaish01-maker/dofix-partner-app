@@ -34,6 +34,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isActive = true; // API se aayega
+
+
     return GetBuilder<DashBoardController>(builder: (controller) {
       return SafeArea(
         child: Scaffold(
@@ -56,6 +59,57 @@ class _AccountScreenState extends State<AccountScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
+                  sizedBox10(),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: isActive
+                            ? [Colors.green.shade400, Colors.green.shade600]
+                            : [Colors.red.shade400, Colors.red.shade600],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.15),
+                          blurRadius: 10,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Account Status",
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              isActive ? "Active" : "Inactive",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Icon(
+                          isActive ? Icons.check_circle : Icons.cancel,
+                          color: Colors.white,
+                          size: 32,
+                        )
+                      ],
+                    ),
+                  ),
                   sizedBox20(),
                   GestureDetector(
                     onTap: () {
@@ -78,7 +132,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       ],
                     ),
                   ),
-                  sizedBox10(),
+                sizedBox10(),
                   Divider(color: Colors.black.withAlpha(38), thickness: 1),
                   sizedBox10(),
                   GestureDetector(
@@ -272,12 +326,65 @@ class _AccountScreenState extends State<AccountScreen> {
                   sizedBox50(),
                   CustomButtonWidget(
                     buttonText: 'Log Out',
-                    onPressed: () {
-                      Get.find<AuthController>().logout();
-                    },
                     transparent: true,
                     borderSideColor: Colors.red,
                     textColor: Colors.red,
+                    onPressed: () {
+                      Get.dialog(
+                        AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                          contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                          actionsPadding: const EdgeInsets.all(16),
+
+                          title: Row(
+                            children: const [
+                              Icon(Icons.logout, color: Colors.red),
+                              SizedBox(width: 8),
+                              Text(
+                                "Confirm Logout",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+
+                          content: const Text(
+                            "Are you sure you want to log out from your account?",
+                            style: TextStyle(fontSize: 14, color: Colors.black54),
+                          ),
+
+                          actions: [
+                            TextButton(
+                              onPressed: () => Get.back(),
+                              child: const Text(
+                                "Cancel",
+                                style: TextStyle(color: Colors.black54),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                              ),
+                              onPressed: () {
+                                Get.back(); // close dialog
+                                Get.find<AuthController>().logout();
+                              },
+                              child: const Text(
+                                "Log Out",
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ],
+                        ),
+                        barrierDismissible: false,
+                      );
+                    },
                   ),
                 ],
               ),
