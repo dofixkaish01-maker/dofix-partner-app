@@ -123,10 +123,10 @@ class AuthController extends GetxController implements GetxService {
           hideLoading();
           await Future.delayed(Duration(seconds: 1), () {});
           // TODO : Hidden for deployment
-          // showCustomSnackBar(
-          //     "${responseData['message']} OTP: ${responseData['OTP']}",
-          //     isError: false,
-          //     isSuccess: true);
+          showCustomSnackBar(
+              "${responseData['message']} OTP: ${responseData['OTP']}",
+              isError: false,
+              isSuccess: true);
           Get.toNamed(RouteHelper.getVerifyOtpRoute(phone));
         } else {
           hideLoading();
@@ -357,13 +357,9 @@ class AuthController extends GetxController implements GetxService {
     isLoggedIn();
   }
 
-  Future<void> isLoggedIn() async {
+  Future<bool> isLoggedIn() async {
     bool value = await authRepo.isLoggedIn();
-    if (value) {
-      Get.toNamed(RouteHelper.getDashboardRoute());
-    } else {
-      Get.toNamed(RouteHelper.getLoginRoute());
-    }
+    return value; // Return the value of isLoggedIn
   }
 
   void logout() {

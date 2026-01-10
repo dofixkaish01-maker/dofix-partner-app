@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/dashboard_controller.dart';
+import '../../../helper/route_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({
@@ -23,12 +24,21 @@ class _SplashScreenState extends State<SplashScreen> {
     _route(); // Call the navigation function
   }
 
-  void _route() {
-    Timer(const Duration(seconds: 2), () {
-      Get.find<AuthController>().isLoggedIn();
-      // Get.offNamed(RouteHelper.getLoginRoute()); // Navigate after 2 seconds
-    });
+
+
+  void _route() async {
+    await Future.delayed(Duration(seconds: 2));
+
+    bool loggedIn = await Get.find<AuthController>().isLoggedIn();
+
+    if (loggedIn) {
+      Get.offNamed(RouteHelper.getDashboardRoute()); //  remove splash from stack
+    } else {
+      Get.offNamed(RouteHelper.getLoginRoute()); //  remove splash from stack
+    }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
