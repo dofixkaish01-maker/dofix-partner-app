@@ -1,0 +1,2 @@
+/Users/iitpl/Documents/Flutter/projects/dofix_technichian/android/app/.cxx/Debug/4o4s425u/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/iitpl/Documents/Flutter/projects/dofix_technichian/android/app/.cxx/Debug/4o4s425u/armeabi-v7a/CMakeFiles/rebuild_cache.dir
