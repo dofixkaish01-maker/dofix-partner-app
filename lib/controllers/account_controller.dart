@@ -122,6 +122,7 @@ class AccountController extends GetxController implements GetxService {
 
   //fetch withdrawn methods
   WithdrawMethodModel? withdrawMethodModel;
+
   Future<void> fetchWithdrawnMethods() async {
     showLoading();
     try {
@@ -147,6 +148,7 @@ class AccountController extends GetxController implements GetxService {
   final TextEditingController withdrawAmountController =
       TextEditingController();
   final TextEditingController withdrawIdController = TextEditingController();
+
   Future<void> withdrawMyBalance({required BuildContext context}) async {
     if (withdrawAmountController.text.isEmpty &&
         withdrawAmountController.text != '' &&
@@ -208,6 +210,7 @@ class AccountController extends GetxController implements GetxService {
 
   //Withdraw listing
   WithdrawListingModel? withdrawListingModel;
+
   Future<void> fetchWithdrawListing() async {
     showLoading();
     try {
@@ -281,6 +284,25 @@ class AccountController extends GetxController implements GetxService {
       hideLoading();
       update();
     }
+  }
+
+  // status
+  @override
+  void onInit() {
+    super.onInit();
+    syncAccountStatusFromDashboard(); // sirf API call
+  }
+
+  int? accountIsActive;
+
+  void syncAccountStatusFromDashboard() {
+    final dashboard = Get.find<DashBoardController>();
+
+    accountIsActive =
+        dashboard.providerDashboardModel.content?.providerInfo?.isActive ?? 0;
+
+    log("isActive (Dashboard) => $accountIsActive");
+    update();
   }
 
   //Provider Reviews
@@ -375,6 +397,7 @@ class AccountController extends GetxController implements GetxService {
   }
 
   SubscriptionPackage? mySubscriptionDetails;
+
   Future<void> fetchMySubscriptionDetails() async {
     showLoading();
     try {

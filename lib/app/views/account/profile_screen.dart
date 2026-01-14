@@ -60,55 +60,55 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Column(
                 children: [
                   sizedBox10(),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: isActive
-                            ? [Colors.green.shade400, Colors.green.shade600]
-                            : [Colors.red.shade400, Colors.red.shade600],
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 10,
-                          offset: const Offset(0, 6),
+                  GetBuilder<AccountController>(
+                    builder: (controller) {
+                      if (controller.accountIsActive == null) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      bool isActive = controller.accountIsActive == 1;
+
+                      return Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: isActive
+                                ? [Colors.green.shade400, Colors.green.shade600]
+                                : [Colors.red.shade400, Colors.red.shade600],
+                          ),
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              "Account Status",
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 13,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Account Status",
+                                  style: TextStyle(color: Colors.white70),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  isActive ? "Active" : "Inactive",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              isActive ? "Active" : "Inactive",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            Icon(
+                              isActive ? Icons.check_circle : Icons.cancel,
+                              color: Colors.white,
+                              size: 32,
+                            )
                           ],
                         ),
-                        Icon(
-                          isActive ? Icons.check_circle : Icons.cancel,
-                          color: Colors.white,
-                          size: 32,
-                        )
-                      ],
-                    ),
+                      );
+                    },
                   ),
                   sizedBox20(),
                   GestureDetector(
