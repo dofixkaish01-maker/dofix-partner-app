@@ -141,26 +141,6 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
       return false;
     }
 
-    // Pan Card Number & Image
-    if (_panCardNumberController.text.isEmpty) {
-      Get.snackbar('Error', 'Please enter your PAN card number');
-      return false;
-    }
-    if (authController.panImage == null) {
-      Get.snackbar('Error', 'Please upload your PAN card image');
-      return false;
-    }
-
-    // Driving License Number & Image
-    if (_drivingLicenseController.text.isEmpty) {
-      Get.snackbar('Error', 'Please enter your Driving License number');
-      return false;
-    }
-    if (authController.drivingLicencesImage == null) {
-      Get.snackbar('Error', 'Please upload your Driving License image');
-      return false;
-    }
-
     return true;
   }
 
@@ -419,54 +399,44 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                                 true,
                                 _aadharCardImageController,
                                 TextInputType.number,
-                                (String value) {
-                                  Get.find<AuthController>().adharNumber =
-                                      value;
-                                },
-                                (File value) {
-                                  Get.find<AuthController>().adharImage = value;
-                                },
+                                (v) => authController.adharNumber = v,
+                                (f) => authController.adharImage = f,
                                 1,
+                                isRequired: true, //
                               ),
+
                               sizedBox20(),
 
                               /// Pan Card & Image Upload
                               buildDocumentField(
-                                "Pan Card Number",
+                                "Pan Card Number (Optional)",
                                 _panCardNumberController,
-                                "Pan Card Image",
+                                "Pan Card Image (Optional)",
                                 context,
                                 false,
                                 _panCardImageController,
                                 TextInputType.text,
-                                (String value) {
-                                  Get.find<AuthController>().panNumber = value;
-                                },
-                                (File value) {
-                                  Get.find<AuthController>().panImage = value;
-                                },
+                                (v) => authController.panNumber = v,
+                                (f) => authController.panImage = f,
                                 2,
+                                isRequired: false, // OPTIONAL
                               ),
+
                               sizedBox20(),
 
                               /// Driving License & Image Upload
                               buildDocumentField(
-                                "Driving License Number",
+                                "Driving License Number (Optional)",
                                 _drivingLicenseController,
-                                "Driving License Image",
+                                "Driving License Image (Optional)",
                                 context,
                                 false,
                                 _drivingLicenseImageController,
                                 TextInputType.text,
-                                (String value) {
-                                  Get.find<AuthController>()
-                                      .drivingLicencesNumber = value;
-                                },
-                                (File value) {
-                                  Get.find<AuthController>()
-                                      .drivingLicencesImage = value;
-                                },
+                                (v) => authController.drivingLicencesNumber = v,
+                                (f) => authController.drivingLicencesImage = f,
                                 3,
+                                isRequired: false, // OPTIONAL
                               ),
                               sizedBox30(),
                               sizedBox30(),

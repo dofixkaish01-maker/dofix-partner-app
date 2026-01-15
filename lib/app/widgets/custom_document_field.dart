@@ -14,7 +14,7 @@ Widget buildDocumentField(
   TextInputType inputType,
   Function(String value) number,
   Function(File) image,
-  int imageType, // 1 for adhar, 2 for pan, 3 for driving license
+  int imageType, {bool isRequired=true} // 1 for adhar, 2 for pan, 3 for driving license
 ) {
   String hintText = "Upload image";
   File? selectedImageFile;
@@ -26,9 +26,10 @@ Widget buildDocumentField(
           showTitle: true,
           isAmount: isAmount,
           hintText: title,
-          validation: _validateRequired,
+          validation: isRequired ? _validateRequired : null,
           controller: controller,
           inputType: inputType,
+          isRequired: isRequired ? true : false,
           onChanged: (value) {
             number(value);
           },
@@ -42,7 +43,7 @@ Widget buildDocumentField(
           children: [
             Text(imageLabel),
             CustomTextField(
-              validation: _validateRequired,
+              validation: isRequired ? _validateRequired : null,
               readOnly: true,
               controller: imageController,
               onTap: () async {

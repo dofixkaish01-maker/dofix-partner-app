@@ -34,6 +34,8 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
   final _cancelChequeImageController = TextEditingController();
   final _profileImage = TextEditingController();
 
+  final _passbookImageController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -94,11 +96,19 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
                           children: [
                             sizedBox30(),
                             Text(
-                              "Account Setup",
+                              "Bank Details",
                               style: albertSansBold.copyWith(
                                 fontSize: Dimensions.fontSize30,
                               ),
                             ),
+                            sizedBox30(),
+
+                            /// 🔥 PROFILE SHIFTED TO TOP (NO DELETE)
+                            buildInteractiveProfile(context),
+                            sizedBox10(),
+                            Text("Upload Profile Photo",
+                                style: TextStyle(
+                                    color: Colors.grey)),
                             sizedBox30(),
 
                             /// Company Name
@@ -197,9 +207,9 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
 
                             /// Driving License & Image Upload
                             buildDocumentField(
-                                "Cancelled Cheque image",
+                                "Check Image",
                                 _cancelChequeImageController,
-                                "Cancelled Cheque image",
+                                "Check Image",
                                 context,
                                 _cancelChequeImageController, (value) {
                               Get.find<AuthController>().cancelchequeNumber =
@@ -212,9 +222,9 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
                             }, false),
                             sizedBox20(),
                             buildDocumentField(
-                              "Profile Image",
+                              "Passbook Photo",
                               _profileImage,
-                              "Profile Image",
+                              "Passbook Photo",
                               context,
                               _profileImage,
                               (value) {
@@ -319,5 +329,55 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
     return (value == null || value.trim().isEmpty)
         ? 'This field is required'
         : null;
+  }
+
+  //========= profile ===========
+Widget buildInteractiveProfile(BuildContext context) {
+    return Center(
+      child: GestureDetector(
+        onTap: () async {
+          var value = await pickFile(
+            context,
+            frontCameraOnly: true,
+          );
+
+          if (value != null && value.containsKey("filename")) {
+            _profileImage.text = value["filename"];
+            Get.find<AuthController>().profileImage =
+                value["file"] as File;
+            Get.find<AuthController>().update();
+          }
+        },
+        child: Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            GetBuilder<AuthController>(
+              builder: (controller) {
+                return CircleAvatar(
+                  radius: 55,
+                  backgroundColor: Colors.grey.shade300,
+                  backgroundImage: controller.profileImage != null
+                      ? FileImage(controller.profileImage!)
+                      : null,
+                  child: controller.profileImage == null
+                      ? Icon(Icons.person,
+                          size: 60, color: Colors.white)
+                      : null,
+                );
+              },
+            ),
+            Container(
+              padding: EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.camera_alt,
+                  size: 20, color: Colors.white),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

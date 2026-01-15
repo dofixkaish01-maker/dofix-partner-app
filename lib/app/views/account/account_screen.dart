@@ -5,6 +5,7 @@ import 'package:dofix_technichian/utils/date_converter.dart';
 import 'package:dofix_technichian/utils/theme.dart';
 import 'package:dofix_technichian/views/payment_method_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../../controllers/account_controller.dart';
 import '../../../widgets/custom_snack_bar.dart';
@@ -31,60 +32,191 @@ class PaiseScreen extends StatefulWidget {
 class _PaiseScreenState extends State<PaiseScreen> {
   final AccountController accountController = Get.find();
 
-  void showRechargeDialog(BuildContext context) {
-    final TextEditingController amountController = TextEditingController();
+void showRechargeDialog(BuildContext context) {
+  final TextEditingController amountController = TextEditingController();
+  final dashCtrl = Get.find<DashBoardController>();
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Recharge Wallet'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: amountController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: 'Enter recharge amount',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: primaryAppColor),
-                  borderRadius: BorderRadius.circular(5.0),
+  int minAmount = 2000;
+
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: false,
+    barrierLabel: "",
+    transitionDuration: const Duration(milliseconds: 350),
+    pageBuilder: (_, __, ___) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+
+          /// SAME BALANCE AS DASHBOARD
+          double receivableAmount = double.tryParse(
+                dashCtrl.providerDashboardModel.content
+                        ?.providerInfo
+                        ?.owner
+                        ?.account
+                        ?.accountReceivable
+                        ?.toString() ??
+                    "0",
+              ) ??
+              0;
+
+          int currentBalance = dashCtrl
+              .getTransactionAmountAmount(0.0, receivableAmount)
+              .toInt();
+
+          int amount = int.tryParse(amountController.text) ?? 0;
+          int totalBalance = currentBalance + amount;
+
+          bool isValidAmount = totalBalance >= minAmount;
+
+          return Center(
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: primaryAppColor),
-                  borderRadius: BorderRadius.circular(5.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+
+                    /// TITLE
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            "Recharge Wallet",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: const Icon(Icons.close),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    /// INFO
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "Minimum wallet balance must be ₹$minAmount",
+                        style: const TextStyle(
+                          color: Colors.orange,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    /// CURRENT BALANCE
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Current Balance: ₹$currentBalance",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    /// AMOUNT FIELD
+                    TextField(
+                      controller: amountController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      decoration: InputDecoration(
+                        prefixText: "₹ ",
+                        hintText: "Enter Recharge Amount",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onChanged: (_) => setState(() {}),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    /// STATUS
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        isValidAmount
+                            ? "Final Balance: ₹$totalBalance"
+                            : "Add ₹${minAmount - totalBalance} more to continue",
+                        style: TextStyle(
+                          color:
+                              isValidAmount ? Colors.green : Colors.redAccent,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    /// BUTTON
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: isValidAmount
+                            ? () async {
+                                Navigator.pop(context);
+
+                                await accountController.userWalletRecharge(
+                                  amount: amount.toString(),
+                                  providerId: dashCtrl
+                                          .providerDashboardModel
+                                          .content
+                                          ?.providerInfo
+                                          ?.id ??
+                                      "",
+                                );
+                              }
+                            : null,
+                        child: const Text(
+                          "Proceed to Pay",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primaryAppColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await accountController.userWalletRecharge(
-                  amount: amountController.text,
-                  providerId: Get.find<DashBoardController>()
-                          .providerDashboardModel
-                          .content
-                          ?.providerInfo
-                          ?.id ??
-                      "",
-                );
-              },
-              child: Text(
-                'Proceed',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+          );
+        },
+      );
+    },
+    transitionBuilder: (_, animation, __, child) {
+      return SlideTransition(
+        position:
+            Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero)
+                .animate(animation),
+        child: ScaleTransition(scale: animation, child: child),
+      );
+    },
+  );
+}
 
   @override
   void initState() {
@@ -133,7 +265,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
 
         transactionAmount = controller.getTransactionAmountAmount(
             // payableAmount, receivableAmount);
-            0.0,
+            100.0,
             receivableAmount);
 
         TransactionType transactionType =
