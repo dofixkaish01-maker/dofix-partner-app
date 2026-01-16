@@ -210,6 +210,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                       // ),
                       child: Row(
                         children: [
+                          Icon(Icons.miscellaneous_services,
+                                  color: Color(0xFF207FA7)),
+                              const SizedBox(width: 8),
                           /// CATEGORY
                           Expanded(
                             child: Text(
@@ -223,28 +226,50 @@ class DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ),
 
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                const TextSpan(
-                                  text: "Min Balance: ",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "₹${category.minimumBalance}",
-                                  style: const TextStyle(
-                                    color: Colors.redAccent,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+GestureDetector(
+  onTap: () {
+    // future me recharge dialog ya info dikha sakte ho
+    // showRechargeDialog(context);
+  },
+  child: Container(
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    decoration: BoxDecoration(
+      color: Colors.redAccent.withOpacity(0.08),
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(
+        color: Colors.redAccent.withOpacity(0.4),
+      ),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(width: 6),
+        Text.rich(
+          TextSpan(
+            children: [
+              const TextSpan(
+                text: "Min Balance ",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+              TextSpan(
+                text: "₹${category.minimumBalance}",
+                style: const TextStyle(
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+),
                         ],
                       ),
                     );
