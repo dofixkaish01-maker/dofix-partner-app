@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:dofix_technichian/controllers/dashboard_controller.dart';
 import 'package:dofix_technichian/data/repo/account_repo.dart';
+import 'package:dofix_technichian/data/repo/auth_repo.dart';
 import 'package:dofix_technichian/model/account/provider_review_model.dart';
 import 'package:dofix_technichian/model/user_profile_model.dart';
 import 'package:dofix_technichian/model/wallet_history_model.dart';
@@ -286,11 +287,35 @@ class AccountController extends GetxController implements GetxService {
     }
   }
 
+  Rx<CategoryInfo?> categoryInfo = Rx<CategoryInfo?>(null);
+  final AuthRepo authRepo = Get.find<AuthRepo>();
+
+  Future<void> fetchCategory() async {
+    try {
+      Response response = await authRepo.getAccountInfo();
+
+      if (response.statusCode == 200) {
+        final body = response.body;
+
+        final categoryJson = body['content']['category_info'];
+
+        categoryInfo.value = CategoryInfo.fromJson(categoryJson);
+      }
+    } catch (e) {
+      print("Category fetch error: $e");
+    }
+  }
+
   // status
   @override
   void onInit() {
     super.onInit();
     syncAccountStatusFromDashboard(); // sirf API call
+    //   categoryInfo.value = CategoryInfo(
+    //   minimumBalance: 3000,
+    //   categoryName: "Home painting",
+    // );
+    fetchCategory();
   }
 
   int? accountIsActive;

@@ -3,12 +3,14 @@ class ProviderReviewModel {
   final String? message;
   final Content? content;
   final List<dynamic>? errors;
+  final CategoryInfo? categoryInfo;
 
   ProviderReviewModel({
     this.responseCode,
     this.message,
     this.content,
     this.errors,
+    this.categoryInfo,
   });
 }
 
@@ -21,6 +23,24 @@ class Content {
     this.rating,
   });
 }
+
+class CategoryInfo {
+  final int minimumBalance;
+  final String categoryName;
+
+  CategoryInfo({
+    required this.minimumBalance,
+    required this.categoryName,
+  });
+
+  factory CategoryInfo.fromJson(Map<String, dynamic> json) {
+    return CategoryInfo(
+      minimumBalance: json['minimum_balance'] ?? 0,
+      categoryName: json['category_name'] ?? '',
+    );
+  }
+}
+
 
 class Rating {
   final int? ratingCount;

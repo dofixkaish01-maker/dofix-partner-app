@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:dofix_technichian/controllers/auth_controller.dart';
 import 'package:dofix_technichian/controllers/dashboard_controller.dart';
 import 'package:dofix_technichian/utils/images.dart';
+import 'package:dofix_technichian/utils/sizeboxes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/account_controller.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_nav_bar.dart';
 import '../account/profile_screen.dart';
@@ -42,6 +44,8 @@ class DashboardScreenState extends State<DashboardScreen> {
       setState(() {});
     });
   }
+
+  final AccountController authController = Get.find<AccountController>();
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +170,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                           size: 30,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -178,15 +182,86 @@ class DashboardScreenState extends State<DashboardScreen> {
                         _setPage(index);
                       },
                     ),
-              body:
-                  // Naya_kaam()
-                  PageView.builder(
-                controller: _pageController,
-                itemCount: controller.screens.length,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return controller.screens[index];
-                },
+              body: Column(
+                children: [
+                  /// ================= CATEGORY INFO =================
+                  Obx(() {
+                    final category = authController.categoryInfo.value;
+
+                    if (category == null) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      );
+                    }
+
+                    return Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      // decoration: BoxDecoration(
+                      //   color: Colors.redAccent.withOpacity(0.08),
+                      //   borderRadius: BorderRadius.circular(10),
+                      //   border: Border.all(
+                      //     color: Colors.redAccent.withOpacity(0.4),
+                      //   ),
+                      // ),
+                      child: Row(
+                        children: [
+                          /// CATEGORY
+                          Expanded(
+                            child: Text(
+                              category.categoryName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: "Min Balance: ",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "₹${category.minimumBalance}",
+                                  style: const TextStyle(
+                                    color: Colors.redAccent,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+
+                  /// ================= SCREENS =================
+                  Expanded(
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: controller.screens.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return controller.screens[index];
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

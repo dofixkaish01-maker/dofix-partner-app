@@ -32,191 +32,365 @@ class PaiseScreen extends StatefulWidget {
 class _PaiseScreenState extends State<PaiseScreen> {
   final AccountController accountController = Get.find();
 
-void showRechargeDialog(BuildContext context) {
-  final TextEditingController amountController = TextEditingController();
-  final dashCtrl = Get.find<DashBoardController>();
+  void showRechargeDialog(BuildContext context) {
+    final TextEditingController amountController = TextEditingController();
 
-  int minAmount = 2000;
+    final dashCtrl = Get.find<DashBoardController>();
+    final authCtrl = Get.find<AccountController>();
 
-  showGeneralDialog(
-    context: context,
-    barrierDismissible: false,
-    barrierLabel: "",
-    transitionDuration: const Duration(milliseconds: 350),
-    pageBuilder: (_, __, ___) {
-      return StatefulBuilder(
-        builder: (context, setState) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierLabel: "",
+      transitionDuration: const Duration(milliseconds: 350),
+      pageBuilder: (_, __, ___) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            /// ================= CATEGORY DATA =================
+            final category = authCtrl.categoryInfo.value;
+            int minAmount = category?.minimumBalance ?? 0;
+            String categoryName = category?.categoryName ?? "Service";
 
-          /// SAME BALANCE AS DASHBOARD
-          double receivableAmount = double.tryParse(
-                dashCtrl.providerDashboardModel.content
-                        ?.providerInfo
-                        ?.owner
-                        ?.account
-                        ?.accountReceivable
-                        ?.toString() ??
-                    "0",
-              ) ??
-              0;
+            /// ================= CURRENT BALANCE =================
+            double receivableAmount = double.tryParse(
+                  dashCtrl.providerDashboardModel.content?.providerInfo?.owner
+                          ?.account?.accountReceivable
+                          ?.toString() ??
+                      "0",
+                ) ??
+                0;
 
-          int currentBalance = dashCtrl
-              .getTransactionAmountAmount(0.0, receivableAmount)
-              .toInt();
+            int currentBalance = dashCtrl
+                .getTransactionAmountAmount(0.0, receivableAmount)
+                .toInt();
 
-          int amount = int.tryParse(amountController.text) ?? 0;
-          int totalBalance = currentBalance + amount;
+            int amount = int.tryParse(amountController.text) ?? 0;
+            int totalBalance = currentBalance + amount;
 
-          bool isValidAmount = totalBalance >= minAmount;
+            bool isValidAmount = totalBalance >= minAmount;
+            int remainingAmount = isValidAmount ? 0 : minAmount - totalBalance;
 
-          return Center(
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-
-                    /// TITLE
-                    Row(
+            return Center(
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Expanded(
-                          child: Text(
-                            "Recharge Wallet",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                        /// ================= HEADER =================
+                        Row(
+                          children: [
+                            const Icon(Icons.account_balance_wallet,
+                                color: Color(0xFF207FA7)),
+                            const SizedBox(width: 8),
+                            const Expanded(
+                              child: Text(
+                                "Recharge Wallet",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () => Navigator.pop(context),
+                              child: const Icon(Icons.close),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        /// ================= SERVICE INFO =================
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF207FA7).withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.miscellaneous_services,
+                                  color: Color(0xFF207FA7)),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  "$categoryName Service",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        /// ================= MIN BALANCE INFO =================
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.info_outline,
+                                  color: Colors.orange),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  "Minimum wallet balance required for $categoryName service is ₹$minAmount",
+                                  style: const TextStyle(
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        /// ================= PREMIUM BALANCE CARD =================
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFF207FA7),
+                                Color(0xFF3FA9D6),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color:
+                                    const Color(0xFF207FA7).withOpacity(0.35),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Wallet Balance",
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                "₹ $currentBalance",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 14),
+                              Container(height: 1, color: Colors.white24),
+                              const SizedBox(height: 12),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  _balanceItem(
+                                    title: "Existing",
+                                    amount: currentBalance,
+                                    icon: Icons.account_balance_wallet_outlined,
+                                  ),
+                                  _balanceItem(
+                                    title: "Recharge",
+                                    amount: amount,
+                                    icon: Icons.add_circle_outline,
+                                  ),
+                                  _balanceItem(
+                                    title: "After Pay",
+                                    amount: totalBalance,
+                                    icon: Icons.trending_up,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        /// ================= AMOUNT FIELD =================
+                        TextField(
+                          controller: amountController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          decoration: InputDecoration(
+                            prefixText: "₹ ",
+                            labelText: "Enter Recharge Amount",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
+                          onChanged: (_) => setState(() {}),
                         ),
-                        InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: const Icon(Icons.close),
+
+                        const SizedBox(height: 14),
+
+                        /// ================= STATUS =================
+                        Row(
+                          children: [
+                            Icon(
+                              isValidAmount
+                                  ? Icons.check_circle
+                                  : Icons.warning_amber_rounded,
+                              color: isValidAmount
+                                  ? Colors.green
+                                  : Colors.redAccent,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                isValidAmount
+                                    ? "You're good to go"
+                                    : "Add ₹$remainingAmount more",
+                                style: TextStyle(
+                                  color: isValidAmount
+                                      ? Colors.green
+                                      : Colors.redAccent,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 22),
+
+                        /// ================= BUTTON =================
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          transitionBuilder: (child, animation) {
+                            return SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(0, 0.3),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: FadeTransition(
+                                  opacity: animation, child: child),
+                            );
+                          },
+                          child: isValidAmount
+                              ? SizedBox(
+                                  key: const ValueKey("pay_button"),
+                                  width: double.infinity,
+                                  height: 48,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF207FA7),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+
+                                      await authCtrl.userWalletRecharge(
+                                        amount: amount.toString(),
+                                        providerId: dashCtrl
+                                                .providerDashboardModel
+                                                .content
+                                                ?.providerInfo
+                                                ?.id ??
+                                            "",
+                                      );
+                                    },
+                                    child: const Text(
+                                      "Proceed to Pay",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(
+                                  key: ValueKey("empty_space"),
+                                  height: 0,
+                                ),
                         ),
                       ],
                     ),
-
-                    const SizedBox(height: 10),
-
-                    /// INFO
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.orange.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        "Minimum wallet balance must be ₹$minAmount",
-                        style: const TextStyle(
-                          color: Colors.orange,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    /// CURRENT BALANCE
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Current Balance: ₹$currentBalance",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 14),
-
-                    /// AMOUNT FIELD
-                    TextField(
-                      controller: amountController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      decoration: InputDecoration(
-                        prefixText: "₹ ",
-                        hintText: "Enter Recharge Amount",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onChanged: (_) => setState(() {}),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    /// STATUS
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        isValidAmount
-                            ? "Final Balance: ₹$totalBalance"
-                            : "Add ₹${minAmount - totalBalance} more to continue",
-                        style: TextStyle(
-                          color:
-                              isValidAmount ? Colors.green : Colors.redAccent,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    /// BUTTON
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48,
-                      child: ElevatedButton(
-                        onPressed: isValidAmount
-                            ? () async {
-                                Navigator.pop(context);
-
-                                await accountController.userWalletRecharge(
-                                  amount: amount.toString(),
-                                  providerId: dashCtrl
-                                          .providerDashboardModel
-                                          .content
-                                          ?.providerInfo
-                                          ?.id ??
-                                      "",
-                                );
-                              }
-                            : null,
-                        child: const Text(
-                          "Proceed to Pay",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-      );
-    },
-    transitionBuilder: (_, animation, __, child) {
-      return SlideTransition(
-        position:
-            Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero)
-                .animate(animation),
-        child: ScaleTransition(scale: animation, child: child),
-      );
-    },
-  );
-}
+            );
+          },
+        );
+      },
+      transitionBuilder: (_, animation, __, child) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 0.3),
+            end: Offset.zero,
+          ).animate(animation),
+          child: ScaleTransition(scale: animation, child: child),
+        );
+      },
+    );
+  }
+
+  /// ================= HELPER =================
+  Widget _balanceItem({
+    required String title,
+    required int amount,
+    required IconData icon,
+  }) {
+    return Column(
+      children: [
+        Icon(icon, color: Colors.white70, size: 18),
+        const SizedBox(height: 4),
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 12,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          "₹$amount",
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 13,
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   void initState() {
