@@ -79,6 +79,7 @@ class AuthRepo {
       required File? drivingLicencesImage,
       required File? cancelchequeImage,
       required File? profileImage,
+        required File? passbookImage,
       required String? lat,
       required String? long,
       required String? zoneId,
@@ -104,7 +105,7 @@ class AuthRepo {
       "zone_id": zoneId ?? "",
       "user_type": "provider-admin",
       "company_address": companyAddress ?? "",
-      // "cancel_cheque_number": cancelchequeNumber,
+      "cancel_cheque_number": cancelchequeNumber,
     }, [], [
       MultipartDocument(
         "adhar_img",
@@ -125,6 +126,10 @@ class AuthRepo {
       MultipartDocument(
         "profile_img",
         profileImage,
+      ),
+      MultipartDocument(
+        "passbook_img",
+        passbookImage,
       ),
     ]);
   }

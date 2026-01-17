@@ -3,6 +3,7 @@ import 'package:dofix_technichian/utils/dimensions.dart';
 import 'package:dofix_technichian/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:in_app_update/in_app_update.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/dashboard_controller.dart';
 import '../../../helper/route_helper.dart';
@@ -22,6 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Get.find<DashBoardController>().getPagesData(isLogin: true);
     _route(); // Call the navigation function
+        checkForAppUpdate();
   }
 
   void _route() async {
@@ -35,6 +37,30 @@ class _SplashScreenState extends State<SplashScreen> {
       Get.offNamed(RouteHelper.getLoginRoute()); // remove splash from stack
     }
   }
+
+  // For checking latest update
+  Future<void> checkForAppUpdate() async {
+  try {
+    AppUpdateInfo updateInfo = await InAppUpdate.checkForUpdate();
+
+    if (updateInfo.updateAvailability ==
+        UpdateAvailability.updateAvailable) {
+
+      // FORCE UPDATE
+      if (updateInfo.immediateUpdateAllowed) {
+        await InAppUpdate.performImmediateUpdate();
+      }
+
+      // OPTIONAL UPDATE
+      else if (updateInfo.flexibleUpdateAllowed) {
+        await InAppUpdate.startFlexibleUpdate();
+        await InAppUpdate.completeFlexibleUpdate();
+      }
+    }
+  } catch (e) {
+    print("Update check error: $e");
+  }
+}
 
 
 

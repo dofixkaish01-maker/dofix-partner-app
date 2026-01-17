@@ -15,6 +15,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class LoginVerificationScreen extends StatefulWidget {
   final String? phoneNo;
+
   LoginVerificationScreen({super.key, this.phoneNo});
 
   @override

@@ -17,8 +17,14 @@ Future<void> init() async {
       appBaseUrl: AppConstants.baseUrl, sharedPreferences: Get.find()));
 
   /// Repository
-  Get.lazyPut(
-      () => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
+  // Get.lazyPut(
+  //     () => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
+
+  Get.put(
+    AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()),
+    permanent: true,
+  );
+
   Get.lazyPut(
       () => AccountRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
 
@@ -28,6 +34,8 @@ Future<void> init() async {
   Get.lazyPut(() =>
       DashBoardController(authRepo: Get.find(), sharedPreferences: Get.find()));
   Get.lazyPut(() => AccountController(
-      accountRepo: Get.find(), sharedPreferences: Get.find()));
+      accountRepo: Get.find(),
+      sharedPreferences: Get.find(),
+      authRepo: Get.find()));
   Get.lazyPut(() => RazorpayQRPaymentController());
 }

@@ -74,6 +74,7 @@ class AuthController extends GetxController implements GetxService {
   String profileNumber = "";
   File? cancelchequeImage = File("");
   File? profileImage = File("");
+  File? passbookImage = File("");
 
   Future<bool> willPopCallback() async {
     final now = DateTime.now();
@@ -294,6 +295,7 @@ class AuthController extends GetxController implements GetxService {
         drivingLicencesImage: drivingLicencesImage,
         cancelchequeImage: cancelchequeImage,
         profileImage: profileImage,
+        passbookImage: passbookImage,
         lat: Get.find<DashBoardController>().lat,
         long: Get.find<DashBoardController>().long,
         //TODO : Need to update the ZONE ID later for area wise zoneId

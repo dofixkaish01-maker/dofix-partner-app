@@ -36,6 +36,8 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
 
   final _passbookImageController = TextEditingController();
 
+  final _cancelChequeImage = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -140,7 +142,7 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
                               showTitle: true,
                               capitalization: TextCapitalization.words,
                               controller: _branchName,
-                              hintText: "Branch Name",
+                              hintText: "Bank Branch Name",
                               onChanged: (value) {
                                 Get.find<AuthController>().branchName = value;
                               },
@@ -223,16 +225,16 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
                             sizedBox20(),
                             buildDocumentField(
                               "Passbook Photo",
-                              _profileImage,
+                              _passbookImageController,
                               "Passbook Photo",
                               context,
-                              _profileImage,
+                              _passbookImageController,
                               (value) {
                                 Get.find<AuthController>().profileNumber =
                                     value;
                               },
                               (file) {
-                                Get.find<AuthController>().profileImage = file;
+                                Get.find<AuthController>().passbookImage = file;
                                 Get.find<AuthController>().update();
                                 debugPrint("Image Path: ${file.path}");
                               },

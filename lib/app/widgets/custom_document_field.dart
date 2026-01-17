@@ -55,6 +55,15 @@ Widget buildDocumentField(
                 } else if (imageType == 3) {
                   imageBaseUrl = AppConstants.dlImageUrl;
                 }
+                else if (imageType == 4) {
+                  imageBaseUrl = AppConstants.cancelChequeImageUrl;
+                }
+                else if (imageType == 5) {
+                  imageBaseUrl = AppConstants.passbookImageUrl;
+                }
+                else if(imageType == 6){
+                  imageBaseUrl = AppConstants.imgProfileBaseUrl;
+                }
                 await pickFile(
                   context,
                   frontCameraOnly: false,

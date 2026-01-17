@@ -1,6 +1,7 @@
 class AppConstants {
   // static const String baseUrl = "https://lab7.invoidea.in/dofix/public/";
   static const String baseUrl = "https://panel.dofix.in/";
+  // static const String baseUrl = "http://192.168.1.3:7000";
   static const String imgBaseUrl =
       "https://lab5.invoidea.in/offle/assets/admin/images/coupan/";
   static const String imgLogoBaseUrl =
@@ -11,6 +12,8 @@ class AppConstants {
       "https://panel.dofix.in/storage/provider/adhar_img/";
   static const String panImageUrl =
       "https://panel.dofix.in/storage/provider/pan_img/";
+  static const String passbookImageUrl =
+      "https://panel.dofix.in/storage/provider/passbook_img/";
   static const String dlImageUrl = "mybookshop/storage/provider/dl_img/";
   static const String cancelChequeImageUrl =
       "https://panel.dofix.in/storage/provider/cancelchequeImage/";

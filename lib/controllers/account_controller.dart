@@ -26,6 +26,7 @@ import '../widgets/custom_snack_bar.dart';
 class AccountController extends GetxController implements GetxService {
   final AccountRepo accountRepo;
   final SharedPreferences sharedPreferences;
+  final AuthRepo authRepo;
   TextEditingController companyNameController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController contactNumberController = TextEditingController();
@@ -60,6 +61,7 @@ class AccountController extends GetxController implements GetxService {
   AccountController({
     required this.accountRepo,
     required this.sharedPreferences,
+    required this.authRepo,
   });
 
   //Wallet Recharge
@@ -288,7 +290,6 @@ class AccountController extends GetxController implements GetxService {
   }
 
   Rx<CategoryInfo?> categoryInfo = Rx<CategoryInfo?>(null);
-  final AuthRepo authRepo = Get.find<AuthRepo>();
 
   Future<void> fetchCategory() async {
     try {
