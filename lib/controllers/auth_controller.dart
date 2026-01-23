@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../app/views/auth/registration_fee_screen.dart';
 import '../data/api/api.dart';
 import '../data/repo/auth_repo.dart';
 import '../helper/route_helper.dart';
@@ -124,10 +125,8 @@ class AuthController extends GetxController implements GetxService {
           hideLoading();
           await Future.delayed(Duration(seconds: 1), () {});
           // TODO : Hidden for deployment
-          showCustomSnackBar(
-              "${responseData['message']}",
-              isError: false,
-              isSuccess: true);
+          showCustomSnackBar("${responseData['message']}",
+              isError: false, isSuccess: true);
           Get.toNamed(RouteHelper.getVerifyOtpRoute(phone));
         } else {
           hideLoading();
@@ -239,8 +238,18 @@ class AuthController extends GetxController implements GetxService {
             log("Token saved : ${sharedPreferences.getString(AppConstants.token)}");
             log("Token saved response: ${responseData['content']['token']}");
             await apiClient.updateHeader(responseData['content']['token']);
+
+            // // REGISTRATION FEE CHECK HERE
+            final dashboardController = Get.find<DashBoardController>();
+            final int feeStatus = await dashboardController.isRegistrationFees();
+
             hideLoading();
-            Get.offAllNamed(RouteHelper.getDashboardRoute());
+
+            if (feeStatus == 0) {
+              Get.offAll(() => const RegistrationFeeScreen());
+            } else {
+              Get.offAllNamed(RouteHelper.getDashboardRoute());
+            }
           }
           // Get.toNamed(RouteHelper.getAccountSetup(phone.trim()));
           update();
@@ -325,8 +334,9 @@ class AuthController extends GetxController implements GetxService {
                 "Registration successful! Login to your account.",
                 isError: false,
                 isSuccess: true);
-            Get.offAllNamed(RouteHelper.login);
+            // Get.offAllNamed(RouteHelper.login);
             // Get.offAllNamed(RouteHelper.dashboard);
+            Get.offAll(() => const RegistrationFeeScreen());
           }
           // update();
         } else {

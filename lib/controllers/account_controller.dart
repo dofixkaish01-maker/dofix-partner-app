@@ -66,44 +66,54 @@ class AccountController extends GetxController implements GetxService {
 
   //Wallet Recharge
 
-  Future<void> userWalletRecharge({
-    required String providerId,
-    required String amount,
-  }) async {
-    if (amount == '0' || amount.isEmpty) {
-      showCustomSnackBar("Please enter a valid amount to recharge.");
-      return;
-    }
-    showLoading();
-    Map<String, String> body = {
-      'payment_method': 'razor_pay',
-      'provider_id': providerId,
-      'amount': amount,
-    };
-    try {
-      log("Wallet Recharge Body : $body");
-      Response response = await accountRepo.walletRecharge(body: body);
-      if (response.statusCode == 200) {
-        log("Wallet Recharge : ${response.body}");
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        String paymentUrl = data['content'];
-        log("Wallet Recharge URL : $paymentUrl");
-        await Get.to(
-          () => PaymentScreen(
-            url: paymentUrl,
-            redirectIndex: 1,
-          ),
-        );
-      } else {
-        log("Wallet Recharge : ${response.body} in else block");
-      }
-    } catch (e) {
-      log("Wallet Recharge : catch : $e");
-    } finally {
-      hideLoading();
-      update();
-    }
+Future<bool> userWalletRecharge({
+  required String providerId,
+  required String amount,
+}) async {
+  if (amount == '0' || amount.isEmpty) {
+    showCustomSnackBar("Please enter a valid amount to recharge.");
+    return false;
   }
+
+  showLoading();
+
+  Map<String, String> body = {
+    'payment_method': 'razor_pay',
+    'provider_id': providerId,
+    'amount': amount,
+  };
+
+  try {
+    log("Wallet Recharge Body : $body");
+    Response response = await accountRepo.walletRecharge(body: body);
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      String paymentUrl = data['content'];
+
+      // WAIT for payment screen result
+      final paymentSuccess = await Get.to<bool>(
+        () => PaymentScreen(
+          url: paymentUrl,
+          redirectIndex: 1,
+        ),
+      );
+
+      // payment screen se true aaya
+      return paymentSuccess == true;
+    } else {
+      log("Wallet Recharge failed: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    log("Wallet Recharge catch: $e");
+    return false;
+  } finally {
+    hideLoading();
+    update();
+  }
+
+}
 
   //ADjust Balance
   Future<void> adjustMyBalance() async {
@@ -307,32 +317,13 @@ class AccountController extends GetxController implements GetxService {
     }
   }
 
-  // status
   @override
   void onInit() {
     super.onInit();
-    syncAccountStatusFromDashboard(); // sirf API call
-    //   categoryInfo.value = CategoryInfo(
-    //   minimumBalance: 3000,
-    //   categoryName: "Home painting",
-    // );
     fetchCategory();
   }
 
-  int? accountIsActive;
-
-  void syncAccountStatusFromDashboard() {
-    final dashboard = Get.find<DashBoardController>();
-
-    accountIsActive =
-        dashboard.providerDashboardModel.content?.providerInfo?.isActive ?? 0;
-
-    log("isActive (Dashboard) => $accountIsActive");
-    update();
-  }
-
   //Provider Reviews
-
   List<ProviderReview>? providerReviews;
 
   Future<void> fetchProviderReviews() async {

@@ -392,6 +392,7 @@ class Provider {
   final String? contactNumber;
   final String? altContactNumber;
   final String? email;
+  final int? registrationFeeStatus;
   final String? zoneId;
   final Coordinates? coordinates;
   final String? adharNumber;
@@ -422,6 +423,7 @@ class Provider {
     this.contactNumber,
     this.altContactNumber,
     this.email,
+    this.registrationFeeStatus,
     this.zoneId,
     this.coordinates,
     this.adharNumber,

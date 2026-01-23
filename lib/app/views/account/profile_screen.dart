@@ -29,14 +29,14 @@ class _AccountScreenState extends State<AccountScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Get.find<DashBoardController>().getAccountInfo(true);
       await Get.find<DashBoardController>().getPagesData();
+
+      final controller=Get.find<DashBoardController>();
+      await controller.getAccountOverview();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isActive = true; // API se aayega
-
-
     return GetBuilder<DashBoardController>(builder: (controller) {
       return SafeArea(
         child: Scaffold(
@@ -60,56 +60,47 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Column(
                 children: [
                   sizedBox10(),
-                  GetBuilder<AccountController>(
-                    builder: (controller) {
-                      if (controller.accountIsActive == null) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
+                  Obx(() {
+                    if (controller.accountIsActive.value == -1) {
+                      return const CircularProgressIndicator();
+                    }
 
-                      bool isActive = controller.accountIsActive == 1;
+                    final bool isActive = controller.accountIsActive.value == 1;
 
-                      return Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: isActive
-                                ? [Colors.green.shade400, Colors.green.shade600]
-                                : [Colors.red.shade400, Colors.red.shade600],
+                    return Container(
+                      width: double.infinity,
+                      height: 65,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isActive
+                            ? Colors.green.withOpacity(0.15)
+                            : Colors.red.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isActive ? Colors.green : Colors.red,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isActive ? Icons.check_circle : Icons.cancel,
+                            color: isActive ? Colors.green : Colors.red,
                           ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Account Status",
-                                  style: TextStyle(color: Colors.white70),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  isActive ? "Active" : "Inactive",
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                          const SizedBox(width: 8),
+                          Text(
+                            isActive ? "Active" : "Inactive",
+                            style: TextStyle(
+                              color: isActive ? Colors.green : Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
-                            Icon(
-                              isActive ? Icons.check_circle : Icons.cancel,
-                              color: Colors.white,
-                              size: 32,
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
                   sizedBox20(),
                   GestureDetector(
                     onTap: () {
@@ -132,7 +123,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       ],
                     ),
                   ),
-                sizedBox10(),
+                  sizedBox10(),
                   Divider(color: Colors.black.withAlpha(38), thickness: 1),
                   sizedBox10(),
                   GestureDetector(
@@ -335,10 +326,11 @@ class _AccountScreenState extends State<AccountScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                          contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                          titlePadding:
+                              const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(20, 12, 20, 0),
                           actionsPadding: const EdgeInsets.all(16),
-
                           title: Row(
                             children: const [
                               Icon(Icons.logout, color: Colors.red),
@@ -349,12 +341,11 @@ class _AccountScreenState extends State<AccountScreen> {
                               ),
                             ],
                           ),
-
                           content: const Text(
                             "Are you sure you want to log out from your account?",
-                            style: TextStyle(fontSize: 14, color: Colors.black54),
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.black54),
                           ),
-
                           actions: [
                             TextButton(
                               onPressed: () => Get.back(),
@@ -369,7 +360,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
                               ),
                               onPressed: () {
                                 Get.back(); // close dialog

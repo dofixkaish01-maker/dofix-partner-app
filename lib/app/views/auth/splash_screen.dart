@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dofix_technichian/app/views/auth/registration_fee_screen.dart';
 import 'package:dofix_technichian/utils/dimensions.dart';
 import 'package:dofix_technichian/utils/images.dart';
 import 'package:flutter/material.dart';
@@ -23,46 +24,54 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Get.find<DashBoardController>().getPagesData(isLogin: true);
     _route(); // Call the navigation function
-        checkForAppUpdate();
+    checkForAppUpdate();
   }
 
-  void _route() async {
-    await Future.delayed(Duration(seconds: 2));
+  Future<void> _route() async {
+    await const Duration(seconds: 2);
 
-    bool loggedIn = await Get.find<AuthController>().isLoggedIn();
+    final authController = Get.find<AuthController>();
+    final dashboardController = Get.find<DashBoardController>();
 
-    if (loggedIn) {
-      Get.offNamed(RouteHelper.getDashboardRoute()); // remove splash from stack
+    final bool loggedIn = await authController.isLoggedIn();
+
+    if (!loggedIn) {
+      Get.offNamed(RouteHelper.getLoginRoute());
+      return;
+    }
+
+    // Registration fee logic handled in DashboardController
+    final int registrationFeeStatus =
+        await dashboardController.isRegistrationFees();
+
+    if (registrationFeeStatus == 0) {
+      Get.offAll(() => const RegistrationFeeScreen());
     } else {
-      Get.offNamed(RouteHelper.getLoginRoute()); // remove splash from stack
+      Get.offNamed(RouteHelper.getDashboardRoute());
     }
   }
 
   // For checking latest update
   Future<void> checkForAppUpdate() async {
-  try {
-    AppUpdateInfo updateInfo = await InAppUpdate.checkForUpdate();
+    try {
+      AppUpdateInfo updateInfo = await InAppUpdate.checkForUpdate();
 
-    if (updateInfo.updateAvailability ==
-        UpdateAvailability.updateAvailable) {
+      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+        // FORCE UPDATE
+        if (updateInfo.immediateUpdateAllowed) {
+          await InAppUpdate.performImmediateUpdate();
+        }
 
-      // FORCE UPDATE
-      if (updateInfo.immediateUpdateAllowed) {
-        await InAppUpdate.performImmediateUpdate();
+        // OPTIONAL UPDATE
+        else if (updateInfo.flexibleUpdateAllowed) {
+          await InAppUpdate.startFlexibleUpdate();
+          await InAppUpdate.completeFlexibleUpdate();
+        }
       }
-
-      // OPTIONAL UPDATE
-      else if (updateInfo.flexibleUpdateAllowed) {
-        await InAppUpdate.startFlexibleUpdate();
-        await InAppUpdate.completeFlexibleUpdate();
-      }
+    } catch (e) {
+      print("Update check error: $e");
     }
-  } catch (e) {
-    print("Update check error: $e");
   }
-}
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         height: Get.size.height,
         width: Get.size.width,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xffffffff), Color(0xff207fa8)],
             stops: [0, 1],
@@ -78,15 +87,16 @@ class _SplashScreenState extends State<SplashScreen> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(Dimensions.paddingSize100),
-          child: Center(
-            child: Image.asset(
-              Images.iclogo,
-            ),
+        child: Center(
+          child: Image.asset(
+            Images.iclogo,
+            height: 130,
+            width: 130,
           ),
         ),
       ),
     );
   }
 }
+
+

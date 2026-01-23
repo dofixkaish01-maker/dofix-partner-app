@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../controllers/account_controller.dart';
+import '../../../controllers/auth_controller.dart';
 import '../../../controllers/dashboard_controller.dart';
 import '../../../utils/images.dart';
 import '../../../utils/sizeboxes.dart';
@@ -22,6 +23,8 @@ class ApkaProfileScreen extends StatefulWidget {
 
 class _ApkaProfileScreenState extends State<ApkaProfileScreen> {
   final AccountController accController = Get.find();
+    final authController = Get.find<AuthController>();
+
 
   @override
   void initState() {
@@ -314,12 +317,8 @@ class _ApkaProfileScreenState extends State<ApkaProfileScreen> {
                     false,
                     accountController.panCardImageController,
                     TextInputType.text,
-                    (String value) {
-                      Get.find<AccountController>().panNumber = value;
-                    },
-                    (File value) {
-                      Get.find<AccountController>().panImage = value;
-                    },
+                    (v) => authController.panNumber = v,
+                                (f) => authController.panImage = f,
                     2,
                   ),
                   sizedBox20(),
@@ -333,14 +332,8 @@ class _ApkaProfileScreenState extends State<ApkaProfileScreen> {
                     false,
                     accountController.dlCardImageController,
                     TextInputType.text,
-                    (String value) {
-                      Get.find<AccountController>().drivingLicencesNumber =
-                          value;
-                    },
-                    (File value) {
-                      Get.find<AccountController>().drivingLicencesImage =
-                          value;
-                    },
+                     (v) => authController.drivingLicencesNumber = v,
+                        (f) => authController.drivingLicencesImage = f,
                     3,
                   ),
                   const SizedBox(height: 20),

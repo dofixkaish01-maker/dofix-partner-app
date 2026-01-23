@@ -27,6 +27,7 @@ import '../app/views/no_service_screen.dart';
 import '../app/widgets/custom_wallet_balance.dart';
 import '../data/api/api.dart';
 import '../data/repo/auth_repo.dart';
+import '../helper/route_helper.dart';
 import '../model/ConfigModel/config_model.dart';
 import '../model/MonthlyStats/monthly_stats.dart';
 import '../model/booking_details_content/booking_details_content.dart';
@@ -64,7 +65,43 @@ class DashBoardController extends GetxController implements GetxService {
       //TODO: Unwanted function call on controller initialization
       // getListOfBookings();
     });
+    getAccountOverview();
   }
+
+  RxInt accountIsActive = (-1).obs;
+
+  Future<void> getAccountOverview() async {
+    try {
+      final response = await authRepo.getAccountInfo();
+
+      // OWNER STATUS (YEH 0 AARHA HAI TUMHARE RESPONSE ME)
+      final rawIsActive =
+          response.body?['content']?['provider_info']?['owner']?['is_active'];
+
+      accountIsActive.value = rawIsActive == 1 ? 1 : 0;
+
+      debugPrint("OWNER accountIsActive => ${accountIsActive.value}");
+    } catch (e) {
+      accountIsActive.value = 0;
+    }
+  }
+
+  RxInt registrationFeeStatus = 0.obs;
+
+  Future<int> isRegistrationFees() async {
+    try {
+      final response = await authRepo.getAccountInfo();
+
+      registrationFeeStatus.value =
+          response.body?['content']?['provider_info']?['registration_fee_status'] ?? 0;
+
+      return registrationFeeStatus.value;
+    } catch (err) {
+      debugPrint("Error in isRegistrationFees: $err");
+      return 0;
+    }
+  }
+
 
   bool _isLoginLoading = false;
   CategoryModel? categoryList = CategoryModel(data: []);
@@ -102,6 +139,7 @@ class DashBoardController extends GetxController implements GetxService {
   }
 
   List<File> _jobStartImages = [];
+
   List<File> get jobStartImages => _jobStartImages;
 
   void addJobStartImage(File file) {
@@ -1804,6 +1842,7 @@ class DashBoardController extends GetxController implements GetxService {
   }
 
   bool _isCartButtonActive = false;
+
   bool get isCartButtonActive => _isCartButtonActive;
 
   Future<void> getServiceListBasedOnSubcategory(
@@ -2244,6 +2283,7 @@ class DashBoardController extends GetxController implements GetxService {
   }
 
   RxDouble dueAmount = 0.0.obs;
+
   Future<void> getBookingDueAmount({required String bookingId}) async {
     showLoading();
     update();
@@ -2317,6 +2357,7 @@ class DashBoardController extends GetxController implements GetxService {
 
   RxBool dueAmountPaid = false.obs;
   RxString transactionId = ''.obs;
+
   Future<void> updateBookingDueAmount({
     required String bookingId,
     required String amount,

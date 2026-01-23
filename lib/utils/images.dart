@@ -12,4 +12,6 @@ class Images {
   static const String icIndicator = 'assets/icons/ic_indicator.png';
   static const String icsuccessfull = 'assets/images/successfull_screen.png';
   static const String plansBackground = 'assets/images/plans_background.png';
+  static const String icWallet = 'assets/icons/ic_wallet.png';
+
 }

@@ -38,7 +38,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                 _buildNavItem(Images.icHome, "HOME", 0),
                 _buildNavItem(Images.icServices, "NAYA KAAM", 1),
                 _buildNavItem(Images.icBooking, "BOOKINGS", 2),
-                _buildNavItem(Images.icProfile, "PAISE", 3),
+                _buildNavItem(Images.icWallet, "PAISE", 3),
               ],
             ),
           ),

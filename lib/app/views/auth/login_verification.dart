@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dofix_technichian/app/views/auth/registration_fee_screen.dart';
 import 'package:dofix_technichian/app/widgets/custom_button_widget.dart';
 import 'package:dofix_technichian/app/widgets/custom_textfield.dart';
 import 'package:dofix_technichian/controllers/auth_controller.dart';
@@ -12,6 +13,8 @@ import 'package:dofix_technichian/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
+import '../../../controllers/dashboard_controller.dart';
 
 class LoginVerificationScreen extends StatefulWidget {
   final String? phoneNo;
@@ -168,8 +171,8 @@ class _LoginVerificationScreenState extends State<LoginVerificationScreen> {
                             sizedBox20(),
                             CustomButtonWidget(
                               buttonText: "VERIFY OTP",
-                              onPressed: () {
-                                controller.VerifyOtp(widget.phoneNo ?? "",
+                              onPressed: () async {
+                              controller.VerifyOtp(widget.phoneNo ?? "",
                                     _otpController.text.trim());
                                 // if (_formKey.currentState!.validate()) {
                                 //   Get.toNamed(RouteHelper.getAccountSetup());

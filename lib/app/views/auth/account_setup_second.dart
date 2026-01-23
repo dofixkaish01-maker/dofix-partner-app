@@ -260,8 +260,7 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   //  Get.find<DashBoardController>().getzoneIdForRegisteration();
-                  Get.find<AuthController>().register();
-                }
+                  Get.find<AuthController>().register();                }
               },
             ),
           ),

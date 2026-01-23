@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../../controllers/account_controller.dart';
+import '../../../views/PaymentScreen/payment_screen.dart';
 import '../../../widgets/custom_snack_bar.dart';
 import '../../widgets/custom_button_widget.dart';
 import '../../widgets/custom_wallet_balance.dart';
@@ -32,18 +33,21 @@ class PaiseScreen extends StatefulWidget {
 class _PaiseScreenState extends State<PaiseScreen> {
   final AccountController accountController = Get.find();
 
-  void showRechargeDialog(BuildContext context) {
+  void showRechargeBottomSheet(BuildContext context) {
     final TextEditingController amountController = TextEditingController();
 
     final dashCtrl = Get.find<DashBoardController>();
     final authCtrl = Get.find<AccountController>();
 
-    showGeneralDialog(
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: false,
-      barrierLabel: "",
-      transitionDuration: const Duration(milliseconds: 350),
-      pageBuilder: (_, __, ___) {
+      isScrollControlled: true,
+      // 🔥 keyboard fix
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
             /// ================= CATEGORY DATA =================
@@ -70,293 +74,241 @@ class _PaiseScreenState extends State<PaiseScreen> {
             bool isValidAmount = totalBalance >= minAmount;
             int remainingAmount = isValidAmount ? 0 : minAmount - totalBalance;
 
-            return Center(
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// ================= HEADER =================
+                      Row(
+                        children: [
+                          const Icon(Icons.account_balance_wallet,
+                              color: Color(0xFF207FA7)),
+                          const SizedBox(width: 8),
+                          const Expanded(
+                            child: Text(
+                              "Recharge Wallet",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: const Icon(Icons.close),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /// ================= HEADER =================
-                        Row(
+
+                      const SizedBox(height: 16),
+
+                      /// ================= SERVICE INFO =================
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF207FA7).withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
                           children: [
-                            const Icon(Icons.account_balance_wallet,
+                            const Icon(Icons.miscellaneous_services,
                                 color: Color(0xFF207FA7)),
-                            const SizedBox(width: 8),
-                            const Expanded(
-                              child: Text(
-                                "Recharge Wallet",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () => Navigator.pop(context),
-                              child: const Icon(Icons.close),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        /// ================= SERVICE INFO =================
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF207FA7).withOpacity(0.08),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.miscellaneous_services,
-                                  color: Color(0xFF207FA7)),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  "$categoryName Service",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        /// ================= MIN BALANCE INFO =================
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.orange.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.info_outline,
-                                  color: Colors.orange),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  "Minimum wallet balance required for $categoryName service is ₹$minAmount",
-                                  style: const TextStyle(
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 18),
-
-                        /// ================= PREMIUM BALANCE CARD =================
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFF207FA7),
-                                Color(0xFF3FA9D6),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color:
-                                    const Color(0xFF207FA7).withOpacity(0.35),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Wallet Balance",
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 13,
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                "₹ $currentBalance",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 14),
-                              Container(height: 1, color: Colors.white24),
-                              const SizedBox(height: 12),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  _balanceItem(
-                                    title: "Existing",
-                                    amount: currentBalance,
-                                    icon: Icons.account_balance_wallet_outlined,
-                                  ),
-                                  _balanceItem(
-                                    title: "Recharge",
-                                    amount: amount,
-                                    icon: Icons.add_circle_outline,
-                                  ),
-                                  _balanceItem(
-                                    title: "After Pay",
-                                    amount: totalBalance,
-                                    icon: Icons.trending_up,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 18),
-
-                        /// ================= AMOUNT FIELD =================
-                        TextField(
-                          controller: amountController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          decoration: InputDecoration(
-                            prefixText: "₹ ",
-                            labelText: "Enter Recharge Amount",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onChanged: (_) => setState(() {}),
-                        ),
-
-                        const SizedBox(height: 14),
-
-                        /// ================= STATUS =================
-                        Row(
-                          children: [
-                            Icon(
-                              isValidAmount
-                                  ? Icons.check_circle
-                                  : Icons.warning_amber_rounded,
-                              color: isValidAmount
-                                  ? Colors.green
-                                  : Colors.redAccent,
-                            ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                isValidAmount
-                                    ? "You're good to go"
-                                    : "Add ₹$remainingAmount more",
-                                style: TextStyle(
-                                  color: isValidAmount
-                                      ? Colors.green
-                                      : Colors.redAccent,
+                                "$categoryName Service",
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
                           ],
                         ),
+                      ),
 
-                        const SizedBox(height: 22),
+                      const SizedBox(height: 12),
 
-                        /// ================= BUTTON =================
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          transitionBuilder: (child, animation) {
-                            return SlideTransition(
-                              position: Tween<Offset>(
-                                begin: const Offset(0, 0.3),
-                                end: Offset.zero,
-                              ).animate(animation),
-                              child: FadeTransition(
-                                  opacity: animation, child: child),
-                            );
-                          },
-                          child: isValidAmount
-                              ? SizedBox(
-                                  key: const ValueKey("pay_button"),
-                                  width: double.infinity,
-                                  height: 48,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF207FA7),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      Navigator.pop(context);
-
-                                      await authCtrl.userWalletRecharge(
-                                        amount: amount.toString(),
-                                        providerId: dashCtrl
-                                                .providerDashboardModel
-                                                .content
-                                                ?.providerInfo
-                                                ?.id ??
-                                            "",
-                                      );
-                                    },
-                                    child: const Text(
-                                      "Proceed to Pay",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : const SizedBox(
-                                  key: ValueKey("empty_space"),
-                                  height: 0,
-                                ),
+                      /// ================= MIN BALANCE INFO =================
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      ],
-                    ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.info_outline,
+                                color: Colors.orange),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                "Minimum wallet balance required is ₹$minAmount",
+                                style: const TextStyle(
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      /// ================= WALLET CARD =================
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF207FA7),
+                              Color(0xFF3FA9D6),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Wallet Balance",
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              "₹ $currentBalance",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _balanceItem(
+                                  title: "Existing",
+                                  amount: currentBalance,
+                                  icon: Icons.account_balance_wallet_outlined,
+                                ),
+                                _balanceItem(
+                                  title: "Recharge",
+                                  amount: amount,
+                                  icon: Icons.add_circle_outline,
+                                ),
+                                _balanceItem(
+                                  title: "After Pay",
+                                  amount: totalBalance,
+                                  icon: Icons.trending_up,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      /// ================= AMOUNT FIELD =================
+                      TextField(
+                        controller: amountController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        decoration: InputDecoration(
+                          prefixText: "₹ ",
+                          labelText: "Enter Recharge Amount",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onChanged: (_) => setState(() {}),
+                      ),
+
+                      const SizedBox(height: 14),
+
+                      /// ================= STATUS =================
+                      Row(
+                        children: [
+                          Icon(
+                            isValidAmount
+                                ? Icons.check_circle
+                                : Icons.warning_amber_rounded,
+                            color:
+                                isValidAmount ? Colors.green : Colors.redAccent,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              isValidAmount
+                                  ? "You're good to go"
+                                  : "Add ₹$remainingAmount more",
+                              style: TextStyle(
+                                color: isValidAmount
+                                    ? Colors.green
+                                    : Colors.redAccent,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 22),
+
+                      /// ================= BUTTON =================
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF207FA7),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: isValidAmount
+                              ? () async {
+                                  Navigator.pop(context);
+                                  await authCtrl.userWalletRecharge(
+                                    amount: amount.toString(),
+                                    providerId: dashCtrl.providerDashboardModel
+                                            .content?.providerInfo?.id ??
+                                        "",
+                                  );
+                                }
+                              : null,
+                          child: const Text(
+                            "Proceed to Pay",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             );
           },
-        );
-      },
-      transitionBuilder: (_, animation, __, child) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, 0.3),
-            end: Offset.zero,
-          ).animate(animation),
-          child: ScaleTransition(scale: animation, child: child),
         );
       },
     );
@@ -995,11 +947,11 @@ class _PaiseScreenState extends State<PaiseScreen> {
               ),
             ),
             Positioned(
-              bottom: 90,
-              right: 8,
+              left: 315,
+              top: 375,
               child: FloatingActionButton(
                 onPressed: () {
-                  showRechargeDialog(context);
+                  showRechargeBottomSheet(context);
                 },
                 backgroundColor: greenColor,
                 shape: CircleBorder(),
