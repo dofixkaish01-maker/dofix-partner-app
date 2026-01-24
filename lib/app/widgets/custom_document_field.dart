@@ -41,7 +41,28 @@ Widget buildDocumentField(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(imageLabel),
+            /// IMAGE LABEL
+            Text(
+              imageLabel,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            const SizedBox(height: 4),
+
+            /// MAX SIZE TEXT
+            Text(
+              "Max size: 2 MB",
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.red,
+              ),
+            ),
+
+            const SizedBox(height: 6),
+
+            /// IMAGE PICKER FIELD
             CustomTextField(
               validation: isRequired ? _validateRequired : null,
               readOnly: true,
@@ -54,36 +75,29 @@ Widget buildDocumentField(
                   imageBaseUrl = AppConstants.panImageUrl;
                 } else if (imageType == 3) {
                   imageBaseUrl = AppConstants.dlImageUrl;
-                }
-                else if (imageType == 4) {
+                } else if (imageType == 4) {
                   imageBaseUrl = AppConstants.cancelChequeImageUrl;
-                }
-                else if (imageType == 5) {
+                } else if (imageType == 5) {
                   imageBaseUrl = AppConstants.passbookImageUrl;
-                }
-                else if(imageType == 6){
+                } else if (imageType == 6) {
                   imageBaseUrl = AppConstants.imgProfileBaseUrl;
                 }
+
                 await pickFile(
                   context,
                   frontCameraOnly: false,
                   showImage: imageController.text.isNotEmpty,
                   showImageUrl: '$imageBaseUrl${imageController.text}',
                   showImageFile: selectedImageFile,
-                ).then(
-                  (value) {
-                    debugPrint(value.toString());
-                    if (value != null && value.containsKey("filename")) {
-                      imageController.text = value["filename"].toString();
-                      hintText = imageController.text;
-                      debugPrint("Image Path: ${imageController.text}");
-                      selectedImageFile = value["file"] as File;
-                      image(selectedImageFile!);
-                    }
-                  },
-                ); // Await the function
+                ).then((value) {
+                  if (value != null && value.containsKey("filename")) {
+                    imageController.text = value["filename"].toString();
+                    selectedImageFile = value["file"] as File;
+                    image(selectedImageFile!);
+                  }
+                });
               },
-              hintText: hintText,
+              hintText: "Upload image",
               showBorder: false,
               prefixIcon: Icons.camera_alt,
             ),

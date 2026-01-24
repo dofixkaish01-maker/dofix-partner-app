@@ -32,6 +32,14 @@ class AuthController extends GetxController implements GetxService {
   String? token;
   final RxString phoneNumber = ''.obs;
 
+  bool isTermsAccepted = false;
+
+  void toggleTerms(bool value) {
+    isTermsAccepted = value;
+    update();
+  }
+
+
   Future<bool> handleOnWillPop() async {
     final now = DateTime.now();
 

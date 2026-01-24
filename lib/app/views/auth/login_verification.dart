@@ -12,6 +12,7 @@ import 'package:dofix_technichian/utils/styles.dart';
 import 'package:dofix_technichian/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../controllers/dashboard_controller.dart';
@@ -115,14 +116,18 @@ class _LoginVerificationScreenState extends State<LoginVerificationScreen> {
                             sizedBox50(),
                             Text(
                               "OTP Verification",
-                              style: albertSansBold.copyWith(
-                                  fontSize: Dimensions.fontSize30),
+                              style: GoogleFonts.montserrat(
+                                fontSize: Dimensions.fontSize30,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             sizedBox8(),
                             Text(
                               "Please enter OTP shared on your mobile number",
-                              style: albertSansRegular.copyWith(
-                                  fontSize: Dimensions.fontSize12),
+                              style: GoogleFonts.poppins(
+                                fontSize: Dimensions.fontSize13,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                             sizedBox30(),
                             Padding(
@@ -172,7 +177,7 @@ class _LoginVerificationScreenState extends State<LoginVerificationScreen> {
                             CustomButtonWidget(
                               buttonText: "VERIFY OTP",
                               onPressed: () async {
-                              controller.VerifyOtp(widget.phoneNo ?? "",
+                                controller.VerifyOtp(widget.phoneNo ?? "",
                                     _otpController.text.trim());
                                 // if (_formKey.currentState!.validate()) {
                                 //   Get.toNamed(RouteHelper.getAccountSetup());

@@ -11,6 +11,7 @@ import 'package:dofix_technichian/utils/sizeboxes.dart';
 import 'package:dofix_technichian/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../widgets/account_setup_custom_textfield.dart';
 import '../../widgets/custom_document_field.dart';
 import 'account_setup_second.dart';
 
@@ -298,7 +299,7 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    child: CustomTextField(
+                                    child: AccountCustomTextField(
                                       showTitle: true,
                                       isNumber: true,
                                       isPhone: true,
@@ -323,7 +324,7 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                                   ),
                                   SizedBox(width: 10),
                                   Expanded(
-                                    child: CustomTextField(
+                                    child: AccountCustomTextField(
                                       onChanged: (value) {
                                         Get.find<AuthController>()
                                             .alternativeNumber = value;

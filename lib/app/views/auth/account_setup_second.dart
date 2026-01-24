@@ -105,7 +105,7 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
                             ),
                             sizedBox30(),
 
-                            /// 🔥 PROFILE SHIFTED TO TOP (NO DELETE)
+                            /// PROFILE SHIFTED TO TOP (NO DELETE)
                             buildInteractiveProfile(context),
                             sizedBox10(),
                             Text("Upload Profile Photo",

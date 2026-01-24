@@ -9,6 +9,7 @@ import '../../../controllers/auth_controller.dart';
 import '../../../controllers/dashboard_controller.dart';
 import '../../../utils/images.dart';
 import '../../../utils/sizeboxes.dart';
+import '../../widgets/account_setup_custom_textfield.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_document_field.dart';
 import '../../widgets/custom_textfield.dart';
@@ -220,7 +221,7 @@ class _ApkaProfileScreenState extends State<ApkaProfileScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: CustomTextField(
+                        child: AccountCustomTextField(
                           showTitle: true,
                           isNumber: true,
                           isPhone: true,
@@ -241,7 +242,7 @@ class _ApkaProfileScreenState extends State<ApkaProfileScreen> {
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: CustomTextField(
+                        child: AccountCustomTextField(
                           showTitle: true,
                           isNumber: true,
                           isPhone: true,

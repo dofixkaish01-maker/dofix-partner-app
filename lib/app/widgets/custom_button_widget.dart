@@ -28,16 +28,16 @@ class CustomButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ButtonStyle flatButtonStyle = TextButton.styleFrom(
-      backgroundColor: onPressed == null ? Theme.of(context).disabledColor : transparent
+      backgroundColor: onPressed == null ? Colors.grey.shade400 : transparent
           ? Colors.transparent : color ?? Theme.of(context).primaryColor,
       minimumSize: Size(width != null ? width! : Dimensions.webMaxWidth, height != null ? height! : 50),
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
-        side: BorderSide(
-          color:borderSideColor ?? Theme.of(context).primaryColor, // Specify the color of the border
-          width: 1, // Specify the width of the border
-        ),
+        // side: BorderSide(
+        //   color:borderSideColor ?? Theme.of(context).primaryColor, // Specify the color of the border
+        //   width: 1, // Specify the width of the border
+        // ),
       ),
     );
 
@@ -67,6 +67,7 @@ class CustomButtonWidget extends StatelessWidget {
 
           Text(buttonText, textAlign: TextAlign.center,  style: 
               albertSansRegular.copyWith(
+                fontWeight: FontWeight.bold,
             color: textColor ?? (transparent ? Theme.of(context).primaryColor : Colors.white),
             fontSize: fontSize ?? Dimensions.fontSize14,
           )

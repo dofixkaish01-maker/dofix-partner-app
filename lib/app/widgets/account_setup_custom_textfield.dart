@@ -5,7 +5,7 @@ import 'package:dofix_technichian/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CustomTextField extends StatefulWidget {
+class AccountCustomTextField extends StatefulWidget {
   final String hintText;
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -36,7 +36,7 @@ class CustomTextField extends StatefulWidget {
   final Function()? onTap;
   final int? maxLength;
 
-  const CustomTextField({
+  const AccountCustomTextField({
     super.key,
     this.hintText = 'Write something...',
     this.controller,
@@ -70,10 +70,10 @@ class CustomTextField extends StatefulWidget {
   });
 
   @override
-  CustomTextFieldState createState() => CustomTextFieldState();
+  AccountCustomTextFieldState createState() => AccountCustomTextFieldState();
 }
 
-class CustomTextFieldState extends State<CustomTextField> {
+class AccountCustomTextFieldState extends State<AccountCustomTextField> {
   bool _obscureText = true;
 
   @override
@@ -154,11 +154,10 @@ class CustomTextFieldState extends State<CustomTextField> {
             filled: true,
             prefixIcon: widget.isPhone
                 ? SizedBox(
-                    width: 87,
+                    width: 57,
                     child: Row(
                       children: [
                         const SizedBox(width: 7),
-                        SizedBox(child: Image.asset('assets/images/indian_flag_logo.png',height: 30,width: 30,)),
                         Text(
                           " + 91",
                           style: TextStyle(
