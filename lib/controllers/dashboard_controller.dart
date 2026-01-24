@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../app/views/account/account_screen.dart';
+import '../app/views/auth/registration_fee_screen.dart';
 import '../app/views/bookingScreen/booking_screen.dart';
 import '../app/views/dashboard/dashboard_screen.dart';
 import '../app/views/home/SubScreens/category_to_services.dart';
@@ -87,6 +88,7 @@ class DashBoardController extends GetxController implements GetxService {
   }
 
   RxInt registrationFeeStatus = 0.obs;
+  RxBool isLoading = false.obs;
 
   Future<int> isRegistrationFees() async {
     try {
@@ -99,6 +101,50 @@ class DashBoardController extends GetxController implements GetxService {
     } catch (err) {
       debugPrint("Error in isRegistrationFees: $err");
       return 0;
+    }
+  }
+
+  Future<void> refreshAndNavigateIfPaid() async {
+    try {
+      isLoading.value = true;
+
+      final status = await isRegistrationFees();
+
+      debugPrint("REFRESH STATUS => $status");
+
+      if (status == 1) {
+        Get.offAllNamed(RouteHelper.dashboard);
+      }
+    } catch (e) {
+      debugPrint("Refresh navigation error: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> refreshAndNavigateIfUnpaid() async {
+    try {
+      isLoading.value = true;
+
+      final response = await authRepo.getAccountInfo();
+
+      registrationFeeStatus.value =
+          response.body?['content']?['provider_info']
+          ?['registration_fee_status'] ??
+              0;
+
+      debugPrint(
+          "REFRESH registration_fee_status => ${registrationFeeStatus.value}");
+
+      // Unpaid → Registration Fee Screen
+      if (registrationFeeStatus.value == 0) {
+        Get.offAll(() => const RegistrationFeeScreen());
+      }
+
+    } catch (e) {
+      debugPrint("Error in refreshAndNavigateIfUnpaid: $e");
+    } finally {
+      isLoading.value = false;
     }
   }
 

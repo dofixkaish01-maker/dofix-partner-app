@@ -495,5 +495,6 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
   Future<void> _onRefresh() async {
     await Get.find<DashBoardController>().getListOfBookings(isRefresh: true);
+    await Get.find<DashBoardController>().refreshAndNavigateIfUnpaid();
   }
 }

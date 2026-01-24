@@ -102,32 +102,51 @@ class RegistrationFeeScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _topMessage(),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                final dashCtrl = Get.find<DashBoardController>();
+                await dashCtrl.refreshAndNavigateIfPaid();
+              },
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(20),
+                child: Obx(() {
+                  final dashCtrl = Get.find<DashBoardController>();
 
-                  const SizedBox(height: 18),
+                  //  Loading state (pull ke baad thoda rukega)
+                  if (dashCtrl.isLoading.value) {
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 140),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
 
-                  /// USER INFO
-                  // _userInfoCard(),
+                  // Normal UI
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _topMessage(),
+                      const SizedBox(height: 18),
 
-                  const SizedBox(height: 22),
+                      /// USER INFO
+                      // _userInfoCard(),
 
-                  _amountCard(),
-
-                  const SizedBox(height: 22),
-
-                  _infoMessage(),
-                ],
+                      const SizedBox(height: 22),
+                      _amountCard(),
+                      const SizedBox(height: 22),
+                      _infoMessage(),
+                    ],
+                  );
+                }),
               ),
             ),
           ),
           _bottomPaySection(),
         ],
       ),
+
     );
   }
 
