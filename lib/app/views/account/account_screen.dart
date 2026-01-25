@@ -42,7 +42,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      // 🔥 keyboard fix
+      //  keyboard fix
       backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),

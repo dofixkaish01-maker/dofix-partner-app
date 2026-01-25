@@ -1705,7 +1705,6 @@ class DashBoardController extends GetxController implements GetxService {
     11: 'Dec',
   };
 
-  ///
   Future<bool> getConfigData() async {
     showLoading();
     Response response = await authRepo.getConfigData();

@@ -321,7 +321,6 @@ class AuthRepo {
         method: "GET");
   }
 
-  /// Get config data
   Future<Response> getConfigData() async {
     Response response =
         await apiClient.getData(AppConstants.configUri, method: "GET");
