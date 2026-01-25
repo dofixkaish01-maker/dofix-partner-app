@@ -101,8 +101,10 @@ class AccountCustomTextFieldState extends State<AccountCustomTextField> {
           style: const TextStyle(fontSize: 16),
           textInputAction: widget.inputAction,
           keyboardType:
-              widget.isAmount ? TextInputType.number : widget.inputType,
-          cursorColor: Theme.of(context).primaryColor,
+          widget.isAmount ? TextInputType.number : widget.inputType,
+          cursorColor: Theme
+              .of(context)
+              .primaryColor,
           textCapitalization: widget.capitalization,
           enabled: widget.isEnabled,
           autofocus: false,
@@ -110,13 +112,13 @@ class AccountCustomTextFieldState extends State<AccountCustomTextField> {
           inputFormatters: widget.isAmount
               ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))]
               : widget.isNumber
-                  ? [
-                      FilteringTextInputFormatter.allow(RegExp(r'\d')),
-                      LengthLimitingTextInputFormatter(10)
-                    ]
-                  : widget.isPhone
-                      ? [FilteringTextInputFormatter.allow(RegExp('[0-9+]'))]
-                      : null,
+              ? [
+            FilteringTextInputFormatter.allow(RegExp(r'\d')),
+            LengthLimitingTextInputFormatter(10)
+          ]
+              : widget.isPhone
+              ? [FilteringTextInputFormatter.allow(RegExp('[0-9+]'))]
+              : null,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
@@ -131,7 +133,9 @@ class AccountCustomTextFieldState extends State<AccountCustomTextField> {
               borderSide: BorderSide(
                 style: widget.showBorder ? BorderStyle.solid : BorderStyle.none,
                 width: 2,
-                color: Theme.of(context).primaryColor,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
               ),
             ),
             border: OutlineInputBorder(
@@ -139,85 +143,103 @@ class AccountCustomTextFieldState extends State<AccountCustomTextField> {
               borderSide: BorderSide(
                 style: widget.showBorder ? BorderStyle.solid : BorderStyle.none,
                 width: 0.3,
-                color: Theme.of(context).primaryColorDark.withOpacity(0.80),
+                color: Theme
+                    .of(context)
+                    .primaryColorDark
+                    .withOpacity(0.80),
               ),
             ),
             isDense: true,
             hintText: widget.hintText,
             errorStyle: albertSansRegular.copyWith(
                 fontSize: Dimensions.fontSize12, color: redColor),
-            fillColor: Theme.of(context).cardColor,
+            fillColor: Theme
+                .of(context)
+                .cardColor,
             hintStyle: TextStyle(
               fontSize: 14,
-              color: Theme.of(context).disabledColor.withOpacity(0.40),
+              color: Theme
+                  .of(context)
+                  .disabledColor
+                  .withOpacity(0.40),
             ),
             filled: true,
             prefixIcon: widget.isPhone
                 ? SizedBox(
-                    width: 57,
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 7),
-                        Text(
-                          " + 91",
-                          style: TextStyle(
-                              color: Theme.of(context)
-                                  .disabledColor
-                                  .withOpacity(0.70),
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 7),
-                        Container(
-                          height: 30,
-                          width: 1.5,
-                          color:
-                              Theme.of(context).disabledColor.withOpacity(0.40),
-                        ),
-                      ],
-                    ),
-                  )
+              width: 57,
+              child: Row(
+                children: [
+                  const SizedBox(width: 7),
+                  Text(
+                    " + 91",
+                    style: TextStyle(
+                        color: Theme
+                            .of(context)
+                            .disabledColor
+                            .withOpacity(0.70),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 7),
+                  Container(
+                    height: 30,
+                    width: 1.5,
+                    color:
+                    Theme
+                        .of(context)
+                        .disabledColor
+                        .withOpacity(0.40),
+                  ),
+                ],
+              ),
+            )
                 : widget.prefixImage != null && widget.prefixIcon == null
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Image.asset(
-                          widget.prefixImage!,
-                          height: 20,
-                          width: 20,
-                        ),
-                      )
-                    : widget.prefixImage == null && widget.prefixIcon != null
-                        ? Icon(widget.prefixIcon, size: widget.iconSize)
-                        : null,
+                ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Image.asset(
+                widget.prefixImage!,
+                height: 20,
+                width: 20,
+              ),
+            )
+                : widget.prefixImage == null && widget.prefixIcon != null
+                ? Icon(widget.prefixIcon, size: widget.iconSize)
+                : null,
             suffixIcon: widget.isPassword
                 ? IconButton(
-                    icon: Icon(
-                      _obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: _toggle,
-                  )
+              icon: Icon(
+                _obscureText ? Icons.visibility_off : Icons.visibility,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
+              ),
+              onPressed: _toggle,
+            )
                 : widget.isLocation
-                    ? Icon(Icons.my_location, color: locationRed)
-                    : widget.editText
-                        ? Container(
-                            width: 60,
-                            child: Row(
-                              children: [
-                                Icon(Icons.edit,
-                                    color: Theme.of(context).primaryColor),
-                                sizedBoxW5(),
-                                Text(
-                                  "Edit",
-                                  style: albertSansRegular.copyWith(
-                                    fontSize: Dimensions.fontSize12,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        : null,
+                ? Icon(Icons.my_location, color: locationRed)
+                : widget.editText
+                ? Container(
+              width: 60,
+              child: Row(
+                children: [
+                  Icon(Icons.edit,
+                      color: Theme
+                          .of(context)
+                          .primaryColor),
+                  sizedBoxW5(),
+                  Text(
+                    "Edit",
+                    style: albertSansRegular.copyWith(
+                      fontSize: Dimensions.fontSize12,
+                      color: Theme
+                          .of(context)
+                          .primaryColor,
+                    ),
+                  )
+                ],
+              ),
+            )
+                : null,
           ),
           onChanged: widget.onChanged as void Function(String)?,
         ),

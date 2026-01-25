@@ -391,7 +391,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
 
         transactionAmount = controller.getTransactionAmountAmount(
             // payableAmount, receivableAmount);
-            100.0,
+            0.0,
             receivableAmount);
 
         TransactionType transactionType =

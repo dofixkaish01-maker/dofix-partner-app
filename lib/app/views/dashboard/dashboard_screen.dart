@@ -31,18 +31,23 @@ class DashboardScreenState extends State<DashboardScreen> {
     super.initState();
 
     _pageIndex = widget.pageIndex;
-
     _pageController = PageController(initialPage: widget.pageIndex);
-
     currentPage = widget.pageIndex;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       debugPrint("DashboardScreen initState");
-      Get.find<DashBoardController>().getListOfBookings(isRefresh: false);
-    });
 
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {});
+      final dashCtrl = Get.find<DashBoardController>();
+      final accCtrl = Get.find<AccountController>();
+
+      //  IMPORTANT: wallet/account info yahin load karo
+      await dashCtrl.getAccountInfo(true);
+
+      // optional: category bhi yahin ensure ho
+      await accCtrl.fetchCategory();
+
+      // existing call
+      await dashCtrl.getListOfBookings(isRefresh: false);
     });
   }
 
@@ -162,7 +167,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ),
 
-                          SizedBox(width: size.width * 0.025),
+                          SizedBox(width: size.width * 0.015),
 
                           /// PROFILE
                           GestureDetector(

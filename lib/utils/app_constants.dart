@@ -22,7 +22,7 @@ class AppConstants {
   static const String fontFamily = 'AlbertSans';
 
   static const String couponListUrl = 'coupon/index';
-  static const String configUri = 'api/v1/provider/config';
+  static const String configUri = 'api/v1/provider/config'; //
   static const String sendOtp = 'api/v1/provider/auth/send-otp';
   static const String getServiceCategory = 'api/v1/provider/auth/get-category';
   static const String verifyOtp = 'api/v1/provider/auth/verify-otp';
