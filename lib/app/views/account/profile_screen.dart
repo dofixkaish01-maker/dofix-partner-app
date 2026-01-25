@@ -315,73 +315,87 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                   ),
                   sizedBox50(),
-                  CustomButtonWidget(
-                    buttonText: 'Log Out',
-                    transparent: true,
-                    borderSideColor: Colors.red,
-                    textColor: Colors.red,
-                    onPressed: () {
-                      Get.dialog(
-                        AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          titlePadding:
-                              const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                          actionsPadding: const EdgeInsets.all(16),
-                          title: Row(
-                            children: const [
-                              Icon(Icons.logout, color: Colors.red),
-                              SizedBox(width: 8),
-                              Text(
-                                "Confirm Logout",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          content: const Text(
-                            "Are you sure you want to log out from your account?",
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.black54),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Get.back(),
-                              child: const Text(
-                                "Cancel",
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 12),
-                              ),
-                              onPressed: () {
-                                Get.back(); // close dialog
-                                Get.find<AuthController>().logout();
-                              },
-                              child: const Text(
-                                "Log Out",
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ],
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.logout, color: Colors.red),
+                      label: const Text(
+                        "Log Out",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
                         ),
-                        barrierDismissible: false,
-                      );
-                    },
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.red),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        _showLogoutDialog();
+                      },
+                    ),
                   ),
+
                 ],
               ),
             )),
       );
     });
   }
+  void _showLogoutDialog() {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: const [
+            Icon(Icons.logout, color: Colors.red),
+            SizedBox(width: 8),
+            Text(
+              "Confirm Logout",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        content: const Text(
+          "Kya aap sure hain ki aap apne account se logout karna chahte ho?",
+          style: TextStyle(fontSize: 14, color: Colors.black54),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text(
+              "Cancel",
+              style: TextStyle(color: Colors.black54),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            ),
+            onPressed: () {
+              Get.back(); // dialog close
+              Get.find<AuthController>().logout();
+            },
+            child: const Text(
+              "Log Out",
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
+
 }
