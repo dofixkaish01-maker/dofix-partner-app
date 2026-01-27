@@ -16,6 +16,7 @@ import '../helper/route_helper.dart';
 import '../utils/app_constants.dart';
 import '../widgets/common_loading.dart';
 import '../widgets/custom_snack_bar.dart';
+import 'Notification/fcm_service.dart';
 
 class AuthController extends GetxController implements GetxService {
   final AuthRepo authRepo;
@@ -209,7 +210,10 @@ class AuthController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> VerifyOtp(String phone, String otp) async {
+
+  /// old version of verify otp
+
+  /* Future<void> VerifyOtp(String phone, String otp) async {
     ApiClient apiClient = ApiClient(
         appBaseUrl: AppConstants.baseUrl, sharedPreferences: sharedPreferences);
     if (otp.length != 4) {
@@ -284,6 +288,92 @@ class AuthController extends GetxController implements GetxService {
       update();
     }
   }
+*/
+
+  Future<void> VerifyOtp(String phone, String otp) async {
+    ApiClient apiClient = ApiClient(
+        appBaseUrl: AppConstants.baseUrl,
+        sharedPreferences: sharedPreferences);
+
+    if (otp.length != 4) {
+      showCustomSnackBar("Please enter a valid 4-digit OTP", isError: true);
+      return;
+    }
+
+    update();
+
+    try {
+      //  STEP 1: FCM token nikalo
+      String? fcmToken = await FcmService.getToken();
+      debugPrint("FCM Token while verify: $fcmToken");
+
+      //  STEP 2: Verify API call (token ke saath)
+      Response response = await authRepo.verifyOtp(
+        phone.trim(),
+        otp.trim(),
+        fcmToken,
+      );
+
+      var responseData = jsonDecode(response.body);
+      debugPrint("Response: $responseData");
+
+      if (response.statusCode == 200) {
+        if (responseData["message"]
+            .toString()
+            .contains("Successfully registered")) {
+
+          hideLoading();
+
+          //  STEP 3: Token refresh listener (VERY IMPORTANT)
+          FcmService.onTokenRefresh((newToken) {
+            debugPrint("FCM Token refreshed: $newToken");
+
+            authRepo.verifyOtp(
+              phone.trim(),
+              otp.trim(),
+              newToken,
+            );
+          });
+
+          if (responseData['content']['RegisterComplete'] == 0) {
+            token = responseData['content']['token'];
+            Get.toNamed(RouteHelper.getAccountSetup(phone.trim()));
+          } else {
+            await authRepo.saveUserToken(responseData['content']['token']);
+            await apiClient.updateHeader(responseData['content']['token']);
+
+            final dashboardController =
+            Get.find<DashBoardController>();
+            final int feeStatus =
+            await dashboardController.isRegistrationFees();
+
+            if (feeStatus == 0) {
+              Get.offAll(() => const RegistrationFeeScreen());
+            } else {
+              Get.offAllNamed(RouteHelper.getDashboardRoute());
+            }
+          }
+          update();
+        } else {
+          hideLoading();
+          showCustomSnackBar(responseData['error'], isError: true);
+        }
+      } else {
+        hideLoading();
+        showCustomSnackBar(responseData['error'], isError: true);
+      }
+    } catch (e) {
+      hideLoading();
+      showCustomSnackBar(
+        "Something went wrong. Please try again. $e",
+        isError: true,
+      );
+    } finally {
+      hideLoading();
+      update();
+    }
+  }
+
 
   Future<void> register() async {
     showLoading();

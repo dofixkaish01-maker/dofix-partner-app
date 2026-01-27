@@ -2,19 +2,83 @@ import 'package:dofix_technichian/utils/app_constants.dart';
 import 'package:dofix_technichian/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'helper/di_dart.dart' as di;
 import 'helper/route_helper.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await di.init();
-  runApp(
-    const MyApp(),
-  );
+///  Background notification handler
+///  Ye function class ke bahar hi rahega
+Future<void> firebaseMessagingBackgroundHandler(
+    RemoteMessage message) async {
+  await Firebase.initializeApp();
+  debugPrint(
+      "Background message received: ${message.messageId}");
 }
 
-class MyApp extends StatelessWidget {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  /// Firebase init
+  await Firebase.initializeApp();
+
+  /// Background handler register
+  FirebaseMessaging.onBackgroundMessage(
+      firebaseMessagingBackgroundHandler);
+
+  /// DI init
+  await di.init();
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    _setupFCM();
+  }
+
+  ///  Foreground + click listeners
+  Future<void> _setupFCM() async {
+    FirebaseMessaging messaging =
+        FirebaseMessaging.instance;
+
+    /// Permission (Android 13+ / iOS)
+    await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    /// App foreground me ho
+    FirebaseMessaging.onMessage.listen((message) {
+      debugPrint(
+          "Foreground message: ${message.notification?.title}");
+    });
+
+    /// App background se open ho
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      debugPrint("Notification clicked (background)");
+    });
+
+    /// App kill state se open ho
+    RemoteMessage? initialMessage =
+    await messaging.getInitialMessage();
+
+    if (initialMessage != null) {
+      debugPrint(
+          "App opened from terminated state");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +89,15 @@ class MyApp extends StatelessWidget {
       initialRoute: RouteHelper.getInitialRoute(),
       getPages: RouteHelper.routes,
       defaultTransition: Transition.topLevel,
-      // home: SplashScreen(),
-      // home: UserCurrentLocation(),
-      transitionDuration: const Duration(milliseconds: 500),
+      transitionDuration:
+      const Duration(milliseconds: 500),
       builder: (BuildContext context, widget) {
         return MediaQuery(
-            data: MediaQuery.of(context).copyWith(
-              textScaler: TextScaler.linear(1.0),
-            ),
-            child: widget!);
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(1.0),
+          ),
+          child: widget!,
+        );
       },
     );
   }

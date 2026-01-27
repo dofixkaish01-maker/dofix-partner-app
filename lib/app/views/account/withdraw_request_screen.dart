@@ -10,6 +10,8 @@ import '../../../controllers/dashboard_controller.dart';
 import '../../../model/account/withdraw_method_model.dart';
 import '../../../utils/images.dart';
 import '../../widgets/custom_appbar.dart';
+import 'package:flutter/services.dart';
+
 
 class WithdrawRequestScreen extends StatefulWidget {
   const WithdrawRequestScreen({super.key});
@@ -151,6 +153,9 @@ class _WithdrawRequestScreenState extends State<WithdrawRequestScreen> {
                       controller:
                       controller.withdrawAmountController,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly // seif digitonly
+                      ],
                       onChanged: (_) {
                         controller.update(); // key line
                       },
