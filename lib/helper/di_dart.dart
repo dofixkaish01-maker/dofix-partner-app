@@ -26,7 +26,7 @@ Future<void> init() async {
   );
 
   Get.lazyPut(
-      () => AccountRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
+          () => AccountRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
 
   /// Controller
   Get.lazyPut(() =>

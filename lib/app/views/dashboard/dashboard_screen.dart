@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dofix_technichian/app/views/auth/registration_fee_screen.dart';
 import 'package:dofix_technichian/controllers/auth_controller.dart';
 import 'package:dofix_technichian/controllers/dashboard_controller.dart';
 import 'package:dofix_technichian/utils/images.dart';
@@ -11,7 +10,7 @@ import '../../../controllers/account_controller.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_nav_bar.dart';
 import '../account/profile_screen.dart';
-import '../home/notification/notification_screen.dart';
+import '../notification/notification_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final int pageIndex;
@@ -167,7 +166,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ),
 
-                          SizedBox(width: size.width * 0.015),
+                          SizedBox(width: size.width * 0.010),
 
                           /// PROFILE
                           GestureDetector(
@@ -175,7 +174,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                               Get.to(() => AccountScreen());
                             },
                             child: Container(
-                              padding: EdgeInsets.all(size.width * 0.015),
+                              padding: EdgeInsets.all(size.width * 0.010),
                               decoration: ShapeDecoration(
                                 color: const Color(0x19207FA7),
                                 shape: RoundedRectangleBorder(
@@ -499,7 +498,20 @@ class DashboardScreenState extends State<DashboardScreen> {
     });
   }
   Future<void> _onRefresh() async {
-    await Get.find<DashBoardController>().getListOfBookings(isRefresh: true);
-    await Get.find<DashBoardController>().refreshAndNavigateIfUnpaid();
+
+    final dashCtrl = Get.find<DashBoardController>();
+    final accCtrl = Get.find<AccountController>();
+
+    // 1. Latest account info
+    await dashCtrl.getAccountInfo(true);
+
+    // 2. Latest category info
+    await accCtrl.fetchCategory();
+
+    // 3. Latest bookings
+    await dashCtrl.getListOfBookings(isRefresh: true);
+
+    // 4. Optional: unpaid refresh
+    await dashCtrl.refreshAndNavigateIfUnpaid();
   }
 }

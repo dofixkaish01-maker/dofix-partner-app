@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -5,9 +6,11 @@ import 'package:dofix_technichian/data/api/api.dart';
 import 'package:dofix_technichian/utils/app_constants.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controllers/dashboard_controller.dart';
+import '../../model/notification/notification_model.dart';
 
 class AccountRepo {
   final ApiClient apiClient;
@@ -24,6 +27,40 @@ class AccountRepo {
       method: "GET",
     );
   }
+
+  static const String _baseUrl =
+      'https://panel.dofix.in/api/v1/provider/get-notifications';
+
+ static Future<NotificationModel> fetchNotifications({
+    required String token,
+    required String userId,
+    required String userType,
+  }) async {
+    final uri = Uri.parse(_baseUrl).replace(
+      queryParameters: {
+        'user_id': userId,
+        'user_type': userType,
+      },
+    );
+
+    final response = await http.get(
+      uri,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return NotificationModel('', '', []).convertToModel(data);
+    } else {
+      throw Exception(
+        'Failed to load notifications (${response.statusCode})',
+      );
+    }
+  }
+
 
   Future<Response> getWithdrawMethodApi() async {
     return await apiClient.getData(

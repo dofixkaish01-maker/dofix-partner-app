@@ -31,116 +31,138 @@ class _Naya_kaamState extends State<Naya_kaam> {
     return Scaffold(
       body: GetBuilder<DashBoardController>(
         builder: (controller) {
-          return SingleChildScrollView(
-            child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Aaj ke jobs',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontFamily: 'Albert Sans',
-                                fontWeight: FontWeight.w600,
+          return RefreshIndicator(
+            onRefresh: () async {
+              // Ye method sirf refresh ke liye loader ke bina call karega
+              await Get.find<DashBoardController>().getListOfBookings(isRefresh: true);
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Aaj ke jobs',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontFamily: 'Albert Sans',
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                          Flexible(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text:
-                                            '${controller.bookingModel.data?.where((e) => e.bookingStatus == "completed").length ?? 0}',
-                                        style: TextStyle(
-                                          color: const Color(0xFF207FA7),
-                                          fontSize: 20,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w800,
-                                          height: 1.40,
+                            Flexible(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              '${controller.bookingModel.data?.where((e) => e.bookingStatus == "completed").length ?? 0}',
+                                          style: TextStyle(
+                                            color: const Color(0xFF207FA7),
+                                            fontSize: 20,
+                                            fontFamily: 'Albert Sans',
+                                            fontWeight: FontWeight.w800,
+                                            height: 1.40,
+                                          ),
                                         ),
-                                      ),
-                                      TextSpan(
-                                        text:
-                                            '/${controller.bookingModel.data?.length}',
-                                        style: TextStyle(
-                                          color: const Color(0xFF207FA7),
-                                          fontSize: 16,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w800,
-                                          height: 1.40,
+                                        TextSpan(
+                                          text:
+                                              '/${controller.bookingModel.data?.length}',
+                                          style: TextStyle(
+                                            color: const Color(0xFF207FA7),
+                                            fontSize: 16,
+                                            fontFamily: 'Albert Sans',
+                                            fontWeight: FontWeight.w800,
+                                            height: 1.40,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: controller.bookingModel.data?.isEmpty ?? true
-                          ? Center(
-                              child: Text("No Work For Today"),
+                                      ],
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  )
+                                ],
+                              ),
                             )
-                          : ListView.separated(
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.only(bottom: 80),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                debugPrint(
-                                    "formated Date ${controller.bookingModel.data?[index].subCategory.name}");
-                                return GestureDetector(
-                                  onTap: () {},
-                                  child: detailsComponent(
-                                      DateFormat("hh:mm a")
-                                          .format(DateTime.parse(controller
-                                              .bookingModel
-                                              .data?[index]
-                                              .serviceSchedule))
-                                          .toString(),
-                                      "${controller.bookingModel.data?[index].subCategory.name}",
-                                      "${controller.bookingModel.data?[index].serviceAddress?.address ?? 'Address not available'}",
-                                      index,
-                                      controller.bookingModel.data?[index]
-                                              .bookingStatus ==
-                                          "accepted",
-                                      controller.bookingModel.data?[index]
-                                              .bookingStatus ==
-                                          "completed"),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return SizedBox(
-                                  height: 20,
-                                );
-                              },
-                              itemCount: controller.bookingModel.data?.length ?? 0),
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                  ],
-                ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: controller.bookingModel.data?.isEmpty ?? true
+                            ? Center(
+                          child: Column(
+                            children: const [
+                              Icon(
+                                Icons.work_off,
+                                size: 48,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                "No Work For Today",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                            : ListView.separated(
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.only(bottom: 80),
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  debugPrint(
+                                      "formated Date ${controller.bookingModel.data?[index].subCategory.name}");
+                                  return GestureDetector(
+                                    onTap: () {},
+                                    child: detailsComponent(
+                                        DateFormat("hh:mm a")
+                                            .format(DateTime.parse(controller
+                                                .bookingModel
+                                                .data?[index]
+                                                .serviceSchedule))
+                                            .toString(),
+                                        "${controller.bookingModel.data?[index].subCategory.name}",
+                                        "${controller.bookingModel.data?[index].serviceAddress?.address ?? 'Address not available'}",
+                                        index,
+                                        controller.bookingModel.data?[index]
+                                                .bookingStatus ==
+                                            "accepted",
+                                        controller.bookingModel.data?[index]
+                                                .bookingStatus ==
+                                            "completed"),
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(
+                                    height: 20,
+                                  );
+                                },
+                                itemCount: controller.bookingModel.data?.length ?? 0),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                    ],
+                  ),
+            ),
           );
         },
       ),

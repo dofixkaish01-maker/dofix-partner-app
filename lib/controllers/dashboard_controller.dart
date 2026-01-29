@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dofix_technichian/app/BookingEditScreen/booking_edit_screen.dart';
 import 'package:dofix_technichian/controllers/auth_controller.dart';
+import 'package:dofix_technichian/data/repo/account_repo.dart';
 import 'package:dofix_technichian/model/addon_cart_model.dart';
 import 'package:dofix_technichian/model/booking_count_response.dart';
 import 'package:dofix_technichian/model/booking_details_content/booking_details_model.dart';
@@ -35,6 +36,7 @@ import '../model/booking_details_content/booking_details_content.dart';
 import '../model/booking_model.dart' as booking;
 import '../model/booking_status/booking_status.dart';
 import '../model/category_model.dart';
+import '../model/notification/notification_model.dart';
 import '../model/pages_model.dart';
 import '../model/provider_dashboard_model.dart';
 import '../model/provider_model.dart';
@@ -84,6 +86,39 @@ class DashBoardController extends GetxController implements GetxService {
       debugPrint("OWNER accountIsActive => ${accountIsActive.value}");
     } catch (e) {
       accountIsActive.value = 0;
+    }
+  }
+
+
+  var isNotificationLoading = false.obs;
+  var notificationModel = NotificationModel(null, null, []).obs;
+
+  // normally ye auth / storage se aata hai
+  late String? token=authRepo.apiClient.token;
+  // final String token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NWZhYWFjNi1jMWQyLTRkNGMtYmViMS0wNDE5NmRkMmZhOGUiLCJqdGkiOiI2NGNiZTZjMzg4MWU2NTdjNjc4NGMyOWNkNjc0ZGQ1NDVhN2Q0ZTk5NDc1YmQzYTQwZTBlZjFmYzJmNTQyNzE4ODEzNWMxNGYxNjRmYmZjMiIsImlhdCI6MTc2OTY2NDUzMy43NDE4ODMwMzk0NzQ0ODczMDQ2ODc1LCJuYmYiOjE3Njk2NjQ1MzMuNzQxODg0OTQ2ODIzMTIwMTE3MTg3NSwiZXhwIjoxODAxMjAwNTMzLjc0MDg3ODEwNTE2MzU3NDIxODc1LCJzdWIiOiIyMjZhMTA3OS00ZGIzLTQ5YzUtYWQ0Ni0yY2NkNDc1OTlmN2UiLCJzY29wZXMiOltdfQ.VXggwgDH_PIOc0ItfOqhYVEE-0_iZYusKT29PQcUMj9x6aDWFZ5_ZFywzTm3SzoEiOXxAaVblulhf08fcyDT7vVxIhFyKIlhbuDJ2JIkMCLf3dzTjCszjzAiRd7DjckrcXh9qvvdEC2nypTLWplzGnEdETQllWhkG5U0BCCqMljxWTrP1FWvfjD5JnITsNOvUIiF439nsTYijRYtdi4EVuImx-2xy83uyIMFX8D1TuPnK2BrTDjZxOvDKNbG3xOzlgd8ZanxmvbZPBjfR3WE4zKKV4Mdz98JBPfDVdjPw_cMgvB6OyZa6gutRyTHz0pJsGFrAxD-IwvDAPoAqoBoChJKscKo32-WKNGQHDImhkA8evSM9y7-z1OeZuDT0vcp3KyIyOXYF9REJDnk3loF57Z3SRPz4R3zCEpPhOBGZOrY_OvgO3L0coFNu4ssMpIIXRZgAEEvbGJwuGs0bsMiUkJDC-hgL9fKZbSBBD7rdd7MRaTN8ZDz3z-z89xQ01kjtyqnxqkl0DQjoSMTcA_H2Wcocj42Ojj0D5i7rpV2T9YsSXIgckZzD9kDZko7vi7falfcTUWJjrQ2qS1XjjefB5Ixy5Ov_fVicu4jdPKYF3VGVRz2A71THDPp9BBHeKJL9eMFzG_wpGZl8c_tUwVs_ZHAOQXg1MiOqSkL40McpXw';
+  final String userId = '226a1079-4db3-49c5-ad46-2ccd47599f7e';
+  final String userType = 'provider';
+
+  Future<void> fetchNotifications() async {
+    try {
+      isNotificationLoading.value = true;
+
+      final String? token = authRepo.apiClient.token;
+      if (token == null || token.isEmpty) {
+        throw Exception('Token not found');
+      }
+
+      final result = await AccountRepo.fetchNotifications(
+        token: token,
+        userId: userId,
+        userType: userType,
+      );
+
+      notificationModel.value = result;
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isNotificationLoading.value = false;
     }
   }
 
@@ -1254,7 +1289,7 @@ class DashBoardController extends GetxController implements GetxService {
 
   Future<void> getListOfBookings({required bool isRefresh}) async {
     if (!isRefresh) {
-      showLoading();
+      showLoading(); // loader open
     }
 
     try {
@@ -1277,7 +1312,7 @@ class DashBoardController extends GetxController implements GetxService {
       log("Request Body: $body");
       log("Headers: ${apiClient.mainHeaders}");
 
-      // Make API call using ApiClient's postData method
+      // Make API call
       Response response = await apiClient.postData(
         AppConstants.getTodaysBooking,
         body,
@@ -1287,21 +1322,20 @@ class DashBoardController extends GetxController implements GetxService {
       if (response.statusCode == 200) {
         var responseData = jsonDecode(response.body);
         log("$responseData today booking data");
+
         if (responseData['content'] != null &&
             responseData['content']['bookings'] != null) {
           bookingModel =
               booking.BookingList.fromJson(responseData['content']['bookings']);
+
           if (!isRefresh) {
             getProviderInfo();
           }
           update();
-          // hideLoading();
         } else {
           log("Error: Invalid response structure");
-          hideLoading();
         }
       } else {
-        hideLoading();
         log("${response.statusText} issue error ${response.statusCode}");
         if (response.statusText == 'Unauthorized') {
           closeSnackBarIfActive();
@@ -1316,11 +1350,14 @@ class DashBoardController extends GetxController implements GetxService {
         update();
       }
     } catch (e) {
-      hideLoading();
-      showCustomSnackBar("Something went wrong. Please try again. $e",
-          isError: true);
       log("Error fetching bookings: $e");
       closeSnackBarIfActive();
+      showCustomSnackBar("Something went wrong. Please try again. $e",
+          isError: true);
+    } finally {
+      if (!isRefresh) {
+        hideLoading(); // YAHI PE HAMESHA CLOSE
+      }
     }
   }
 

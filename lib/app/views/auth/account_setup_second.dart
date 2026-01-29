@@ -339,7 +339,7 @@ Widget buildInteractiveProfile(BuildContext context) {
         onTap: () async {
           var value = await pickFile(
             context,
-            frontCameraOnly: true,
+            frontCameraOnly: false,
           );
 
           if (value != null && value.containsKey("filename")) {
