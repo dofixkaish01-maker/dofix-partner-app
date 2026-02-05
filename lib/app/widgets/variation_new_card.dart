@@ -65,222 +65,245 @@ class _VariationsNewCardState extends State<VariationsNewCard> {
     return duration;
   }
 
-  void _addToCart() {
-    try {
-      final price = int.tryParse(widget.serviceDiscountedPrice) ?? 0;
-      final mrpPrice = int.tryParse(widget.serviceMrpPrice) ?? 0;
-
-      dashboardController.addAddonToCart(
-        serviceId: widget.serviceId,
-        variantKey: widget.variantKey,
-        serviceName: widget.serviceName,
-        variantName: widget.serviceVariationName,
-        price: price,
-        mrpPrice: mrpPrice,
-        duration: widget.serviceTimeDuration != "null"
-            ? widget.serviceTimeDuration
-            : null,
-        description: widget.serviceDescription,
-        thumbnailPath: widget.thumbnailPath,
-        variationId: widget.variationId,
-      );
-    } catch (e) {
-      log("Error adding to cart: $e");
-    }
+  _addToCart() {
+    dashboardController.addAddonToCart(
+      serviceId: widget.serviceId,
+      variantKey: widget.variantKey,
+      serviceName: widget.serviceName,
+      variantName: widget.serviceVariationName,
+      price: int.parse(widget.serviceDiscountedPrice),
+      mrpPrice: int.parse(widget.serviceMrpPrice),
+      duration: widget.serviceTimeDuration,
+      description: widget.serviceDescription,
+      thumbnailPath: widget.thumbnailPath,
+      variationId: widget.variationId,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     log("Service id : ${widget.serviceId} , Variant Key : ${widget.variantKey}");
-    return Container(
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: 6),
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        borderRadius: BorderRadius.circular(12),
+        /// 🔥 SUBTLE BORDER
         border: Border.all(
-          color: Colors.black.withAlpha((0.25 * 255).toInt()),
-          width: 0.25,
+          color: const Color(0xFF207FA8).withOpacity(0.15),
+          width: 1,
         ),
+
+        /// 🔥 SOFT SHADOW
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          /// LEFT CONTENT
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 4),
+                /// SERVICE NAME
                 Text(
-                  widget.serviceVariationName,
+                  widget.serviceName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 8),
+
+                const SizedBox(height: 10),
+
+                /// PRICE + MRP + TIME
                 Wrap(
-                  spacing: 6,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 8,
                   children: [
-                    Text(
-                      "₹${widget.serviceDiscountedPrice}",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                    /// PRICE CHIP
+                    Container(
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF207FA8).withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "₹${widget.serviceDiscountedPrice}",
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF207FA8),
+                        ),
                       ),
                     ),
+
+                    /// MRP
                     if (widget.serviceMrpPrice != "0.0" &&
                         widget.serviceMrpPrice != "null" &&
                         widget.serviceMrpPrice != "0")
-                      Column(
+                      Text(
+                        "₹${widget.serviceMrpPrice}",
+                        style: TextStyle(
+                          fontSize: 11,
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+
+                    /// TIME
+                    if (widget.serviceTimeDuration != "null")
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(
-                            height: 1,
-                          ),
+                          const Icon(Icons.schedule,
+                              size: 12, color: Colors.grey),
+                          const SizedBox(width: 4),
                           Text(
-                            "₹${widget.serviceMrpPrice}",
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
-                              decoration: TextDecoration.lineThrough,
-                              decorationStyle: TextDecorationStyle.solid,
-                              color:
-                                  Colors.black.withAlpha((0.60 * 255).toInt()),
+                            _formatDuration(widget.serviceTimeDuration),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey,
                             ),
                           ),
                         ],
                       ),
-                    if (widget.serviceTimeDuration != "null")
-                      Text(
-                        _formatDuration(widget.serviceTimeDuration),
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black,
-                        ),
-                      ),
                   ],
-                ),
-                SizedBox(
-                  height: 8,
                 ),
               ],
             ),
           ),
+
+          /// RIGHT ACTION AREA
           GetBuilder<DashBoardController>(
             builder: (controller) {
               final quantity = controller.getAddonQuantity(
                   widget.serviceId, widget.variantKey);
-              final isInCart = quantity > 0;
 
-              return SizedBox(
-                height: 35,
-                child: isInCart
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: quantity > 0
                     ? Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: const Color(0xFF207FA8), width: 1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Decrease button
-                            GestureDetector(
-                              onTap: () {
-                                controller.updateAddonQuantity(
-                                  widget.serviceId,
-                                  widget.variantKey,
-                                  increment: false,
-                                );
-                              },
-                              child: Container(
-                                width: 30,
-                                height: 35,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF207FA8),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(5),
-                                    bottomLeft: Radius.circular(5),
-                                  ),
-                                ),
-                                child: Icon(
-                                  quantity > 1 ? Icons.remove : Icons.delete,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                            // Quantity display
-                            Container(
-                              width: 35,
-                              height: 35,
-                              color: Colors.white,
-                              child: Center(
-                                child: Text(
-                                  quantity.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xFF207FA8),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // Increase button
-                            GestureDetector(
-                              onTap: () {
-                                controller.updateAddonQuantity(
-                                  widget.serviceId,
-                                  widget.variantKey,
-                                  increment: true,
-                                );
-                              },
-                              child: Container(
-                                width: 30,
-                                height: 35,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF207FA8),
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(5),
-                                    bottomRight: Radius.circular(5),
-                                  ),
-                                ),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: _addToCart,
+                  key: const ValueKey("counter"),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: const Color(0xFF207FA8), width: 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      /// DECREASE
+                      InkWell(
+                        onTap: () {
+                          controller.updateAddonQuantity(
+                            widget.serviceId,
+                            widget.variantKey,
+                            increment: false,
+                          );
+                        },
                         child: Container(
-                          height: 35,
-                          width: 70,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF207FA8),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Add",
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          width: 32,
+                          height: 36,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF207FA8),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(9),
+                              bottomLeft: Radius.circular(9),
                             ),
+                          ),
+                          child: Icon(
+                            quantity > 1
+                                ? Icons.remove
+                                : Icons.delete,
+                            color: Colors.white,
+                            size: 16,
                           ),
                         ),
                       ),
+
+                      /// COUNT
+                      Container(
+                        width: 36,
+                        height: 36,
+                        alignment: Alignment.center,
+                        child: Text(
+                          quantity.toString(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF207FA8),
+                          ),
+                        ),
+                      ),
+
+                      /// INCREASE
+                      InkWell(
+                        onTap: () {
+                          controller.updateAddonQuantity(
+                            widget.serviceId,
+                            widget.variantKey,
+                            increment: true,
+                          );
+                        },
+                        child: Container(
+                          width: 32,
+                          height: 36,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF207FA8),
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(9),
+                              bottomRight: Radius.circular(9),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                    : InkWell(
+                  key: const ValueKey("add"),
+                  onTap: _addToCart,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    height: 36,
+                    width: 76,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF207FA8),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "ADD",
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               );
             },
           ),

@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../app/views/auth/registration_fee_screen.dart';
+import '../app/views/customer_otp_verification_screen.dart';
 import '../data/api/api.dart';
 import '../data/repo/auth_repo.dart';
 import '../helper/route_helper.dart';
@@ -40,6 +41,13 @@ class AuthController extends GetxController implements GetxService {
     update();
   }
 
+
+  Future<void> verifyCustomerOtp({
+    required String phoneNumber,
+    required String otp,
+  }) async {
+    // API CALL
+  }
 
   Future<bool> handleOnWillPop() async {
     final now = DateTime.now();
@@ -102,6 +110,118 @@ class AuthController extends GetxController implements GetxService {
     SystemNavigator.pop(); // Closes the app
     update();
     return Future.value(true);
+  }
+
+  // send customer otp
+  Future<void> sendCustomerOtpApi({
+    required String phone,
+    required String bookingId,
+    required String token,
+  }) async {
+    if (phone.length != 13) {
+      showCustomSnackBar("Invalid customer phone number", isError: true);
+      return;
+    }
+
+    showLoading();
+    update();
+
+    try {
+      Response response = await authRepo.sendCustomerOtpRepo(
+        phone: phone,
+        bookingId: bookingId,
+        token: token,
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        showCustomSnackBar(
+          data["message"] ?? "OTP sent successfully",
+          isSuccess: true,
+        );
+
+        /// TURANT OTP VERIFY SCREEN
+        Get.to(
+              () => CustomerOtpVerificationScreen(
+            phoneNo: phone,
+            bookingId: bookingId,
+          ),
+        );
+
+        // Success message
+        Get.snackbar(
+          "OTP Sent",
+          "OTP successfully sent to customer mobile number",
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          margin: const EdgeInsets.all(12),
+          duration: const Duration(seconds: 2),
+        );
+      } else {
+        showCustomSnackBar(
+          data["message"] ?? "Failed to send OTP",
+          isError: true,
+        );
+      }
+    } catch (e) {
+      showCustomSnackBar("Something went wrong", isError: true);
+      debugPrint("Send customer OTP error: $e");
+    } finally {
+      hideLoading();
+      update();
+    }
+  }
+
+  // verify customer otp
+  Future<bool> verifyProviderOtpApi({
+    required String phone,
+    required String otp,
+    required String bookingId,
+    required String token,
+    required String zoneId,
+  }) async {
+    if (otp.length < 4) {
+      showCustomSnackBar("Please enter valid OTP", isError: true);
+      return false;
+    }
+
+    showLoading();
+    update();
+
+    try {
+      Response response = await authRepo.verifyProviderOtpRepo(
+        phone: phone,
+        otp: otp,
+        bookingId: bookingId,
+        token: token,
+        zoneId: zoneId,
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        showCustomSnackBar(
+            data["message"] ??
+            "OTP verified successfully",
+            isError: false
+        );
+        return true;
+      } else {
+        showCustomSnackBar(
+          data["message"] ?? "Invalid OTP",
+          isError: true,
+        );
+        return false;
+      }
+    } catch (e) {
+      hideLoading(); // yahan bhi
+
+      showCustomSnackBar("Something went wrong", isError: true);
+      debugPrint("Verify OTP error: $e");
+      return false;
+    }
   }
 
   Future<void> sendOtpApi(String phone) async {

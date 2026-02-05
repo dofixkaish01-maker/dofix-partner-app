@@ -190,7 +190,6 @@ class DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ),
 
-
                           /// NOTIFICATION
                           IconButton(
                             iconSize: isSmallDevice ? 22 : size.width * 0.06,
@@ -317,53 +316,99 @@ class DashboardScreenState extends State<DashboardScreen> {
                             final category = authController.categoryInfo.value;
                             if (category == null) return const SizedBox();
 
-                            final dashboardController =
-                                Get.find<DashBoardController>();
+                            final dashCtrl = Get.find<DashBoardController>();
 
-                            double walletBalance = double.tryParse(
-                                    dashboardController
-                                            .providerDashboardModel
-                                            .content
-                                            ?.providerInfo
-                                            ?.owner
-                                            ?.account
-                                            ?.accountReceivable
-                                            ?.toString() ??
-                                        "0") ??
+                            double receivableAmount = double.tryParse(
+                                dashCtrl
+                                    .providerDashboardModel
+                                    ?.content
+                                    ?.providerInfo
+                                    ?.owner
+                                    ?.account
+                                    ?.accountReceivable
+                                    ?.toString() ??
+                                    "0") ??
                                 0;
 
-                            double minimumBalance =
-                                category.minimumBalance.toDouble();
+                            double transactionAmount =
+                            dashCtrl.getTransactionAmountAmount(0.0, receivableAmount);
 
-                            if (walletBalance >= minimumBalance) {
-                              return const SizedBox(); // balance ok → message hide
+                            double currentBalance = transactionAmount.floorToDouble();
+                            double minimumBalance =
+                            category.minimumBalance.toDouble().floorToDouble();
+
+                            if (currentBalance >= minimumBalance) {
+                              return const SizedBox();
                             }
+
+                            /// 💡 SHORT AMOUNT
+                            double shortAmount = minimumBalance - currentBalance;
 
                             return Container(
                               width: double.infinity,
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
+                              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Colors.redAccent.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.redAccent),
+                                color: Colors.redAccent.withOpacity(0.08),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.redAccent.withOpacity(0.6)),
                               ),
                               child: Row(
-                                children: const [
-                                  Icon(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
                                     Icons.warning_amber_rounded,
                                     color: Colors.redAccent,
+                                    size: 26,
                                   ),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 10),
                                   Expanded(
-                                    child: Text(
-                                      "Aapka current balance minimum balance se kam hai, kripya recharge karein.",
-                                      style: TextStyle(
-                                        color: Colors.redAccent,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14,
-                                      ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Low Balance Warning",
+                                          style: TextStyle(
+                                            color: Colors.redAccent,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          "Current Balance: ₹${currentBalance.toStringAsFixed(0)}",
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Minimum Required: ₹${minimumBalance.toStringAsFixed(0)}",
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+
+                                        /// 🔥 UNIQUE COLOR HIGHLIGHT
+                                        Container(
+                                          padding:
+                                          const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFFFE6CC), // light orange
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          child: Text(
+                                            "Add ₹${shortAmount.toStringAsFixed(0)} more to continue receiving bookings",
+                                            style: const TextStyle(
+                                              color: Color(0xFFE65100), // deep orange
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -372,103 +417,222 @@ class DashboardScreenState extends State<DashboardScreen> {
                           }),
 
                           /// ================= CATEGORY INFO =================
-                          Obx(() {
-                            final category = authController.categoryInfo.value;
+                          // Obx(() {
+                          //   final category = authController.categoryInfo.value;
+                          //
+                          //   if (category == null) {
+                          //     return const Padding(
+                          //       padding: EdgeInsets.symmetric(vertical: 8),
+                          //       child:
+                          //           CircularProgressIndicator(strokeWidth: 2),
+                          //     );
+                          //   }
+                          //
+                          //   return Container(
+                          //     width: double.infinity,
+                          //     margin: const EdgeInsets.symmetric(
+                          //         horizontal: 12, vertical: 6),
+                          //     padding: const EdgeInsets.symmetric(
+                          //         horizontal: 12, vertical: 8),
+                          //     // decoration: BoxDecoration(
+                          //     //   color: Colors.redAccent.withOpacity(0.08),
+                          //     //   borderRadius: BorderRadius.circular(10),
+                          //     //   border: Border.all(
+                          //     //     color: Colors.redAccent.withOpacity(0.4),
+                          //     //   ),
+                          //     // ),
+                          //     child: Row(
+                          //       children: [
+                          //         Icon(Icons.miscellaneous_services,
+                          //             color: Color(0xFF207FA7)),
+                          //         const SizedBox(width: 8),
+                          //
+                          //         /// CATEGORY
+                          //         Expanded(
+                          //           child: Text(
+                          //             category.categoryName,
+                          //             maxLines: 1,
+                          //             overflow: TextOverflow.ellipsis,
+                          //             style: const TextStyle(
+                          //               fontSize: 16,
+                          //               fontWeight: FontWeight.bold,
+                          //             ),
+                          //           ),
+                          //         ),
+                          //
+                          //         GestureDetector(
+                          //           onTap: () {
+                          //             // future me recharge dialog ya info dikha sakte ho
+                          //             // showRechargeDialog(context);
+                          //           },
+                          //           child: Container(
+                          //             padding: const EdgeInsets.symmetric(
+                          //                 horizontal: 12, vertical: 8),
+                          //             decoration: BoxDecoration(
+                          //               color:
+                          //                   Colors.redAccent.withOpacity(0.08),
+                          //               borderRadius: BorderRadius.circular(10),
+                          //               border: Border.all(
+                          //                 color:
+                          //                     Colors.redAccent.withOpacity(0.4),
+                          //               ),
+                          //             ),
+                          //             child: Row(
+                          //               mainAxisSize: MainAxisSize.min,
+                          //               children: [
+                          //                 const SizedBox(width: 6),
+                          //                 Text.rich(
+                          //                   TextSpan(
+                          //                     children: [
+                          //                       const TextSpan(
+                          //                         text: "Min Balance ",
+                          //                         style: TextStyle(
+                          //                           color: Colors.black,
+                          //                           fontWeight: FontWeight.w600,
+                          //                           fontSize: 13,
+                          //                         ),
+                          //                       ),
+                          //                       TextSpan(
+                          //                         text:
+                          //                             "₹${category.minimumBalance}",
+                          //                         style: const TextStyle(
+                          //                           color: Colors.redAccent,
+                          //                           fontWeight: FontWeight.bold,
+                          //                           fontSize: 13,
+                          //                         ),
+                          //                       ),
+                          //                     ],
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   );
+                          // }),
 
-                            if (category == null) {
-                              return const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 8),
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              );
-                            }
 
-                            return Container(
-                              width: double.infinity,
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              // decoration: BoxDecoration(
-                              //   color: Colors.redAccent.withOpacity(0.08),
-                              //   borderRadius: BorderRadius.circular(10),
-                              //   border: Border.all(
-                              //     color: Colors.redAccent.withOpacity(0.4),
-                              //   ),
-                              // ),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.miscellaneous_services,
-                                      color: Color(0xFF207FA7)),
-                                  const SizedBox(width: 8),
+                          //=================================
 
-                                  /// CATEGORY
-                                  Expanded(
-                                    child: Text(
-                                      category.categoryName,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                    /// ================= CATEGORY INFO =================
+                    Obx(() {
+                      final category = authController.categoryInfo.value;
+
+                      if (category == null) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        );
+                      }
+
+                      final dashCtrl = Get.find<DashBoardController>();
+
+                      double receivableAmount = double.tryParse(
+                          dashCtrl
+                              .providerDashboardModel
+                              ?.content
+                              ?.providerInfo
+                              ?.owner
+                              ?.account
+                              ?.accountReceivable
+                              ?.toString() ??
+                              "0") ??
+                          0;
+
+                      double transactionAmount =
+                      dashCtrl.getTransactionAmountAmount(0.0, receivableAmount);
+
+                      double currentBalance = transactionAmount.floorToDouble();
+                      double minimumBalance =
+                      category.minimumBalance.toDouble().floorToDouble();
+
+                      final bool isBalanceOk = currentBalance >= minimumBalance;
+
+                      return Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.miscellaneous_services,
+                                color: Color(0xFF207FA7)),
+                            const SizedBox(width: 8),
+
+                            /// CATEGORY NAME
+                            Expanded(
+                              child: Text(
+                                category.categoryName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+
+                            /// 🔥 MIN BALANCE BADGE
+                            GestureDetector(
+                              onTap: () {
+                                // future: recharge dialog
+                              },
+                              child: Container(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: isBalanceOk
+                                      ? Colors.green.withOpacity(0.08)
+                                      : Colors.redAccent.withOpacity(0.08),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: isBalanceOk
+                                        ? Colors.green
+                                        : Colors.redAccent.withOpacity(0.4),
                                   ),
-
-                                  GestureDetector(
-                                    onTap: () {
-                                      // future me recharge dialog ya info dikha sakte ho
-                                      // showRechargeDialog(context);
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 8),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Colors.redAccent.withOpacity(0.08),
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                          color:
-                                              Colors.redAccent.withOpacity(0.4),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(width: 6),
+                                    Text.rich(
+                                      TextSpan(
                                         children: [
-                                          const SizedBox(width: 6),
-                                          Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                const TextSpan(
-                                                  text: "Min Balance ",
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 13,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text:
-                                                      "₹${category.minimumBalance}",
-                                                  style: const TextStyle(
-                                                    color: Colors.redAccent,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 13,
-                                                  ),
-                                                ),
-                                              ],
+                                          const TextSpan(
+                                            text: "Min Balance ",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: "₹${category.minimumBalance}",
+                                            style: TextStyle(
+                                              color: isBalanceOk
+                                                  ? Colors.green
+                                                  : Colors.redAccent,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            );
-                          }),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
 
-                          /// ================= SCREENS =================
+
+
+
+                    /// ================= SCREENS =================
                           Expanded(
                             child: PageView.builder(
                               controller: _pageController,
@@ -497,8 +661,8 @@ class DashboardScreenState extends State<DashboardScreen> {
       currentPage = pageIndex;
     });
   }
-  Future<void> _onRefresh() async {
 
+  Future<void> _onRefresh() async {
     final dashCtrl = Get.find<DashBoardController>();
     final accCtrl = Get.find<AccountController>();
 

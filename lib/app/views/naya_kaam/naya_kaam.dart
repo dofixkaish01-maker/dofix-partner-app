@@ -1,11 +1,9 @@
-import 'package:dofix_technichian/model/booking_model.dart';
-import 'package:dofix_technichian/utils/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../controllers/dashboard_controller.dart';
+import '../../../utils/theme.dart';
 import '../shuru_kare.dart';
 
 class Naya_kaam extends StatefulWidget {
@@ -16,8 +14,6 @@ class Naya_kaam extends StatefulWidget {
 }
 
 class _Naya_kaamState extends State<Naya_kaam> {
-// To prevent multiple API calls
-
   @override
   void initState() {
     super.initState();
@@ -29,139 +25,85 @@ class _Naya_kaamState extends State<Naya_kaam> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF6F7F9),
       body: GetBuilder<DashBoardController>(
         builder: (controller) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              // Ye method sirf refresh ke liye loader ke bina call karega
-              await Get.find<DashBoardController>().getListOfBookings(isRefresh: true);
+          return WillPopScope(
+            onWillPop: () async {
+              /// 👈 signal bhej rahe hain ki refresh chahiye
+              Get.back(result: true);
+              return false;
             },
-            child: SingleChildScrollView(
-              child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Aaj ke jobs',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontFamily: 'Albert Sans',
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await controller.getListOfBookings(isRefresh: true);
+              },
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
+
+                    /// HEADER
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Aaj ke Jobs",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
                             ),
-                            Flexible(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              '${controller.bookingModel.data?.where((e) => e.bookingStatus == "completed").length ?? 0}',
-                                          style: TextStyle(
-                                            color: const Color(0xFF207FA7),
-                                            fontSize: 20,
-                                            fontFamily: 'Albert Sans',
-                                            fontWeight: FontWeight.w800,
-                                            height: 1.40,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text:
-                                              '/${controller.bookingModel.data?.length}',
-                                          style: TextStyle(
-                                            color: const Color(0xFF207FA7),
-                                            fontSize: 16,
-                                            fontFamily: 'Albert Sans',
-                                            fontWeight: FontWeight.w800,
-                                            height: 1.40,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: controller.bookingModel.data?.isEmpty ?? true
-                            ? Center(
-                          child: Column(
-                            children: const [
-                              Icon(
-                                Icons.work_off,
-                                size: 48,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                "No Work For Today",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
                           ),
-                        )
-                            : ListView.separated(
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.only(bottom: 80),
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  debugPrint(
-                                      "formated Date ${controller.bookingModel.data?[index].subCategory.name}");
-                                  return GestureDetector(
-                                    onTap: () {},
-                                    child: detailsComponent(
-                                        DateFormat("hh:mm a")
-                                            .format(DateTime.parse(controller
-                                                .bookingModel
-                                                .data?[index]
-                                                .serviceSchedule))
-                                            .toString(),
-                                        "${controller.bookingModel.data?[index].subCategory.name}",
-                                        "${controller.bookingModel.data?[index].serviceAddress?.address ?? 'Address not available'}",
-                                        index,
-                                        controller.bookingModel.data?[index]
-                                                .bookingStatus ==
-                                            "accepted",
-                                        controller.bookingModel.data?[index]
-                                                .bookingStatus ==
-                                            "completed"),
-                                  );
-                                },
-                                separatorBuilder: (context, index) {
-                                  return SizedBox(
-                                    height: 20,
-                                  );
-                                },
-                                itemCount: controller.bookingModel.data?.length ?? 0),
+                          Text(
+                            "${controller.bookingModel.data?.where((e) => e.bookingStatus == "completed").length ?? 0}"
+                                "/${controller.bookingModel.data?.length ?? 0}",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF207FA7),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 25,
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    /// EMPTY STATE
+                    if (controller.bookingModel.data?.isEmpty ?? true)
+                      Column(
+                        children: const [
+                          SizedBox(height: 80),
+                          Icon(Icons.work_off, size: 60, color: Colors.grey),
+                          SizedBox(height: 12),
+                          Text(
+                            "No Work For Today",
+                            style: TextStyle(color: Colors.black54),
+                          ),
+                        ],
+                      )
+                    else
+
+                    /// BOOKINGS LIST
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 80),
+                        itemCount: controller.bookingModel.data!.length,
+                        separatorBuilder: (_, __) =>
+                        const SizedBox(height: 16),
+                        itemBuilder: (context, index) {
+                          final booking =
+                          controller.bookingModel.data![index];
+                          return _bookingCard(booking);
+                        },
                       ),
-                    ],
-                  ),
+                  ],
+                ),
+              ),
             ),
           );
         },
@@ -170,149 +112,168 @@ class _Naya_kaamState extends State<Naya_kaam> {
   }
 }
 
-Widget detailsComponent(
-  String time,
-  String title,
-  String location,
-  int index,
-  bool isAccepted,
-  bool isCompleted,
-) {
-  return Column(
-    children: [
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Text(
-              time,
+Widget _bookingCard(booking) {
+  return Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(14),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 6,
+          offset: const Offset(0, 3),
+        )
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        /// TIME
+        Text(
+          DateFormat("hh:mm a")
+              .format(DateTime.parse(booking.serviceSchedule)),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+
+        const SizedBox(height: 6),
+
+        /// SERVICE NAME
+        Text(
+          booking.subCategory?.name ?? '',
+          style: const TextStyle(fontSize: 14),
+        ),
+
+        const SizedBox(height: 6),
+
+        /// ADDRESS
+        Text(
+          booking.serviceAddress?.address ?? "Address not available",
+          style: const TextStyle(color: Colors.grey),
+        ),
+
+        const SizedBox(height: 10),
+
+        /// STATUS ROW
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+
+            /// SERVICE STATUS
+            _statusChip(
+              booking.bookingStatus,
+              _bookingStatusColor(booking.bookingStatus),
+            ),
+
+            /// PAYMENT STATUS
+            Text(
+              booking.isPaid == 1 ? "PAID" : "UNPAID",
               style: TextStyle(
-                color: Colors.black.withAlpha(77),
-                fontSize: 18,
-                fontFamily: 'Albert Sans',
+                color: booking.isPaid == 1
+                    ? Colors.green
+                    : Colors.red,
                 fontWeight: FontWeight.w700,
               ),
             ),
-          )
-        ],
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Row(
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontFamily: 'Albert Sans',
-                    fontWeight: FontWeight.w500,
+          ],
+        ),
+
+        const SizedBox(height: 8),
+
+        /// PAYMENT METHOD + BUTTON
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+
+            /// PAYMENT METHOD
+            Container(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.indigo.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.account_balance_wallet_outlined,
+                    size: 14,
+                    color: Colors.indigo,
                   ),
-                ),
-                Visibility(
-                  visible: isCompleted,
-                  child: Text(
-                    " ( Completed )",
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 14,
-                      fontFamily: 'Albert Sans',
-                      fontWeight: FontWeight.w400,
+                  const SizedBox(width: 4),
+                  Text(
+                    booking.paymentMethod
+                        ?.replaceAll('_', ' ')
+                        .toUpperCase() ??
+                        '',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.indigo,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-      SizedBox(
-        height: 8,
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ImageIcon(
-                AssetImage("assets/icons/ic_location.png"),
-                size: 14,
-                color: primaryAppColor,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              SizedBox(
-                width: Get.width / 2,
-                child: Text(
-                  location,
-                  maxLines: 3,
+
+            /// VIEW DETAILS BUTTON
+            GestureDetector(
+              onTap: () {
+                Get.to(() => ShuruKare(id: booking.id ?? ""));
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                  color: primaryAppColor,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Text(
+                  "View Details",
                   style: TextStyle(
-                    color: Colors.black.withAlpha(102),
+                    color: Colors.white,
                     fontSize: 12,
-                    fontFamily: 'Albert Sans',
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-            ],
-          ),
-          GestureDetector(
-            onTap: () {
-              Get.to(
-                () => ShuruKare(
-                  id: Get.find<DashBoardController>()
-                          .bookingModel
-                          .data?[index]
-                          .id ??
-                      "",
-                ),
-              );
-            },
-            child: Container(
-              margin: EdgeInsets.zero,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-              decoration: ShapeDecoration(
-                color: primaryAppColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-              ),
-              child: Text(
-                isAccepted ? 'Suru Karein' : 'View Details',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontFamily: 'Albert Sans',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
             ),
-          ),
-        ],
-      ),
-      SizedBox(
-        height: 20,
-      ),
-      Container(
-        width: 328,
-        decoration: ShapeDecoration(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              width: 1,
-              strokeAlign: BorderSide.strokeAlignCenter,
-              color: Colors.black.withAlpha(38),
-            ),
-          ),
+          ],
         ),
-      )
-    ],
+      ],
+    ),
   );
+}
+
+Widget _statusChip(String? text, Color color) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+    decoration: BoxDecoration(
+      color: color.withOpacity(0.15),
+      borderRadius: BorderRadius.circular(20),
+    ),
+    child: Text(
+      text?.toUpperCase() ?? '',
+      style: TextStyle(
+        color: color,
+        fontSize: 12,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+  );
+}
+
+Color _bookingStatusColor(String? status) {
+  switch (status) {
+    case "completed":
+      return Colors.green;
+    case "ongoing":
+      return Colors.orange;
+    default:
+      return Colors.grey;
+  }
 }

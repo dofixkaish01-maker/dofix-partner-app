@@ -46,6 +46,50 @@ class AuthRepo {
         {"phone": "+91$phoneNo", "user_type": "provider-admin"});
   }
 
+  // send customer otp
+  Future<Response> sendCustomerOtpRepo({
+    required String phone,
+    required String bookingId,
+    required String token,
+  }) async {
+    return await apiClient.postData(
+      AppConstants.sendCustomerOtp,
+      {
+        "phone": phone,
+        "user_type": "customer",
+        "booking_id": bookingId,
+      },
+      headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+
+  // verify customer otp
+  Future<Response> verifyProviderOtpRepo({
+    required String phone,
+    required String otp,
+    required String bookingId,
+    required String token,
+    required String zoneId,
+  }) async {
+    return await apiClient.postData(
+      AppConstants.verifyProviderOtp,
+      {
+        "phone": phone,
+        "otp": otp,
+        "booking_id": bookingId,
+      },
+      headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+        "zoneID": zoneId,
+      },
+    );
+  }
+
   Future<Response> getServiceCategoryRepo() async {
     return await apiClient.postData(AppConstants.getServiceCategory, {});
   }

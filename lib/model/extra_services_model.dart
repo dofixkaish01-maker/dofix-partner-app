@@ -46,6 +46,7 @@ class ExtraServicesModel {
 class AddOnContent {
   final String? id;
   final String? name;
+  final String? price;
   final String? shortDescription;
   final String? description;
   final String? coverImage;
@@ -75,6 +76,7 @@ class AddOnContent {
   AddOnContent({
     this.id,
     this.name,
+    this.price,
     this.shortDescription,
     this.description,
     this.coverImage,
@@ -105,6 +107,7 @@ class AddOnContent {
   factory AddOnContent.fromJson(Map<String, dynamic> json) => AddOnContent(
         id: json["id"],
         name: json["name"],
+        price: json["price"],
         shortDescription: json["short_description"],
         description: json["description"],
         coverImage: json["cover_image"],
@@ -158,6 +161,7 @@ class AddOnContent {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "price":price,
         "short_description": shortDescription,
         "description": description,
         "cover_image": coverImage,

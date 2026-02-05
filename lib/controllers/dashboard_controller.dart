@@ -17,6 +17,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../app/views/account/account_screen.dart';
 import '../app/views/auth/registration_fee_screen.dart';
 import '../app/views/bookingScreen/booking_screen.dart';
@@ -61,6 +62,7 @@ class DashBoardController extends GetxController implements GetxService {
   @override
   void onInit() {
     // TODO: implement onInit
+    // TODO: implement onInit
     super.onInit();
     // handleLocationPermission(Get.context!);
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -89,6 +91,25 @@ class DashBoardController extends GetxController implements GetxService {
     }
   }
 
+  Future<void> openInvoice(String bookingId) async {
+    final url = Uri.parse(
+      "https://panel.dofix.in/admin/booking/provider-invoice/$bookingId",
+    );
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      Get.snackbar(
+        "Error",
+        "Unable to open invoice",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
 
   var isNotificationLoading = false.obs;
   var notificationModel = NotificationModel(null, null, []).obs;
@@ -96,7 +117,9 @@ class DashBoardController extends GetxController implements GetxService {
   // normally ye auth / storage se aata hai
   late String? token=authRepo.apiClient.token;
   // final String token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NWZhYWFjNi1jMWQyLTRkNGMtYmViMS0wNDE5NmRkMmZhOGUiLCJqdGkiOiI2NGNiZTZjMzg4MWU2NTdjNjc4NGMyOWNkNjc0ZGQ1NDVhN2Q0ZTk5NDc1YmQzYTQwZTBlZjFmYzJmNTQyNzE4ODEzNWMxNGYxNjRmYmZjMiIsImlhdCI6MTc2OTY2NDUzMy43NDE4ODMwMzk0NzQ0ODczMDQ2ODc1LCJuYmYiOjE3Njk2NjQ1MzMuNzQxODg0OTQ2ODIzMTIwMTE3MTg3NSwiZXhwIjoxODAxMjAwNTMzLjc0MDg3ODEwNTE2MzU3NDIxODc1LCJzdWIiOiIyMjZhMTA3OS00ZGIzLTQ5YzUtYWQ0Ni0yY2NkNDc1OTlmN2UiLCJzY29wZXMiOltdfQ.VXggwgDH_PIOc0ItfOqhYVEE-0_iZYusKT29PQcUMj9x6aDWFZ5_ZFywzTm3SzoEiOXxAaVblulhf08fcyDT7vVxIhFyKIlhbuDJ2JIkMCLf3dzTjCszjzAiRd7DjckrcXh9qvvdEC2nypTLWplzGnEdETQllWhkG5U0BCCqMljxWTrP1FWvfjD5JnITsNOvUIiF439nsTYijRYtdi4EVuImx-2xy83uyIMFX8D1TuPnK2BrTDjZxOvDKNbG3xOzlgd8ZanxmvbZPBjfR3WE4zKKV4Mdz98JBPfDVdjPw_cMgvB6OyZa6gutRyTHz0pJsGFrAxD-IwvDAPoAqoBoChJKscKo32-WKNGQHDImhkA8evSM9y7-z1OeZuDT0vcp3KyIyOXYF9REJDnk3loF57Z3SRPz4R3zCEpPhOBGZOrY_OvgO3L0coFNu4ssMpIIXRZgAEEvbGJwuGs0bsMiUkJDC-hgL9fKZbSBBD7rdd7MRaTN8ZDz3z-z89xQ01kjtyqnxqkl0DQjoSMTcA_H2Wcocj42Ojj0D5i7rpV2T9YsSXIgckZzD9kDZko7vi7falfcTUWJjrQ2qS1XjjefB5Ixy5Ov_fVicu4jdPKYF3VGVRz2A71THDPp9BBHeKJL9eMFzG_wpGZl8c_tUwVs_ZHAOQXg1MiOqSkL40McpXw';
-  final String userId = '226a1079-4db3-49c5-ad46-2ccd47599f7e';
+  // final String userId = '226a1079-4db3-49c5-ad46-2ccd47599f7e';
+
+  late String userId = providerDashboardModel.content?.providerInfo?.userId ?? "";
   final String userType = 'provider';
 
   Future<void> fetchNotifications() async {
@@ -219,14 +242,61 @@ class DashBoardController extends GetxController implements GetxService {
     update();
   }
 
+  // List<File> _jobStartImages = [];
+  //
+  // List<File> get jobStartImages => _jobStartImages;
+  //
+  // String? jobStartImageError;
+  //
+  //
+  // void addJobStartImage(File file) {
+  //   _jobStartImages.add(file);
+  //   jobStartImageError = null; // error clear
+  //   update();
+  // }
+  //
+  // bool validateJobStartImages() {
+  //   if (_jobStartImages.isEmpty) {
+  //     jobStartImageError = "Photo is required";
+  //     update();
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
   List<File> _jobStartImages = [];
 
   List<File> get jobStartImages => _jobStartImages;
 
-  void addJobStartImage(File file) {
-    _jobStartImages.add(file);
+  String? jobStartImageError;
+
+  /// index wise image set / replace (NO EMPTY FILE)
+  void addJobStartImageAt(int index, File file) {
+    if (_jobStartImages.length > index) {
+      // replace
+      _jobStartImages[index] = file;
+    } else {
+      // seed list till index
+      while (_jobStartImages.length < index) {
+        _jobStartImages.add(File('__dummy__')); // placeholder, UI me use nahi hoga
+      }
+      _jobStartImages.add(file);
+    }
+
+    jobStartImageError = null;
     update();
   }
+
+  /// SAFE VALIDATION
+  bool validateJobStartImages() {
+    if (_jobStartImages.length < 3) {
+      jobStartImageError = "Please upload all 3 photos";
+      update();
+      return false;
+    }
+    return true;
+  }
+
 
   void clearJobStartMedia() {
     _jobStartImages.clear();
@@ -2205,11 +2275,13 @@ class DashBoardController extends GetxController implements GetxService {
     };
   }
 
-  Future<void> getExtraServicesList({required String subcategoryid}) async {
+  // changes
+  Future<void> getExtraServicesList({required String categoryid,required String subCategoryId}) async {
     showLoading();
     try {
       Map<String, String> body = {
-        "sub_category_id": subcategoryid,
+        "category_id": categoryid,
+        "sub_category_id": subCategoryId,
       };
       Response response = await authRepo.addExtraServicesRepo(body);
 
@@ -2271,54 +2343,67 @@ class DashBoardController extends GetxController implements GetxService {
   }
 
   Future<void> bookAddons({required String bookingId}) async {
-    final url = Uri.parse('${AppConstants.baseUrl}${AppConstants.bookAddOns}');
+    final url = Uri.parse(
+        '${AppConstants.baseUrl}${AppConstants.bookAddOns}');
     final token = authRepo.getUserToken();
+
     final headers = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
     };
 
-    final addons = addonCart.items
-        .map((item) => {
-              'service_id': int.tryParse(item.serviceId) ?? item.serviceId,
-              'variant_key': item.variantKey,
-              'quantity': item.quantity,
-              'service_cost': item.price,
-              'total_cost': item.totalPrice,
-              'variation_id': item.variationId,
-              'service_name': item.serviceName,
-            })
-        .toList();
+    final addons = addonCart.items.map((item) {
+      if (item.variantKey.isEmpty) {
+        throw Exception("variant_key missing");
+      }
+
+      return {
+        'service_id': item.serviceId, // MUST BE INT (change service id:- addon service)
+        'variant_key': item.variantName,
+        'quantity': item.quantity,
+        'service_cost': item.price,
+        'total_cost': item.totalPrice,
+        // 'variation_id': item.variantKey,
+        'service_name': item.serviceName,
+      };
+    }).toList();
+
     final body = {
       'booking_id': bookingId,
       'addons': addons,
     };
+
+    log("FINAL PAYLOAD => ${jsonEncode(body)}");
+
     try {
       final request = http.Request('POST', url);
-      request.body = jsonEncode(body);
       request.headers.addAll(headers);
-      final response = await request.send();
-      if (response.statusCode == 200) {
-        final respStr = await response.stream.bytesToString();
-        showCustomSnackBar(
-          'Service added successfully!',
-          isError: false,
-          isSuccess: true,
-        );
-        debugPrint(respStr);
-      } else {
-        final errorBody = await response.stream.bytesToString();
-        log('API Error: ${response.reasonPhrase} ======== $errorBody');
-        showCustomSnackBar('Failed to add services: $errorBody', isError: true);
+      request.body = jsonEncode(body);
+
+      final response = await request.send().timeout(
+        const Duration(seconds: 20),
+      );
+
+      final responseBody =
+      await response.stream.bytesToString();
+
+      log("STATUS: ${response.statusCode}");
+      log("BODY: $responseBody");
+
+      if (response.statusCode != 200) {
+        throw Exception(responseBody);
       }
+
+      return;
     } catch (e) {
-      debugPrint(e.toString());
-      showCustomSnackBar('Exception: $e', isError: true);
+      log("bookAddons error: $e");
+      rethrow;
     }
   }
 
   RxList<SavedAddOnModel> savedAddonModelList = <SavedAddOnModel>[].obs;
 
+  // add on service
   Future<void> getSavedAddOns({required String bookingId}) async {
     final url =
         Uri.parse('${AppConstants.baseUrl}${AppConstants.getStoredAddOn}');

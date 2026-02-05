@@ -5,7 +5,10 @@ import 'package:dofix_technichian/app/views/add_on_services_screen.dart';
 import 'package:dofix_technichian/app/widgets/custom_addon_listing_item.dart';
 import 'package:dofix_technichian/app/widgets/custom_booking_detail_item.dart';
 import 'package:dofix_technichian/controllers/dashboard_controller.dart';
+import 'package:dofix_technichian/data/api/api.dart';
+import 'package:dofix_technichian/data/repo/auth_repo.dart';
 import 'package:dofix_technichian/model/booking_details_content/booking_details_model.dart';
+import 'package:dofix_technichian/utils/sizeboxes.dart';
 import 'package:dofix_technichian/utils/styles.dart';
 import 'package:dofix_technichian/views/payment_method_show_dialog.dart';
 import 'package:dofix_technichian/widgets/common_loading.dart';
@@ -15,10 +18,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../controllers/auth_controller.dart';
 import '../../utils/images.dart';
 import '../../utils/theme.dart';
 import '../../views/widgets/details_component.dart';
 import '../../widgets/custom_camera_picker.dart';
+import '../../widgets/custome_only_camera.dart';
 import '../../widgets/video_recorder_widget.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/media_upload_widget.dart';
@@ -75,6 +80,7 @@ class _ShuruKareState extends State<ShuruKare> {
         final mainServices = details.where((d) => d.isAddOn == 0).toList();
         debugPrint(
             "ShuruKare===> ${Get.find<DashBoardController>().isBookingDetailsLoading}");
+
         return SafeArea(
           child: Scaffold(
             appBar: CustomAppBar(
@@ -450,31 +456,38 @@ class _ShuruKareState extends State<ShuruKare> {
                                       children: List.generate(
                                         3,
                                         (index) {
-                                          final images =
-                                              Get.find<DashBoardController>()
-                                                  .jobStartImages;
-                                          log("Image at index $index: ${images.length > index ? images[index].path : 'No image'}");
+                                          final controller =
+                                              Get.find<DashBoardController>();
+
+                                          File? image;
+                                          if (controller.jobStartImages.length >
+                                                  index &&
+                                              controller.jobStartImages[index]
+                                                  .path.isNotEmpty &&
+                                              controller.jobStartImages[index]
+                                                      .path !=
+                                                  '__dummy__') {
+                                            image = controller
+                                                .jobStartImages[index];
+                                          }
+
                                           return UploadMediaWidget(
                                             label: "Add Photo",
                                             icon: Icons.image_outlined,
+                                            imageFile: image,
+                                            errorText:
+                                                controller.jobStartImageError,
                                             onTap: () async {
-                                              final value = await pickFile(
-                                                frontCameraOnly: false,
-                                                context,
-                                                onlyCameraOption: true,
-                                              );
-                                              if (value != null &&
-                                                  value['file'] != null) {
-                                                Get.find<DashBoardController>()
-                                                    .addJobStartImage(
-                                                        value['file']);
+                                              final result =
+                                                  await pickFromCamera(context);
+                                              if (result != null &&
+                                                  result['file'] != null) {
+                                                controller.addJobStartImageAt(
+                                                  index,
+                                                  result['file'],
+                                                );
                                               }
                                             },
-                                            imageFile: images.length > index
-                                                ? images[index]
-                                                : null,
-                                            width: 100,
-                                            height: 100,
                                           );
                                         },
                                       ),
@@ -624,27 +637,46 @@ class _ShuruKareState extends State<ShuruKare> {
                                               Get.find<DashBoardController>()
                                                   .jobStartImages;
                                           log("Image at index $index: ${images.length > index ? images[index].path : 'No image'}");
-                                          return UploadMediaWidget(
-                                            label: "Add Photo",
-                                            icon: Icons.image_outlined,
-                                            onTap: () async {
-                                              final value = await pickFile(
-                                                frontCameraOnly: false,
-                                                context,
-                                                onlyCameraOption: true,
+                                          return GetBuilder<
+                                              DashBoardController>(
+                                            builder: (controller) {
+                                              final images =
+                                                  controller.jobStartImages;
+
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  UploadMediaWidget(
+                                                    label: "Add Photo",
+                                                    icon: Icons.image_outlined,
+                                                    onTap: () async {
+                                                      final result =
+                                                          await pickFromCamera(
+                                                              context);
+
+                                                      if (result != null &&
+                                                          result['file'] !=
+                                                              null) {
+                                                        controller.addJobStartImageAt(
+                                                          index,
+                                                          result['file'],
+                                                        );
+
+                                                      }
+                                                    },
+                                                    imageFile:
+                                                        images.length > index
+                                                            ? images[index]
+                                                            : null,
+                                                    errorText: controller
+                                                        .jobStartImageError,
+                                                    width: 100,
+                                                    height: 100,
+                                                  ),
+                                                ],
                                               );
-                                              if (value != null &&
-                                                  value['file'] != null) {
-                                                Get.find<DashBoardController>()
-                                                    .addJobStartImage(
-                                                        value['file']);
-                                              }
                                             },
-                                            imageFile: images.length > index
-                                                ? images[index]
-                                                : null,
-                                            width: 100,
-                                            height: 100,
                                           );
                                         },
                                       ),
@@ -986,6 +1018,65 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                       SizedBox(
                         height: 20,
                       ),
+
+                    // in-voice Download
+                    if (widget.booking.content?.bookingStatus == "completed")
+                      GestureDetector(
+                        onTap: () {
+                          // invoice download logic
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: () {
+                              // invoice download logic
+                              Get.find<DashBoardController>().openInvoice(
+                                  widget.booking.content!.id.toString());
+                            },
+                            child: Container(
+                              height: 44,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFF2ECC71), // light green
+                                    Color(0xFF27AE60), // dark green
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.green.withOpacity(0.35),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Icon(
+                                    Icons.receipt_long,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "Download Invoice",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.3,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     if (dashBoardController.capturedImage != null) ...[
                       Padding(
                         padding: const EdgeInsets.only(
@@ -1216,115 +1307,74 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                     ] else ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Row(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Visibility(
-                              visible: widget.booking.content?.bookingStatus ==
-                                      "completed"
-                                  ? false
-                                  : widget.booking.content?.bookingStatus ==
-                                          "canceled"
-                                      ? false
-                                      : widget.booking.content?.bookingStatus ==
-                                              "ongoing"
-                                          ? false
-                                          : true,
-                              child: Expanded(
-                                  child: GestureDetector(
-                                onTap: () async {
-                                  final lat = widget
-                                          .booking.content?.serviceAddress?.lat
-                                          ?.toString() ??
-                                      "0.0";
-                                  final lon = widget
-                                          .booking.content?.serviceAddress?.lon
-                                          ?.toString() ??
-                                      "0.0";
-                                  String googleMapsUrl =
-                                      "https://www.google.com/maps/search/?api=1&query=$lat,$lon";
-                                  String appleMapsUrl =
-                                      "http://maps.apple.com/?ll=$lat,$lon";
-
-                                  if (Platform.isIOS) {
-                                    // Try Google Maps first
-                                    final googleMapsSchemeUrl = Uri.parse(
-                                        "comgooglemaps://?q=$lat,$lon");
-                                    if (await canLaunchUrl(
-                                        googleMapsSchemeUrl)) {
-                                      await launchUrl(googleMapsSchemeUrl);
-                                    } else if (await canLaunchUrl(
-                                        Uri.parse(appleMapsUrl))) {
-                                      await launchUrl(Uri.parse(appleMapsUrl));
-                                    } else {
-                                      await launchUrl(Uri.parse(googleMapsUrl),
-                                          mode: LaunchMode.externalApplication);
-                                    }
-                                  } else {
-                                    // Android or others: open Google Maps in browser/app
-                                    if (await canLaunchUrl(
-                                        Uri.parse(googleMapsUrl))) {
-                                      await launchUrl(Uri.parse(googleMapsUrl),
-                                          mode: LaunchMode.externalApplication);
-                                    } else {
-                                      debugPrint(
-                                          "Could not launch map for $lat, $lon");
-                                    }
-                                  }
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    border: Border.all(
-                                        color: Colors.white, width: 1),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Center(
-                                      child: Text(
-                                        "See on Map",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Visibility(
-                              visible: widget.booking.content?.bookingStatus ==
-                                      "ongoing"
-                                  ? false
-                                  : widget.booking.content?.bookingStatus ==
-                                          "completed"
-                                      ? false
-                                      : widget.booking.content?.bookingStatus ==
-                                              "canceled"
-                                          ? false
-                                          : true,
-                              child: Expanded(
-                                child: GestureDetector(
+                            sizedBox8(),
+                            Row(children: [
+                              Visibility(
+                                visible: widget
+                                            .booking.content?.bookingStatus ==
+                                        "completed"
+                                    ? false
+                                    : widget.booking.content?.bookingStatus ==
+                                            "canceled"
+                                        ? false
+                                        : widget.booking.content
+                                                    ?.bookingStatus ==
+                                                "ongoing"
+                                            ? false
+                                            : true,
+                                child: Expanded(
+                                    child: GestureDetector(
                                   onTap: () async {
-                                    final value = await pickFile(context,
-                                        frontCameraOnly: true,
-                                        onlyCameraOption: true);
-                                    if (value != null &&
-                                        value['file'] != null) {
-                                      dashBoardController
-                                          .setCapturedImage(value['file']);
+                                    final lat = widget.booking.content
+                                            ?.serviceAddress?.lat
+                                            ?.toString() ??
+                                        "0.0";
+                                    final lon = widget.booking.content
+                                            ?.serviceAddress?.lon
+                                            ?.toString() ??
+                                        "0.0";
+                                    String googleMapsUrl =
+                                        "https://www.google.com/maps/search/?api=1&query=$lat,$lon";
+                                    String appleMapsUrl =
+                                        "http://maps.apple.com/?ll=$lat,$lon";
+
+                                    if (Platform.isIOS) {
+                                      // Try Google Maps first
+                                      final googleMapsSchemeUrl = Uri.parse(
+                                          "comgooglemaps://?q=$lat,$lon");
+                                      if (await canLaunchUrl(
+                                          googleMapsSchemeUrl)) {
+                                        await launchUrl(googleMapsSchemeUrl);
+                                      } else if (await canLaunchUrl(
+                                          Uri.parse(appleMapsUrl))) {
+                                        await launchUrl(
+                                            Uri.parse(appleMapsUrl));
+                                      } else {
+                                        await launchUrl(
+                                            Uri.parse(googleMapsUrl),
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      }
+                                    } else {
+                                      // Android or others: open Google Maps in browser/app
+                                      if (await canLaunchUrl(
+                                          Uri.parse(googleMapsUrl))) {
+                                        await launchUrl(
+                                            Uri.parse(googleMapsUrl),
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      } else {
+                                        debugPrint(
+                                            "Could not launch map for $lat, $lon");
+                                      }
                                     }
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: Colors.transparent,
                                       border: Border.all(
                                           color: Colors.white, width: 1),
                                       borderRadius: BorderRadius.circular(5),
@@ -1333,9 +1383,9 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                       padding: const EdgeInsets.all(16.0),
                                       child: Center(
                                         child: Text(
-                                          "Kaam Start Kare",
+                                          "See on Map",
                                           style: TextStyle(
-                                            color: primaryAppColor,
+                                            color: Colors.white,
                                             fontSize: 14,
                                             fontFamily: 'Albert Sans',
                                             fontWeight: FontWeight.w500,
@@ -1344,58 +1394,54 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                       ),
                                     ),
                                   ),
-                                ),
+                                )),
                               ),
-                            ),
-                            Visibility(
-                              visible: (widget.booking.content?.bookingStatus ==
-                                          "ongoing" &&
-                                      Get.find<DashBoardController>()
-                                              .bookingDetails
-                                              ?.content
-                                              ?.isPreWorkMediaUploaded ==
-                                          true &&
-                                      Get.find<DashBoardController>()
-                                              .bookingDetails
-                                              ?.content
-                                              ?.isPostWorkMediaUploaded ==
-                                          false)
-                                  ? true
-                                  : false,
-                              child: Expanded(
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    await Get.find<DashBoardController>()
-                                        .getExtraServicesList(
-                                            subcategoryid: widget
-                                                .booking.content!.subCategoryId
-                                                .toString());
-                                    await Get.find<DashBoardController>()
-                                        .getSavedAddOns(
-                                            bookingId: widget
-                                                .booking.content!.id
-                                                .toString());
-                                    Get.to(() => AddOnServicesScreen(
-                                        bookingId: widget.booking.content!.id
-                                            .toString()));
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: primaryAppColor,
-                                      border: Border.all(
-                                          color: Colors.white, width: 1),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text(
-                                          "Extra Service",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontFamily: 'Albert Sans',
-                                            fontWeight: FontWeight.w400,
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Visibility(
+                                visible: widget
+                                            .booking.content?.bookingStatus ==
+                                        "ongoing"
+                                    ? false
+                                    : widget.booking.content?.bookingStatus ==
+                                            "completed"
+                                        ? false
+                                        : widget.booking.content
+                                                    ?.bookingStatus ==
+                                                "canceled"
+                                            ? false
+                                            : true,
+                                child: Expanded(
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      final value = await pickFile(context,
+                                          frontCameraOnly: true,
+                                          onlyCameraOption: true);
+                                      if (value != null &&
+                                          value['file'] != null) {
+                                        dashBoardController
+                                            .setCapturedImage(value['file']);
+                                      }
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color: Colors.white, width: 1),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Center(
+                                          child: Text(
+                                            "Kaam Start Kare",
+                                            style: TextStyle(
+                                              color: primaryAppColor,
+                                              fontSize: 14,
+                                              fontFamily: 'Albert Sans',
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -1403,297 +1449,393 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                   ),
                                 ),
                               ),
-                            ),
-                            Visibility(
-                              visible: (widget.booking.content?.bookingStatus ==
-                                          "ongoing" &&
-                                      Get.find<DashBoardController>()
-                                              .bookingDetails
-                                              ?.content
-                                              ?.isPreWorkMediaUploaded ==
-                                          true &&
-                                      Get.find<DashBoardController>()
-                                              .bookingDetails
-                                              ?.content
-                                              ?.isPostWorkMediaUploaded ==
-                                          false)
-                                  ? true
-                                  : false,
-                              child: SizedBox(
-                                width: 10,
-                              ),
-                            ),
-                            Visibility(
-                              visible: widget.booking.content?.bookingStatus ==
-                                      "ongoing"
-                                  ? true
-                                  : false,
-                              child: Expanded(
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    if (Get.find<DashBoardController>()
-                                                .bookingDetails
-                                                ?.content
-                                                ?.isPreWorkMediaUploaded ==
-                                            false &&
-                                        Get.find<DashBoardController>()
-                                                .bookingDetails
-                                                ?.content
-                                                ?.isPostWorkMediaUploaded ==
-                                            false) {
+
+                              if (widget.booking.content?.bookingStatus ==
+                                  "ongoing")
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () async {
                                       final controller =
                                           Get.find<DashBoardController>();
-                                      if (controller.jobStartImages.isEmpty &&
-                                          controller.jobStartVideo == null) {
-                                        Get.snackbar(
-                                          "Error",
-                                          "Please add at least one image & video before sharing.",
-                                          snackPosition: SnackPosition.BOTTOM,
-                                          backgroundColor: Colors.red,
-                                          colorText: Colors.white,
-                                        );
-                                        return;
-                                      }
 
-                                      Map<String, String> body = {
-                                        "booking_id": widget.booking.content!.id
+                                      /// validation fail
+                                      if (!controller.validateJobStartImages())
+                                        return;
+
+                                      /// validation pass
+                                      await controller.getExtraServicesList(
+                                        categoryid: widget
+                                            .booking.content!.categoryId
                                             .toString(),
-                                        "booking_status": "ongoing"
-                                      };
-
-                                      await controller.updateBookingStatus(
-                                        body,
-                                        images: controller.jobStartImages,
-                                        videos: controller.jobStartVideo,
+                                        subCategoryId: widget
+                                            .booking.content!.subCategoryId
+                                            .toString(),
                                       );
-                                      Get.find<DashBoardController>()
-                                          .clearJobStartMedia();
-                                    } else if (Get.find<DashBoardController>()
-                                                .bookingDetails
-                                                ?.content
-                                                ?.isPreWorkMediaUploaded ==
-                                            true &&
-                                        Get.find<DashBoardController>()
-                                                .bookingDetails
-                                                ?.content
-                                                ?.isPostWorkMediaUploaded ==
-                                            false) {
-                                      final controller =
-                                          Get.find<DashBoardController>();
-                                      if (controller.jobStartImages.isEmpty &&
-                                          controller.jobStartVideo == null) {
-                                        Get.snackbar(
-                                          "Error",
-                                          "Please add at least one image & video before sharing.",
-                                          snackPosition: SnackPosition.BOTTOM,
-                                          backgroundColor: Colors.red,
-                                          colorText: Colors.white,
-                                        );
-                                        return;
-                                      }
-                                      if (controller.dueAmount.value == 0) {
-                                        Map<String, String> body = {
-                                          "booking_id": widget
-                                              .booking.content!.id
+
+                                      await controller.getSavedAddOns(
+                                        bookingId: widget.booking.content!.id
+                                            .toString(),
+                                      );
+
+                                      Get.to(
+                                        () => AddOnServicesScreen(
+                                          bookingId: widget.booking.content!.id
                                               .toString(),
-                                          "booking_status": "completed"
-                                        };
-
-                                        await controller.updateBookingStatus(
-                                          body,
-                                          images: controller.jobStartImages,
-                                          videos: controller.jobStartVideo,
-                                          postImageName: 'evidence_photos',
-                                          postVideoName: 'post_work_video',
-                                        );
-                                        return;
-                                      }
-
-                                      String? selectedPaymentMethod =
-                                          await showDialog<String>(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (BuildContext context) {
-                                          return PaymentMethodShowDialog(
-                                            amount: double.tryParse(Get.find<
-                                                        DashBoardController>()
-                                                    .dueAmount
-                                                    .value
-                                                    .toString()) ??
-                                                0.0,
-                                          );
-                                        },
+                                        ),
                                       );
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: primaryAppColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding: const EdgeInsets.all(8),
+                                      child: const Center(
+                                        child: Text(
+                                          "Addon Service",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
 
-                                      if (selectedPaymentMethod ==
-                                          "Pay by Cash") {
-                                        Get.find<DashBoardController>()
-                                            .transactionId
-                                            .value = "";
-                                        await Get.find<DashBoardController>()
-                                            .updateBookingDueAmount(
-                                                isRazorpay: false,
-                                                bookingId: widget
-                                                        .booking.content?.id ??
-                                                    "",
-                                                amount: Get.find<
-                                                        DashBoardController>()
-                                                    .dueAmount
-                                                    .value
-                                                    .toString());
-                                        await Get.find<DashBoardController>()
-                                            .getBookingDueAmount(
-                                                bookingId: widget
-                                                        .booking.content?.id ??
-                                                    "");
-                                        if (controller.dueAmountPaid.value) {
-                                          Map<String, String> body = {
-                                            "booking_id": widget
-                                                .booking.content!.id
-                                                .toString(),
-                                            "booking_status": "completed"
-                                          };
-
-                                          await controller.updateBookingStatus(
-                                            body,
-                                            images: controller.jobStartImages,
-                                            videos: controller.jobStartVideo,
-                                            postImageName: 'evidence_photos',
-                                            postVideoName: 'post_work_video',
-                                          );
-                                        }
-
-                                        return;
-                                      } else if (selectedPaymentMethod ==
-                                          "Pay Online") {
-                                        if (Get.find<DashBoardController>()
+                              Visibility(
+                                visible:
+                                    (widget.booking.content?.bookingStatus ==
+                                                "ongoing" &&
+                                            Get.find<DashBoardController>()
                                                     .bookingDetails
                                                     ?.content
                                                     ?.isPreWorkMediaUploaded ==
                                                 true &&
                                             Get.find<DashBoardController>()
-                                                    .dueAmount
-                                                    .value >
-                                                0) {
-                                          int amount =
-                                              Get.find<DashBoardController>()
-                                                  .dueAmount
-                                                  .value
-                                                  .ceil();
-                                          log("Amount cannot be zero $amount");
-                                          log("Amount cannot be zero ${Get.find<DashBoardController>().dueAmount.value.toString()}");
-                                          if (amount == 0) {
-                                            Get.snackbar(
-                                              "Error",
-                                              "Amount cannot be zero.",
-                                              snackPosition:
-                                                  SnackPosition.BOTTOM,
-                                              backgroundColor: Colors.red,
-                                              colorText: Colors.white,
-                                            );
-                                            return;
-                                          }
-                                          final result = await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RazorpayQRScreen(
-                                                amount: amount * 100,
-                                                description:
-                                                    'Add-on Services Payment',
-                                              ),
-                                            ),
-                                          );
+                                                    .bookingDetails
+                                                    ?.content
+                                                    ?.isPostWorkMediaUploaded ==
+                                                false)
+                                        ? true
+                                        : false,
+                                child: SizedBox(
+                                  width: 10,
+                                ),
+                              ),
 
-                                          if (result == true) {
-                                            await Get.find<
-                                                    DashBoardController>()
-                                                .updateBookingDueAmount(
-                                              bookingId:
-                                                  widget.booking.content?.id ??
-                                                      "",
-                                              amount: Get.find<
-                                                      DashBoardController>()
-                                                  .dueAmount
-                                                  .value
-                                                  .toString(),
-                                              isRazorpay: true,
-                                            );
-                                            await Get.find<
-                                                    DashBoardController>()
-                                                .getBookingDueAmount(
-                                                    bookingId: widget.booking
-                                                            .content?.id ??
-                                                        "");
-                                            if (controller
-                                                .dueAmountPaid.value) {
-                                              Map<String, String> body = {
-                                                "booking_id": widget
-                                                    .booking.content!.id
-                                                    .toString(),
-                                                "booking_status": "completed",
-                                                "payment_method": "razor_pay"
-                                              };
+                              /// mark as complete
+                              // Visibility(
+                              //   visible: widget.booking.content?.bookingStatus ==
+                              //           "ongoing"
+                              //       ? true
+                              //       : false,
+                              //   child: Expanded(
+                              //     child: GestureDetector(
+                              //       onTap: () async {
+                              //         if (Get.find<DashBoardController>()
+                              //                     .bookingDetails
+                              //                     ?.content
+                              //                     ?.isPreWorkMediaUploaded ==
+                              //                 false &&
+                              //             Get.find<DashBoardController>()
+                              //                     .bookingDetails
+                              //                     ?.content
+                              //                     ?.isPostWorkMediaUploaded ==
+                              //                 false) {
+                              //           final controller =
+                              //               Get.find<DashBoardController>();
+                              //           if (controller.jobStartImages.isEmpty &&
+                              //               controller.jobStartVideo == null) {
+                              //             Get.snackbar(
+                              //               "Error",
+                              //               "Please add at least one image & video before sharing.",
+                              //               snackPosition: SnackPosition.BOTTOM,
+                              //               backgroundColor: Colors.red,
+                              //               colorText: Colors.white,
+                              //             );
+                              //             return;
+                              //           }
+                              //
+                              //           Map<String, String> body = {
+                              //             "booking_id": widget.booking.content!.id
+                              //                 .toString(),
+                              //             "booking_status": "ongoing"
+                              //           };
+                              //
+                              //           await controller.updateBookingStatus(
+                              //             body,
+                              //             images: controller.jobStartImages,
+                              //             videos: controller.jobStartVideo,
+                              //           );
+                              //           Get.find<DashBoardController>()
+                              //               .clearJobStartMedia();
+                              //         } else if (Get.find<DashBoardController>()
+                              //                     .bookingDetails
+                              //                     ?.content
+                              //                     ?.isPreWorkMediaUploaded ==
+                              //                 true &&
+                              //             Get.find<DashBoardController>()
+                              //                     .bookingDetails
+                              //                     ?.content
+                              //                     ?.isPostWorkMediaUploaded ==
+                              //                 false) {
+                              //           final controller =
+                              //               Get.find<DashBoardController>();
+                              //           if (controller.jobStartImages.isEmpty &&
+                              //               controller.jobStartVideo == null) {
+                              //             Get.snackbar(
+                              //               "Error",
+                              //               "Please add at least one image & video before sharing.",
+                              //               snackPosition: SnackPosition.BOTTOM,
+                              //               backgroundColor: Colors.red,
+                              //               colorText: Colors.white,
+                              //             );
+                              //             return;
+                              //           }
+                              //           if (controller.dueAmount.value == 0) {
+                              //             Map<String, String> body = {
+                              //               "booking_id": widget
+                              //                   .booking.content!.id
+                              //                   .toString(),
+                              //               "booking_status": "completed"
+                              //             };
+                              //
+                              //             await controller.updateBookingStatus(
+                              //               body,
+                              //               images: controller.jobStartImages,
+                              //               videos: controller.jobStartVideo,
+                              //               postImageName: 'evidence_photos',
+                              //               postVideoName: 'post_work_video',
+                              //             );
+                              //             return;
+                              //           }
+                              //
+                              //           String? selectedPaymentMethod =
+                              //               await showDialog<String>(
+                              //             context: context,
+                              //             barrierDismissible: false,
+                              //             builder: (BuildContext context) {
+                              //               return PaymentMethodShowDialog(
+                              //                 amount: double.tryParse(Get.find<
+                              //                             DashBoardController>()
+                              //                         .dueAmount
+                              //                         .value
+                              //                         .toString()) ??
+                              //                     0.0,
+                              //               );
+                              //             },
+                              //           );
+                              //
+                              //           if (selectedPaymentMethod ==
+                              //               "Pay by Cash") {
+                              //             Get.find<DashBoardController>()
+                              //                 .transactionId
+                              //                 .value = "";
+                              //             await Get.find<DashBoardController>()
+                              //                 .updateBookingDueAmount(
+                              //                     isRazorpay: false,
+                              //                     bookingId: widget
+                              //                             .booking.content?.id ??
+                              //                         "",
+                              //                     amount: Get.find<
+                              //                             DashBoardController>()
+                              //                         .dueAmount
+                              //                         .value
+                              //                         .toString());
+                              //             await Get.find<DashBoardController>()
+                              //                 .getBookingDueAmount(
+                              //                     bookingId: widget
+                              //                             .booking.content?.id ??
+                              //                         "");
+                              //             if (controller.dueAmountPaid.value) {
+                              //               Map<String, String> body = {
+                              //                 "booking_id": widget
+                              //                     .booking.content!.id
+                              //                     .toString(),
+                              //                 "booking_status": "completed"
+                              //               };
+                              //
+                              //               await controller.updateBookingStatus(
+                              //                 body,
+                              //                 images: controller.jobStartImages,
+                              //                 videos: controller.jobStartVideo,
+                              //                 postImageName: 'evidence_photos',
+                              //                 postVideoName: 'post_work_video',
+                              //               );
+                              //             }
+                              //
+                              //             return;
+                              //           } else if (selectedPaymentMethod ==
+                              //               "Pay Online") {
+                              //             if (Get.find<DashBoardController>()
+                              //                         .bookingDetails
+                              //                         ?.content
+                              //                         ?.isPreWorkMediaUploaded ==
+                              //                     true &&
+                              //                 Get.find<DashBoardController>()
+                              //                         .dueAmount
+                              //                         .value >
+                              //                     0) {
+                              //               int amount =
+                              //                   Get.find<DashBoardController>()
+                              //                       .dueAmount
+                              //                       .value
+                              //                       .ceil();
+                              //               log("Amount cannot be zero $amount");
+                              //               log("Amount cannot be zero ${Get.find<DashBoardController>().dueAmount.value.toString()}");
+                              //               if (amount == 0) {
+                              //                 Get.snackbar(
+                              //                   "Error",
+                              //                   "Amount cannot be zero.",
+                              //                   snackPosition:
+                              //                       SnackPosition.BOTTOM,
+                              //                   backgroundColor: Colors.red,
+                              //                   colorText: Colors.white,
+                              //                 );
+                              //                 return;
+                              //               }
+                              //               final result = await Navigator.push(
+                              //                 context,
+                              //                 MaterialPageRoute(
+                              //                   builder: (context) =>
+                              //                       RazorpayQRScreen(
+                              //                     amount: amount * 100,
+                              //                     description:
+                              //                         'Add-on Services Payment',
+                              //                   ),
+                              //                 ),
+                              //               );
+                              //
+                              //               if (result == true) {
+                              //                 await Get.find<
+                              //                         DashBoardController>()
+                              //                     .updateBookingDueAmount(
+                              //                   bookingId:
+                              //                       widget.booking.content?.id ??
+                              //                           "",
+                              //                   amount: Get.find<
+                              //                           DashBoardController>()
+                              //                       .dueAmount
+                              //                       .value
+                              //                       .toString(),
+                              //                   isRazorpay: true,
+                              //                 );
+                              //                 await Get.find<
+                              //                         DashBoardController>()
+                              //                     .getBookingDueAmount(
+                              //                         bookingId: widget.booking
+                              //                                 .content?.id ??
+                              //                             "");
+                              //                 if (controller
+                              //                     .dueAmountPaid.value) {
+                              //                   Map<String, String> body = {
+                              //                     "booking_id": widget
+                              //                         .booking.content!.id
+                              //                         .toString(),
+                              //                     "booking_status": "completed",
+                              //                     "payment_method": "razor_pay"
+                              //                   };
+                              //
+                              //                   await controller
+                              //                       .updateBookingStatus(
+                              //                     body,
+                              //                     images:
+                              //                         controller.jobStartImages,
+                              //                     videos:
+                              //                         controller.jobStartVideo,
+                              //                     postImageName:
+                              //                         'evidence_photos',
+                              //                     postVideoName:
+                              //                         'post_work_video',
+                              //                   );
+                              //                 }
+                              //                 print('Payment completed! hahaha');
+                              //               }
+                              //             }
+                              //             return;
+                              //           } else {
+                              //             log("Payment method is : $selectedPaymentMethod");
+                              //             return;
+                              //           }
+                              //         }
+                              //       },
+                              //       child: Container(
+                              //         decoration: BoxDecoration(
+                              //           color: primaryAppColor,
+                              //           border: Border.all(
+                              //               color: Colors.white, width: 1),
+                              //           borderRadius: BorderRadius.circular(5),
+                              //         ),
+                              //         child: Padding(
+                              //           padding: const EdgeInsets.all(8.0),
+                              //           child: Center(
+                              //             child: Text(
+                              //               (Get.find<DashBoardController>()
+                              //                               .bookingDetails
+                              //                               ?.content
+                              //                               ?.isPreWorkMediaUploaded ==
+                              //                           false &&
+                              //                       Get.find<DashBoardController>()
+                              //                               .bookingDetails
+                              //                               ?.content
+                              //                               ?.isPostWorkMediaUploaded ==
+                              //                           false)
+                              //                   ? "Share Images & Video"
+                              //                   : "Mark as Complete",
+                              //               style: TextStyle(
+                              //                 color: Colors.white,
+                              //                 fontSize: 16,
+                              //                 fontFamily: 'Albert Sans',
+                              //                 fontWeight: FontWeight.w400,
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              // send customer otp button
+                            ]),
+                            if (widget.booking.content?.bookingStatus ==
+                                "ongoing")
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0, vertical: 10),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      final dashboardController =
+                                          Get.find<DashBoardController>();
+                                      final authController =
+                                          Get.find<AuthController>();
 
-                                              await controller
-                                                  .updateBookingStatus(
-                                                body,
-                                                images:
-                                                    controller.jobStartImages,
-                                                videos:
-                                                    controller.jobStartVideo,
-                                                postImageName:
-                                                    'evidence_photos',
-                                                postVideoName:
-                                                    'post_work_video',
-                                              );
-                                            }
-                                            print('Payment completed! hahaha');
-                                          }
-                                        }
-                                        return;
-                                      } else {
-                                        log("Payment method is : $selectedPaymentMethod");
-                                        return;
-                                      }
-                                    }
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: primaryAppColor,
-                                      border: Border.all(
-                                          color: Colors.white, width: 1),
-                                      borderRadius: BorderRadius.circular(5),
+                                      authController.sendCustomerOtpApi(
+                                        phone: widget.booking.content?.customer
+                                                ?.phone ??
+                                            "",
+                                        bookingId:
+                                            widget.booking.content?.id ?? "",
+                                        token: authController
+                                            .authRepo.apiClient.token
+                                            .toString(),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text(
-                                          (Get.find<DashBoardController>()
-                                                          .bookingDetails
-                                                          ?.content
-                                                          ?.isPreWorkMediaUploaded ==
-                                                      false &&
-                                                  Get.find<DashBoardController>()
-                                                          .bookingDetails
-                                                          ?.content
-                                                          ?.isPostWorkMediaUploaded ==
-                                                      false)
-                                              ? "Share Images & Video"
-                                              : "Mark as Complete",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontFamily: 'Albert Sans',
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
+                                    child: const Text(
+                                      "Complete Job",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              )
                           ],
                         ),
                       )
@@ -1754,4 +1896,45 @@ Future<bool> isWithin25Meters(double targetLat, double targetLng) async {
     print('Error getting location: $e');
     return false;
   }
+}
+
+Future<Map<String, dynamic>?> pickFromCamera(BuildContext context) async {
+  return showModalBottomSheet<Map<String, dynamic>?>(
+    context: context,
+    builder: (_) {
+      return SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_front),
+              title: const Text("Front Camera"),
+              onTap: () async {
+                Navigator.pop(
+                  context,
+                  await pickFileOnlyCamera(
+                    context,
+                    frontCameraOnly: true,
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_rear),
+              title: const Text("Back Camera"),
+              onTap: () async {
+                Navigator.pop(
+                  context,
+                  await pickFileOnlyCamera(
+                    context,
+                    frontCameraOnly: false,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

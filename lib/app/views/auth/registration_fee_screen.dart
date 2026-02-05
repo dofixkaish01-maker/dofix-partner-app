@@ -11,7 +11,7 @@ class RegistrationFeeScreen extends StatelessWidget {
   const RegistrationFeeScreen({super.key});
 
   static const Color primaryColor = Color(0xFF227FA8);
-  static const String registrationFee = "1416";
+  static const String registrationFee = "₹1416";
 
   @override
   Widget build(BuildContext context) {

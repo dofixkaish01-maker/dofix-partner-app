@@ -97,4 +97,10 @@ class AppConstants {
       'api/v1/customer/booking/get-due-amount';
   static const String updateBookingDueAmount =
       'api/v1/customer/booking/update-due-payment-success';
+
+  static const String sendCustomerOtp =
+      "api/v1/provider/booking/send/otp-customer";
+
+  static const String verifyProviderOtp =
+      "api/v1/provider/booking/verify/otp-provider";
 }

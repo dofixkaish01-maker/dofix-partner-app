@@ -86,7 +86,7 @@ class ServiceModel {
     thumbnail = json['thumbnail'];
     thumbnailFullPath = json['thumbnail_full_path'];
     categoryId = json['category_id'];
-    subCategoryId = json['sub_category_id'];
+    // subCategoryId = json['sub_category_id'];
     tax = double.tryParse(json['tax'].toString());
     orderCount = int.tryParse(json['order_count'].toString());
     isActive = int.tryParse(json['is_active'].toString());

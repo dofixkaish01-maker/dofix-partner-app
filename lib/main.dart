@@ -1,3 +1,4 @@
+import 'package:dofix_technichian/firebase_options.dart';
 import 'package:dofix_technichian/utils/app_constants.dart';
 import 'package:dofix_technichian/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// Firebase init
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   /// Background handler register
   FirebaseMessaging.onBackgroundMessage(
