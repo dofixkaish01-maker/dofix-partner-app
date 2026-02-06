@@ -24,8 +24,7 @@ class ApkaProfileScreen extends StatefulWidget {
 
 class _ApkaProfileScreenState extends State<ApkaProfileScreen> {
   final AccountController accController = Get.find();
-    final authController = Get.find<AuthController>();
-
+  final authController = Get.find<AuthController>();
 
   @override
   void initState() {
@@ -176,6 +175,37 @@ class _ApkaProfileScreenState extends State<ApkaProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: const Text(
+                          "PARTNER ID",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        accountController.userProfile?.content?.provider?.dofixPartnerId?.toString()
+                            ?? "ID not available",
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+
+                    ],
+                  ),
+                  sizedBox8(),
                   CustomTextField(
                     showTitle: true,
                     capitalization: TextCapitalization.words,
@@ -319,7 +349,7 @@ class _ApkaProfileScreenState extends State<ApkaProfileScreen> {
                     accountController.panCardImageController,
                     TextInputType.text,
                     (v) => authController.panNumber = v,
-                                (f) => authController.panImage = f,
+                    (f) => authController.panImage = f,
                     2,
                   ),
                   sizedBox20(),
@@ -333,8 +363,8 @@ class _ApkaProfileScreenState extends State<ApkaProfileScreen> {
                     false,
                     accountController.dlCardImageController,
                     TextInputType.text,
-                     (v) => authController.drivingLicencesNumber = v,
-                        (f) => authController.drivingLicencesImage = f,
+                    (v) => authController.drivingLicencesNumber = v,
+                    (f) => authController.drivingLicencesImage = f,
                     3,
                   ),
                   const SizedBox(height: 20),

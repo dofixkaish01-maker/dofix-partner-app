@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 class TransactionTile extends StatelessWidget {
   final TransactionModel transaction;
   final bool isLast;
+
   const TransactionTile({
     super.key,
     required this.transaction,
@@ -16,6 +17,7 @@ class TransactionTile extends StatelessWidget {
     DateTime istDate = convertUtcToIst(transaction.date);
     String formattedDate = DateFormat('dd/MM/yyyy').format(istDate);
     String formattedTime = DateFormat('hh:mm a').format(istDate);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
       child: Column(
@@ -49,13 +51,12 @@ class TransactionTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    width: 30,
-                  ),
+                  const SizedBox(width: 30),
                   Text(
                     '₹ ${transaction.amount}',
                     style: TextStyle(
-                      color: transaction.isCredit ? Colors.green : Colors.red,
+                      color:
+                      transaction.isCredit ? Colors.green : Colors.red,
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                     ),
@@ -68,11 +69,26 @@ class TransactionTile extends StatelessWidget {
                   Text(
                     transaction.transactionBy,
                     style: TextStyle(
-                      color: transaction.isCredit ? textGrey : Colors.red,
+                      color:
+                      transaction.isCredit ? textGrey : Colors.red,
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                     ),
                   ),
+
+                  /// T-TYPE SHOWN HERE
+                  Text(
+                    transaction.type.isNotEmpty
+                        ? transaction.type[0].toUpperCase() + transaction.type.substring(1)
+                        : "",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: transaction.isCredit ? Colors.green : Colors.red,
+                    ),
+                  ),
+
+
                   if (transaction.bookingId != "")
                     Text(
                       'Booking ID: ${transaction.bookingId}',
@@ -86,9 +102,7 @@ class TransactionTile extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            height: 3,
-          ),
+          const SizedBox(height: 3),
           Divider(
             color: Colors.grey.shade300,
             thickness: 1,
@@ -106,18 +120,21 @@ class TransactionModel {
   final String transactionBy;
   final String bookingId;
 
+  ///  NEW FIELD
+  final String type;
+
   const TransactionModel({
     required this.date,
     required this.amount,
     required this.isCredit,
     required this.transactionBy,
     required this.bookingId,
+    required this.type,
   });
 }
 
-// Utility function to convert UTC to IST
+/// Utility function to convert UTC to IST
 DateTime convertUtcToIst(DateTime utcDate) {
-  // If already in local, return as is
   if (utcDate.isUtc) {
     return utcDate.add(const Duration(hours: 5, minutes: 30));
   } else {

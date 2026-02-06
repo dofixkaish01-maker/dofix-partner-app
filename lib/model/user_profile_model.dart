@@ -64,6 +64,7 @@ class Content {
 class Provider {
   final String? id;
   final String? userId;
+  final String? dofixPartnerId;
   final String? companyName;
   final String? fullName;
   final String? companyAddress;
@@ -103,6 +104,7 @@ class Provider {
   Provider({
     this.id,
     this.userId,
+    this.dofixPartnerId,
     this.companyName,
     this.fullName,
     this.companyAddress,
@@ -145,6 +147,7 @@ class Provider {
   factory Provider.fromJson(Map<String, dynamic> json) => Provider(
         id: json["id"],
         userId: json["user_id"],
+        dofixPartnerId: json["dofix_partner_id"],
         companyName: json["company_name"],
         fullName: json["full_name"],
         companyAddress: json["company_address"],
@@ -193,6 +196,7 @@ class Provider {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "dofix_partner_id": dofixPartnerId,
         "user_id": userId,
         "company_name": companyName,
         "full_name": fullName,

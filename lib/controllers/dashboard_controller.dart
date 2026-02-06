@@ -290,7 +290,7 @@ class DashBoardController extends GetxController implements GetxService {
   /// SAFE VALIDATION
   bool validateJobStartImages() {
     if (_jobStartImages.length < 3) {
-      jobStartImageError = "Please upload all 3 photos";
+      jobStartImageError = "upload photos";
       update();
       return false;
     }

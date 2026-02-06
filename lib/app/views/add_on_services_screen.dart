@@ -228,10 +228,7 @@ class _AddOnServicesScreenState extends State<AddOnServicesScreen> {
                           Get.back();
 
                           Future.delayed(const Duration(milliseconds: 300), () {
-                            showCustomSnackBar(
-                              'Service added successfully!',
-                              isSuccess: true,
-                            );
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Service added successfully!")));
                           });
                         } catch (e) {
                           hideLoading();

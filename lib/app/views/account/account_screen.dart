@@ -906,7 +906,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                               ),
                                             ),
                                             Text(
-                                              "Transactions",
+                                              "Transactions/Type",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 14,
@@ -932,22 +932,14 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                         isCredit: transactionContent?.credit != 0
                                             ? true
                                             : false,
-                                        transactionBy: (transactionContent
-                                                    ?.trxType ==
-                                                "withdrawable_amount")
-                                            ? transactionContent?.credit != 0.0
-                                                ? "Withdrawal"
-                                                : "Withdrawal Refund"
-                                            : transactionContent?.credit != 0
-                                                ? transactionContent
-                                                        ?.toUser?.firstName ??
-                                                    ""
-                                                : transactionContent
-                                                        ?.fromUser?.firstName ??
-                                                    "",
+                                        transactionBy: (transactionContent?.trxType == "withdrawable_amount")
+                                            ? transactionContent?.credit != 0.0 ? "Withdrawal" : "Withdrawal Refund"
+                                            : transactionContent?.credit != 0 ? transactionContent?.toUser?.firstName ?? ""
+                                            : transactionContent?.fromUser?.firstName ?? "",
+                                        type: transactionContent?.trxType ?? "",
                                       ),
                                       isLast:
-                                          index == (sortedContent?.length ?? 1),
+                                      index == (sortedContent?.length ?? 1),
                                     );
                                   },
                                 );
