@@ -181,8 +181,9 @@ class _ApkaProfileScreenState extends State<ApkaProfileScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
+                          color: Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: Colors.grey,width: 0.5)
                         ),
                         child: const Text(
                           "PARTNER ID",
