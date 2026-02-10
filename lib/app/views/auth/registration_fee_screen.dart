@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:universal_html/js.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../controllers/account_controller.dart';
 import '../../../controllers/dashboard_controller.dart';
@@ -11,7 +14,7 @@ class RegistrationFeeScreen extends StatelessWidget {
   const RegistrationFeeScreen({super.key});
 
   static const Color primaryColor = Color(0xFF227FA8);
-  static const String registrationFee = "₹1416";
+  static const String registrationFee = "1416";
 
   @override
   Widget build(BuildContext context) {
@@ -143,10 +146,9 @@ class RegistrationFeeScreen extends StatelessWidget {
               ),
             ),
           ),
-          _bottomPaySection(),
+          _bottomPaySection(context),
         ],
       ),
-
     );
   }
 
@@ -442,7 +444,7 @@ class RegistrationFeeScreen extends StatelessWidget {
   }
 
   // ================= BOTTOM PAY BAR =================
-  Widget _bottomPaySection() {
+  Widget _bottomPaySection(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 22),
       decoration: BoxDecoration(
@@ -466,7 +468,7 @@ class RegistrationFeeScreen extends StatelessWidget {
               ),
               SizedBox(height: 2),
               Text(
-                "₹1416",
+                "1416",
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -484,17 +486,170 @@ class RegistrationFeeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
-              onPressed: () async {
-                final authCtrl = Get.find<AccountController>();
-                final dashCtrl = Get.find<DashBoardController>();
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  builder: (context) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 5,
+                            margin: const EdgeInsets.only(bottom: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
 
-                await authCtrl.userWalletRecharge(
-                  amount: registrationFee,
-                  providerId: dashCtrl
-                          .providerDashboardModel.content?.providerInfo?.id ??
-                      "",
+                          const Text(
+                            "Choose Payment Method",
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          /// Razorpay
+                          ListTile(
+                            leading: const Icon(Icons.payment, color: Colors.blue),
+                            title: const Text("Pay with Razorpay"),
+                            subtitle: const Text("Cards, UPI, Netbanking"),
+                            onTap: () async {
+                              Navigator.pop(context);
+
+                              final authCtrl = Get.find<AccountController>();
+                              final dashCtrl = Get.find<DashBoardController>();
+
+                              await authCtrl.userWalletRecharge(
+                                amount: registrationFee,
+                                providerId: dashCtrl
+                                    .providerDashboardModel.content?.providerInfo?.id ??
+                                    "",
+                              );
+                            },
+                          ),
+
+                          const Divider(),
+
+                          /// UPI
+                          ListTile(
+                            leading: const Icon(Icons.qr_code, color: Colors.green),
+                            title: const Text("QR with UPI"),
+                            subtitle: const Text("GPay, PhonePe, Paytm"),
+                            onTap: () async {
+                              Navigator.pop(context);
+
+                              final Uri uri = Uri.parse(
+                                'upi://pay'
+                                    '?pa=rzpdofixtechnologi410020.rzp@ypbiz'
+                                    '&pn=Dofix%20Technologies%20Pvt%20Ltd'
+                                    '&am=1416'
+                                    '&cu=INR'
+                                    '&tn=Registration%20Fees',
+                              );
+
+                              if (await canLaunchUrl(uri)) {
+                                await launchUrl(
+                                  uri,
+                                  mode: LaunchMode.externalApplication,
+                                );
+                              } else {
+                                showCustomSnackBar("No UPI app found");
+                              }
+                            },
+                          ),
+
+                        ],
+                      ),
+                    );
+                  },
                 );
               },
+              // onPressed: () {
+              //   showModalBottomSheet(
+              //     context: context,
+              //     shape: const RoundedRectangleBorder(
+              //       borderRadius:
+              //           BorderRadius.vertical(top: Radius.circular(20)),
+              //     ),
+              //     builder: (context) {
+              //       return Padding(
+              //         padding: const EdgeInsets.all(16),
+              //         child: Column(
+              //           mainAxisSize: MainAxisSize.min,
+              //           children: [
+              //             Container(
+              //               width: 50,
+              //               height: 5,
+              //               margin: const EdgeInsets.only(bottom: 16),
+              //               decoration: BoxDecoration(
+              //                 color: Colors.grey[400],
+              //                 borderRadius: BorderRadius.circular(10),
+              //               ),
+              //             ),
+              //
+              //             const Text(
+              //               "Choose Payment Method",
+              //               style: TextStyle(
+              //                   fontSize: 18, fontWeight: FontWeight.bold),
+              //             ),
+              //
+              //             const SizedBox(height: 20),
+              //
+              //             /// Razorpay
+              //             ListTile(
+              //               leading:
+              //                   const Icon(Icons.payment, color: Colors.blue),
+              //               title: const Text("Pay with Razorpay"),
+              //               onTap: () async {
+              //                 final authCtrl = Get.find<AccountController>();
+              //                 final dashCtrl = Get.find<DashBoardController>();
+              //                 await authCtrl.userWalletRecharge(
+              //                   amount: registrationFee,
+              //                   providerId: dashCtrl.providerDashboardModel
+              //                           .content?.providerInfo?.id ??
+              //                       "",
+              //                 );
+              //               },
+              //             ),
+              //
+              //             /// UPI
+              //             ListTile(
+              //               leading:
+              //                   const Icon(Icons.qr_code, color: Colors.green),
+              //               title: const Text("QR With UPI"),
+              //               onTap: () async {
+              //                 Navigator.pop(context);
+              //
+              //                 final Uri uri = Uri.parse(
+              //                   'upi://pay?pa=dofix.limited66@kotak'
+              //                   '&pn=DOFIX%20TECHNOLOGIES%20PRIVATE%20LIMITED'
+              //                   '&am=1416'
+              //                   '&cu=INR',
+              //                 );
+              //
+              //                 if (await canLaunchUrl(uri)) {
+              //                   await launchUrl(
+              //                     uri,
+              //                     mode: LaunchMode.externalApplication,
+              //                   );
+              //                 } else {
+              //                   showCustomSnackBar("No UPI app found");
+              //                 }
+              //               },
+              //             ),
+              //           ],
+              //         ),
+              //       );
+              //     },
+              //   );
+              // },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 22),
                 child: Text(
@@ -512,6 +667,66 @@ class RegistrationFeeScreen extends StatelessWidget {
     );
   }
 }
+
+void _openUpiQrScanner(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.black,
+    builder: (context) {
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.9,
+        child: Stack(
+          children: [
+            MobileScanner(
+              onDetect: (BarcodeCapture capture) {
+                final String? qrCode = capture.barcodes.first.rawValue;
+                if (qrCode == null) return;
+
+                Navigator.pop(context);
+
+                final uri = Uri.parse(qrCode);
+
+                canLaunchUrl(uri).then((canLaunch) {
+                  if (canLaunch) {
+                    launchUrl(
+                      uri,
+                      mode: LaunchMode.externalApplication,
+                    );
+                  } else {
+                    showCustomSnackBar("Invalid UPI QR");
+                  }
+                });
+              },
+            ),
+
+            Positioned(
+              top: 40,
+              left: 20,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+
+            const Positioned(
+              bottom: 40,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Text(
+                  "Align QR within frame",
+                  style: TextStyle(color: Colors.white70),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 
 Widget _amountTile({
   required IconData icon,
@@ -612,6 +827,65 @@ class _AmountRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// lib/screens/pay_screen.dart
+class PayScreen extends StatelessWidget {
+  PayScreen({super.key});
+
+  // =====================
+  // Merchant Details
+  // =====================
+  final String vpa = 'dofix.limited66@kotak';
+  final String payeeName = 'DOFIX TECHNOLOGIES PRIVATE LIMITED';
+  final String currency = 'INR';
+
+  // Fixed amount (optional)
+  // Agar empty rakho → user UPI app me dalega
+  final String amount = '1416';
+
+  Future<void> _payWithUpi(BuildContext context) async {
+    final String txnRef = DateTime.now().millisecondsSinceEpoch.toString();
+
+    final Uri uri = Uri(
+      scheme: 'upi',
+      host: 'pay',
+      queryParameters: {
+        'pa': vpa,
+        'pn': payeeName,
+        'tr': txnRef,
+        'tn': 'Payment',
+        'am': amount,
+        'cu': 'INR',
+      },
+    );
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No UPI app found')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pay via UPI'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => _payWithUpi(context),
+          child: const Text('Pay Now'),
+        ),
+      ),
     );
   }
 }

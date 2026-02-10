@@ -10,11 +10,18 @@
         android:normalScreens="true"
         android:smallScreens="true"
         android:xlargeScreens="true"/>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="upi" />
+        </intent>
+    </queries>
     
     <application
         android:label="DoFix Partner"
         android:name="${applicationName}"
-        android:icon="@mipmap/logo">
+        android:icon="@mipmap/ic_launcher">
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

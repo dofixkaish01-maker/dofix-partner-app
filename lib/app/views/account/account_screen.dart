@@ -955,7 +955,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
             ),
             Positioned(
               left: 315,
-              top: 340,
+              top: 300,
               child: FloatingActionButton(
                 onPressed: () {
                   showRechargeBottomSheet(context);

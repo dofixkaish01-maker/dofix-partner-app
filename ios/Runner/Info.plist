@@ -33,8 +33,6 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera for profile pictures and document uploads.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>We need your location for background tracking.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>We need your location to enhance your experience.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
