@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dofix_technichian/app/views/account/withdraw_request_screen.dart';
 import 'package:dofix_technichian/controllers/dashboard_controller.dart';
 import 'package:dofix_technichian/model/wallet_history_model.dart';
@@ -404,17 +406,17 @@ class _PaiseScreenState extends State<PaiseScreen> {
               onRefresh: () async {
                 // Dashboard aur transaction history dono reload karenge
                 await Get.find<DashBoardController>().getAccountInfo(true);
-                await accountController.fetchWalletTransactionHistory(
-                    controller.providerDashboardModel.content?.providerInfo?.userId ?? "");
+                await accountController.fetchWalletTransactionHistory(controller
+                        .providerDashboardModel.content?.providerInfo?.userId ??
+                    "");
 
                 // Reload account info (for receivable balance)
                 await Get.find<DashBoardController>().getAccountInfo(true);
 
                 // Reload category info (for minimum balance)
                 await Get.find<AccountController>().fetchCategory();
-
               },
-              child:  SingleChildScrollView(
+              child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
@@ -457,7 +459,8 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        transactionType == TransactionType.payable
+                                        transactionType ==
+                                                TransactionType.payable
                                             ? "Payable balance".tr
                                             : transactionType ==
                                                     TransactionType.withdrawAble
@@ -476,7 +479,8 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                                                     .adjust
                                                             ? "Adjustable balance"
                                                                 .tr
-                                                            : "Empty Balance".tr,
+                                                            : "Empty Balance"
+                                                                .tr,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: const Color(0xFF212121),
@@ -519,7 +523,8 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                                                 TransactionType
                                                                     .adjust
                                                             ? "Adjust".tr
-                                                            : "Empty balance".tr,
+                                                            : "Empty balance"
+                                                                .tr,
                                         onPressed: transactionType ==
                                                 TransactionType.none
                                             ? () {
@@ -535,7 +540,8 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                                     .configModel
                                                     .content;
                                                 if (transactionType ==
-                                                        TransactionType.payable ||
+                                                        TransactionType
+                                                            .payable ||
                                                     transactionType ==
                                                         TransactionType
                                                             .adjustAndPayable) {
@@ -575,7 +581,8 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                                             .adjustWithdrawAble) {
                                                   await accountController
                                                       .adjustMyBalance();
-                                                  Get.to(WithdrawRequestScreen());
+                                                  Get.to(
+                                                      WithdrawRequestScreen());
                                                 } else if (transactionType ==
                                                     TransactionType.adjust) {
                                                   await accountController
@@ -845,20 +852,21 @@ class _PaiseScreenState extends State<PaiseScreen> {
                       ),
                       GetBuilder<AccountController>(
                         builder: (accController) {
-                          final List<Content>? sortedContent =
-                              accController.transactionHistory?.content == null
-                                  ? null
-                                  : List<Content>.from(
-                                      accController.transactionHistory!.content!)
-                                ?..sort((a, b) {
-                                  final aDate = DateTime.tryParse(
-                                          a.createdAt?.toString() ?? '') ??
-                                      DateTime(1970);
-                                  final bDate = DateTime.tryParse(
-                                          b.createdAt?.toString() ?? '') ??
-                                      DateTime(1970);
-                                  return bDate.compareTo(aDate); // descending
-                                });
+                          final List<Content>? sortedContent = accController
+                                      .transactionHistory?.content ==
+                                  null
+                              ? null
+                              : List<Content>.from(
+                                  accController.transactionHistory!.content!)
+                            ?..sort((a, b) {
+                              final aDate = DateTime.tryParse(
+                                      a.createdAt?.toString() ?? '') ??
+                                  DateTime(1970);
+                              final bDate = DateTime.tryParse(
+                                      b.createdAt?.toString() ?? '') ??
+                                  DateTime(1970);
+                              return bDate.compareTo(aDate); // descending
+                            });
                           if (sortedContent != null) {
                             for (var item in sortedContent) {
                               print(
@@ -896,7 +904,8 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.only(left: 10),
+                                              padding:
+                                                  EdgeInsets.only(left: 10),
                                               child: Text(
                                                 "Amount",
                                                 style: TextStyle(
@@ -929,17 +938,27 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                         amount: transactionContent?.credit != 0
                                             ? transactionContent?.credit ?? 0.0
                                             : transactionContent?.debit ?? 0.0,
-                                        isCredit: transactionContent?.credit != 0
-                                            ? true
-                                            : false,
-                                        transactionBy: (transactionContent?.trxType == "withdrawable_amount")
-                                            ? transactionContent?.credit != 0.0 ? "Withdrawal" : "Withdrawal Refund"
-                                            : transactionContent?.credit != 0 ? transactionContent?.toUser?.firstName ?? ""
-                                            : transactionContent?.fromUser?.firstName ?? "",
+                                        isCredit:
+                                            transactionContent?.credit != 0
+                                                ? true
+                                                : false,
+                                        transactionBy: (transactionContent
+                                                    ?.trxType ==
+                                                "withdrawable_amount")
+                                            ? transactionContent?.credit != 0.0
+                                                ? "Withdrawal"
+                                                : "Withdrawal Refund"
+                                            : transactionContent?.credit != 0
+                                                ? transactionContent
+                                                        ?.toUser?.firstName ??
+                                                    ""
+                                                : transactionContent
+                                                        ?.fromUser?.firstName ??
+                                                    "",
                                         type: transactionContent?.trxType ?? "",
                                       ),
                                       isLast:
-                                      index == (sortedContent?.length ?? 1),
+                                          index == (sortedContent?.length ?? 1),
                                     );
                                   },
                                 );
@@ -954,20 +973,43 @@ class _PaiseScreenState extends State<PaiseScreen> {
               ),
             ),
             Positioned(
-              left: 315,
-              top: 300,
-              child: FloatingActionButton(
-                onPressed: () {
+              right: 0,
+              bottom: MediaQuery.of(context).size.height * 0.40,
+              child: GestureDetector(
+                onTap: () {
                   showRechargeBottomSheet(context);
                 },
-                backgroundColor: greenColor,
-                shape: CircleBorder(),
-                child: const Icon(
-                  Icons.currency_rupee,
-                  color: Colors.white,
+                child: Container(
+                  height: 52,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: greenColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(27),
+                        bottomLeft: Radius.circular(27)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        blurRadius: 18,
+                        offset: const Offset(0, 8),
+                      ),
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.currency_rupee,
+                      color: Colors.white,
+                      size: 26,
+                    ),
+                  ),
                 ),
               ),
-            ),
+            )
           ],
         );
       },

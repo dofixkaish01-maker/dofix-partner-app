@@ -545,23 +545,24 @@ class RegistrationFeeScreen extends StatelessWidget {
                             onTap: () async {
                               Navigator.pop(context);
 
-                              final Uri uri = Uri.parse(
-                                'upi://pay'
-                                    '?pa=rzpdofixtechnologi410020.rzp@ypbiz'
-                                    '&pn=Dofix%20Technologies%20Pvt%20Ltd'
-                                    '&am=1416'
-                                    '&cu=INR'
-                                    '&tn=Registration%20Fees',
+                              final uri = Uri(
+                                scheme: 'upi',
+                                host: 'pay',
+                                queryParameters: {
+                                  'pa': 'rzpdofixtechnologi410020.rzp@ypbiz',
+                                  'pn': 'Dofix Technologies Pvt Ltd',
+                                  'am': '1416.00',
+                                  'cu': 'INR',
+                                  'tn': 'Registration Fees',
+                                },
                               );
 
-                              if (await canLaunchUrl(uri)) {
-                                await launchUrl(
-                                  uri,
-                                  mode: LaunchMode.externalApplication,
-                                );
-                              } else {
-                                showCustomSnackBar("No UPI app found");
+                              try {
+                                await launchUrl(uri, mode: LaunchMode.externalApplication);
+                              } catch (e) {
+                                showCustomSnackBar("Unable to open UPI app");
                               }
+
                             },
                           ),
 

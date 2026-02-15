@@ -297,6 +297,40 @@ class DashBoardController extends GetxController implements GetxService {
     return true;
   }
 
+  /// ================= JOB COMPLETE IMAGES =================
+
+  List<File> _jobCompleteImages = [];
+
+  List<File> get jobCompleteImages => _jobCompleteImages;
+
+  String? jobCompleteImageError;
+
+  /// index wise image set / replace (NO EMPTY FILE)
+  void addJobCompleteImageAt(int index, File file) {
+    if (_jobCompleteImages.length > index) {
+      // replace
+      _jobCompleteImages[index] = file;
+    } else {
+      while (_jobCompleteImages.length < index) {
+        _jobCompleteImages.add(File('__dummy__')); // placeholder
+      }
+      _jobCompleteImages.add(file);
+    }
+
+    jobCompleteImageError = null;
+    update();
+  }
+
+  /// SAFE VALIDATION (3 IMAGE REQUIRED)
+  bool validateJobCompleteImages() {
+    if (_jobCompleteImages.length < 3) {
+      jobCompleteImageError = "Please upload 3 job complete images";
+      update();
+      return false;
+    }
+    return true;
+  }
+
 
   void clearJobStartMedia() {
     _jobStartImages.clear();
@@ -305,6 +339,7 @@ class DashBoardController extends GetxController implements GetxService {
   }
 
   File? jobStartVideo;
+  File? jobCompleteVideo;
 
   void setJobStartVideo(File file) {
     jobStartVideo = file;
