@@ -223,6 +223,7 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
                               debugPrint("Image Path: ${file.path}");
                             }, false),
                             sizedBox20(),
+                            // 7645973858
                             buildDocumentField(
                               "Passbook Photo",
                               _passbookImageController,
@@ -238,7 +239,7 @@ class _AccountSetupScreenSecondState extends State<AccountSetupScreenSecond> {
                                 Get.find<AuthController>().update();
                                 debugPrint("Image Path: ${file.path}");
                               },
-                              true,
+                              false,
                             ),
                             sizedBox30(),
                             sizedBox30(),

@@ -400,10 +400,10 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                                 true,
                                 _aadharCardImageController,
                                 TextInputType.number,
-                                (v) => authController.adharNumber = v,
-                                (f) => authController.adharImage = f,
+                                    (v) => authController.adharNumber = v,
+                                    (f) => authController.adharImage = f,
                                 1,
-                                isRequired: true, //
+                                isRequired: true,
                               ),
 
                               sizedBox20(),
