@@ -248,7 +248,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                     sizedBox10(),
                     Divider(color: Colors.black.withAlpha(38), thickness: 1),
-                    sizedBox10(),
+                    SizedBox(height: 5,),
                     GestureDetector(
                       onTap: () {
                         Get.to(() => HtmlContentScreen(

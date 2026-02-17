@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../controllers/dashboard_controller.dart';
 import '../../../model/booking_status/booking_status.dart';
+import '../../../utils/dimensions.dart';
 import '../shuru_kare.dart';
 
 class BookingScreen extends StatefulWidget {
@@ -121,7 +122,7 @@ class _BookingScreenState extends State<BookingScreen>
                       title,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 14,
+                        fontSize: Dimensions.fontSize14,
                         fontFamily: 'Albert Sans',
                         fontWeight: FontWeight.w500,
                       ),
@@ -143,9 +144,15 @@ class _BookingScreenState extends State<BookingScreen>
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       location,
+                      // style: TextStyle(
+                      //   color: Colors.black.withAlpha(102),
+                      //   fontSize: 12,
+                      //   fontFamily: 'Albert Sans',
+                      //   fontWeight: FontWeight.w500,
+                      // ),
                       style: TextStyle(
-                        color: Colors.black.withAlpha(102),
-                        fontSize: 12,
+                        color: Colors.black.withAlpha(140),
+                        fontSize: Dimensions.fontSize12,
                         fontFamily: 'Albert Sans',
                         fontWeight: FontWeight.w500,
                       ),
@@ -166,8 +173,8 @@ class _BookingScreenState extends State<BookingScreen>
                   Text(
                     time,
                     style: TextStyle(
-                      color: Colors.black.withAlpha(102),
-                      fontSize: 12,
+                      color: Colors.black.withAlpha(140),
+                      fontSize: Dimensions.fontSize12,
                       fontFamily: 'Albert Sans',
                       fontWeight: FontWeight.w500,
                     ),
@@ -191,7 +198,7 @@ class _BookingScreenState extends State<BookingScreen>
                         calender,
                         style: TextStyle(
                           color: Colors.black.withAlpha(102),
-                          fontSize: 12,
+                          fontSize: Dimensions.fontSize12,
                           fontFamily: 'Albert Sans',
                           fontWeight: FontWeight.w500,
                         ),
@@ -238,9 +245,9 @@ class _BookingScreenState extends State<BookingScreen>
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12,
+                                fontSize: Dimensions.fontSize12,
                                 fontFamily: 'Albert Sans',
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
@@ -273,7 +280,7 @@ class _BookingScreenState extends State<BookingScreen>
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12,
+                                fontSize: Dimensions.fontSize12,
                                 fontFamily: 'Albert Sans',
                                 fontWeight: FontWeight.w600,
                               ),
@@ -312,9 +319,10 @@ class _BookingScreenState extends State<BookingScreen>
                 location: BannerLocation.topEnd,
                 color: Colors.red,
                 textStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
                   color: Colors.white,
+                  fontSize: Dimensions.fontSize12,
+                  fontFamily: 'Albert Sans',
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -364,7 +372,7 @@ class _BookingScreenState extends State<BookingScreen>
                     .format(DateTime.parse(
                         _items[index]?.serviceSchedule ?? '11:00 AM'))
                     .toString(),
-                _items[index]?.subCategory.name ?? 'Service Name',
+                _items[index]?.subCategory?.name ?? 'Service Name',
                 _items[index]?.serviceAddress?.address ?? 'Location',
                 DateFormat("d MMMM y")
                     .format(DateTime.parse(

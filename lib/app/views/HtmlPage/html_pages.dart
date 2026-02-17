@@ -14,11 +14,25 @@ class HtmlContentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(title: Text(title),backgroundColor: Color(0xff337BA0),),
+      // body: SingleChildScrollView(
+      //   padding: const EdgeInsets.all(2.0),
+      //   // child: Html(data: htmlContent),
+      // ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Html(data: htmlContent),
+        padding: const EdgeInsets.all(12.0),
+        child: Html(
+          data: htmlContent,
+          style: {
+            "*": Style(
+              margin: Margins.zero,
+              padding: HtmlPaddings.zero,
+              lineHeight: LineHeight(1.8),
+            ),
+          },
+        ),
       ),
+
     );
   }
 }

@@ -146,8 +146,12 @@ class RegistrationFeeScreen extends StatelessWidget {
               ),
             ),
           ),
-          _bottomPaySection(context),
         ],
+      ),
+      bottomNavigationBar:Container(
+        height: 100,
+        color: Colors.white,
+        child: _bottomPaySection(context),
       ),
     );
   }

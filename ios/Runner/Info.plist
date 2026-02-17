@@ -26,37 +26,61 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<!-- Network -->
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+
+	<!-- Camera -->
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera for profile pictures and document uploads.</string>
+
+	<!-- Location Permissions -->
 	<key>NSLocationUsageDescription</key>
 	<string>We need your location to enhance your experience.</string>
+
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need your location to provide better services.</string>
+	<string>We need your location to provide better services and show nearby jobs.</string>
+
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location to show nearby service requests and assign jobs efficiently even when the app is in background.</string>
+
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location to assign jobs and update status even when the app is not in use.</string>
+
+	<!-- Microphone -->
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need access to your microphone for voice calls and recordings.</string>
+
+	<!-- Photos -->
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library for uploading images.</string>
+
+	<!-- App Settings -->
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
 	</array>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
