@@ -239,26 +239,75 @@ class _CustomerOtpVerificationScreenState
                                     bookingId:
                                     dashboardController.bookingDetails?.content?.id ?? "",
                                     token: dashboardController.authRepo.apiClient.token.toString(),
-                                    zoneId: dashboardController.providerDashboardModel
-                                        .content
-                                        ?.providerInfo
-                                        ?.zoneId ??
+                                    zoneId: dashboardController
+                                        .providerDashboardModel.content?.providerInfo?.zoneId ??
                                         "",
                                   );
-                                  if (isVerified) {
-                                    /// 🔁 latest booking detail fetch karo
-                                    await dashboardController.getBookingDetails(
-                                      id: dashboardController.bookingDetails!.content!.id.toString(),
-                                    );
 
-                                    /// ❌ home mat bhejo
-                                    /// ✅ directly booking detail (Completed state)
-                                    Get.off(
-                                          () => ShuruKare(
-                                        id: dashboardController.bookingDetails!.content!.id.toString(),
-                                      ),
-                                    );
+                                  if (!isVerified) {
+                                    Get.snackbar("Error", "OTP verify nahi hua");
+                                    return;
                                   }
+
+                                  /// ✅ now mark complete
+                                  Map<String, String> body = {
+                                    "booking_id": dashboardController.bookingDetails!.content!.id.toString(),
+                                    "booking_status": "completed"
+                                  };
+
+                                  await dashboardController.updateBookingStatus(
+                                    body,
+                                    images: dashboardController.jobStartImages,
+                                    videos: dashboardController.jobStartVideo,
+                                    postImageName: 'evidence_photos',
+                                    postVideoName: 'post_work_video',
+                                  );
+
+
+                                  Get.off(() => ShuruKare(
+                                    id: dashboardController.bookingDetails!.content!.id.toString(),
+                                  ));
+                                  // var dashboardController = Get.find<DashBoardController>();
+                                  // var authController = Get.find<AuthController>();
+                                  //
+                                  // String phone = dashboardController
+                                  //     .providerDashboardModel
+                                  //     .content
+                                  //     ?.providerInfo
+                                  //     ?.owner
+                                  //     ?.phone ??
+                                  //     "";
+                                  //
+                                  // if (!phone.startsWith('+')) {
+                                  //   phone = '+91$phone';
+                                  // }
+                                  //
+                                  // bool isVerified = await authController.verifyProviderOtpApi(
+                                  //   phone: phone,
+                                  //   otp: _otpController.text.trim(),
+                                  //   bookingId:
+                                  //   dashboardController.bookingDetails?.content?.id ?? "",
+                                  //   token: dashboardController.authRepo.apiClient.token.toString(),
+                                  //   zoneId: dashboardController.providerDashboardModel
+                                  //       .content
+                                  //       ?.providerInfo
+                                  //       ?.zoneId ??
+                                  //       "",
+                                  // );
+                                  // if (isVerified) {
+                                  //   /// 🔁 latest booking detail fetch karo
+                                  //   await dashboardController.getBookingDetails(
+                                  //     id: dashboardController.bookingDetails!.content!.id.toString(),
+                                  //   );
+                                  //
+                                  //   /// ❌ home mat bhejo
+                                  //   /// ✅ directly booking detail (Completed state)
+                                  //   Get.off(
+                                  //         () => ShuruKare(
+                                  //       id: dashboardController.bookingDetails!.content!.id.toString(),
+                                  //     ),
+                                  //   );
+                                  // }
 
 
                                 },
