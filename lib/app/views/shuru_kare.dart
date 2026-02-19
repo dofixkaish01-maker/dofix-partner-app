@@ -29,6 +29,8 @@ import '../widgets/custom_appbar.dart';
 import '../widgets/media_upload_widget.dart';
 import 'package:video_player/video_player.dart';
 
+import 'customer_otp_verification_screen.dart';
+
 class ShuruKare extends StatefulWidget {
   final String id;
   final VoidCallback? onBookingUpdated;
@@ -640,9 +642,6 @@ class _ShuruKareState extends State<ShuruKare> {
                                           return GetBuilder<
                                               DashBoardController>(
                                             builder: (controller) {
-                                              final images =
-                                                  controller.jobStartImages;
-
                                               return Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -1568,6 +1567,65 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                               const SizedBox(
                                 width: 10,
                               ),
+                              // if (Get.find<DashBoardController>()
+                              //             .bookingDetails
+                              //             ?.content
+                              //             ?.bookingStatus ==
+                              //         'ongoing' &&
+                              //     Get.find<DashBoardController>()
+                              //             .bookingDetails
+                              //             ?.content
+                              //             ?.isPostWorkMediaUploaded ==
+                              //         false &&
+                              //     Get.find<DashBoardController>()
+                              //             .bookingDetails
+                              //             ?.content
+                              //             ?.isPreWorkMediaUploaded ==
+                              //         true)
+                              //   Expanded(
+                              //     child: GestureDetector(
+                              //       onTap: () async {
+                              //         final controller =
+                              //             Get.find<DashBoardController>();
+                              //
+                              //         //  validate images (minimum required)
+                              //         if (!controller
+                              //             .validateJobStartImages()) return;
+                              //
+                              //         //  only job complete logic
+                              //         Map<String, String> body = {
+                              //           "booking_id": widget.booking.content!.id
+                              //               .toString(),
+                              //           "booking_status": "completed"
+                              //         };
+                              //
+                              //         await controller.updateBookingStatus(
+                              //           body,
+                              //           images: controller.jobStartImages,
+                              //           videos: controller.jobStartVideo,
+                              //           postImageName: 'evidence_photos',
+                              //           postVideoName: 'post_work_video',
+                              //         );
+                              //
+                              //         // optional: clear local media after upload
+                              //         controller.clearJobStartMedia();
+                              //       },
+                              //       child: Container(
+                              //         height: 40,
+                              //         decoration: BoxDecoration(
+                              //           color: primaryAppColor,
+                              //           borderRadius: BorderRadius.circular(5),
+                              //         ),
+                              //         padding: const EdgeInsets.all(8),
+                              //         child: const Center(
+                              //           child: Text(
+                              //             "Share Media",
+                              //             style: TextStyle(color: Colors.white),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
                               if (Get.find<DashBoardController>()
                                           .bookingDetails
                                           ?.content
@@ -1586,26 +1644,58 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () async {
-                                      final controller =
-                                          Get.find<DashBoardController>();
+                                      final dashboardController =
+                                      Get.find<DashBoardController>();
+                                      final authController =
+                                      Get.find<AuthController>();
 
-                                      // validation (same jo tum already use kar rahe ho)
-                                      if (!controller.validateJobStartImages())
-                                        return;
+                                      /// 1️⃣ validate media
+                                      if (!dashboardController
+                                          .validateJobStartImages()) return;
 
+                                      /// 2️⃣ upload media
                                       Map<String, String> body = {
                                         "booking_id": widget.booking.content!.id
                                             .toString(),
                                         "booking_status": "ongoing",
                                       };
 
-                                      await controller.updateBookingStatus(
+                                      await dashboardController
+                                          .updateBookingStatus(
                                         body,
-                                        images: controller.jobCompleteImages,
-                                        videos: controller.jobCompleteVideo,
+                                        images:
+                                        dashboardController.jobStartImages,
+                                        videos:
+                                        dashboardController.jobStartVideo,
+                                        postImageName: 'evidence_photos',
+                                        postVideoName: 'post_work_video',
                                       );
 
-                                      controller.clearJobStartMedia();
+                                      /// 3️⃣ send OTP
+                                      await authController.sendCustomerOtpApi(
+                                        phone: widget.booking.content?.customer
+                                            ?.phone ??
+                                            "",
+                                        bookingId:
+                                        widget.booking.content?.id ?? "",
+                                        token: authController
+                                            .authRepo.apiClient.token
+                                            .toString(),
+                                      );
+
+                                      /// 4️⃣ go to OTP screen ✅
+                                      Get.to(
+                                              () => CustomerOtpVerificationScreen(
+                                            phoneNo: widget.booking.content
+                                                ?.customer?.phone ??
+                                                "",
+                                            bookingId: widget
+                                                .booking.content!.id
+                                                .toString(),
+                                          ));
+
+                                      Get.snackbar("Success",
+                                          "Media uploaded & OTP sent");
                                     },
                                     child: Container(
                                       height: 40,
@@ -1616,7 +1706,7 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                       padding: const EdgeInsets.all(8),
                                       child: const Center(
                                         child: Text(
-                                          "Share Media",
+                                          "Share Work & OTP",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
@@ -1919,60 +2009,60 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                               // ),
                               // send customer otp button
                             ]),
-                            if (Get.find<DashBoardController>()
-                                        .bookingDetails
-                                        ?.content
-                                        ?.bookingStatus ==
-                                    'ongoing' &&
-                                Get.find<DashBoardController>()
-                                        .bookingDetails
-                                        ?.content
-                                        ?.isPostWorkMediaUploaded ==
-                                    false &&
-                                Get.find<DashBoardController>()
-                                        .bookingDetails
-                                        ?.content
-                                        ?.isPreWorkMediaUploaded ==
-                                    true)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0, vertical: 10),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      final dashboardController =
-                                          Get.find<DashBoardController>();
-                                      final authController =
-                                          Get.find<AuthController>();
-
-                                      authController.sendCustomerOtpApi(
-                                        phone: widget.booking.content?.customer
-                                                ?.phone ??
-                                            "",
-                                        bookingId:
-                                            widget.booking.content?.id ?? "",
-                                        token: authController
-                                            .authRepo.apiClient.token
-                                            .toString(),
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      "Complete Job",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
+                            // if (Get.find<DashBoardController>()
+                            //             .bookingDetails
+                            //             ?.content
+                            //             ?.bookingStatus ==
+                            //         'ongoing' &&
+                            //     Get.find<DashBoardController>()
+                            //             .bookingDetails
+                            //             ?.content
+                            //             ?.isPostWorkMediaUploaded ==
+                            //         false &&
+                            //     Get.find<DashBoardController>()
+                            //             .bookingDetails
+                            //             ?.content
+                            //             ?.isPreWorkMediaUploaded ==
+                            //         true)
+                            //   Padding(
+                            //     padding: const EdgeInsets.symmetric(
+                            //         horizontal: 10.0, vertical: 10),
+                            //     child: SizedBox(
+                            //       width: double.infinity,
+                            //       child: ElevatedButton(
+                            //         onPressed: () {
+                            //           final dashboardController =
+                            //               Get.find<DashBoardController>();
+                            //           final authController =
+                            //               Get.find<AuthController>();
+                            //
+                            //           authController.sendCustomerOtpApi(
+                            //             phone: widget.booking.content?.customer
+                            //                     ?.phone ??
+                            //                 "",
+                            //             bookingId:
+                            //                 widget.booking.content?.id ?? "",
+                            //             token: authController
+                            //                 .authRepo.apiClient.token
+                            //                 .toString(),
+                            //           );
+                            //         },
+                            //         style: ElevatedButton.styleFrom(
+                            //           backgroundColor: Colors.green,
+                            //           shape: RoundedRectangleBorder(
+                            //             borderRadius: BorderRadius.circular(8),
+                            //           ),
+                            //         ),
+                            //         child: const Text(
+                            //           "Complete Job",
+                            //           style: TextStyle(
+                            //             fontSize: 16,
+                            //             fontWeight: FontWeight.w600,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   )
                           ],
                         ),
                       )
