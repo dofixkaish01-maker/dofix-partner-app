@@ -9,6 +9,8 @@ import '../../../controllers/account_controller.dart';
 import '../../../controllers/dashboard_controller.dart';
 import '../../../helper/route_helper.dart';
 import '../../../widgets/custom_snack_bar.dart';
+import '../payment/payment_failed_screen.dart';
+import '../payment/payment_success_screen.dart';
 
 class RegistrationFeeScreen extends StatelessWidget {
   const RegistrationFeeScreen({super.key});
@@ -536,6 +538,18 @@ class RegistrationFeeScreen extends StatelessWidget {
                                     .providerDashboardModel.content?.providerInfo?.id ??
                                     "",
                               );
+
+                              // bool success = await authCtrl.userWalletRecharge(
+                              //   amount: registrationFee,
+                              //   providerId: dashCtrl.providerDashboardModel.content?.providerInfo?.id ?? "",
+                              // );
+                              //
+                              // // yaha se screen change hoga
+                              // if (success) {
+                              //   Get.to(() => PaymentSuccessScreen());
+                              // } else {
+                              //   Get.to(() => PaymentFailedScreen());
+                              // }
                             },
                           ),
 
