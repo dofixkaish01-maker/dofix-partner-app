@@ -1,7 +1,7 @@
 name: dofix_technichian
 description: "A new Flutter project."
 publish_to: 'none'
-version: 1.4.3+36
+version: 1.4.4+37
 
 environment:
   sdk: ^3.6.0
@@ -50,6 +50,7 @@ dependencies:
   firebase_core: ^4.4.0
   mobile_scanner: ^7.1.4
   glassmorphism: ^3.0.0
+  lottie: ^3.3.2
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,7 @@ flutter:
     - assets/icons/
     - assets/img/vice/
     - assets/img/logo/
+    - assets/lottie/
 
   fonts:
     - family: Jost
