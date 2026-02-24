@@ -51,6 +51,7 @@ dependencies:
   mobile_scanner: ^7.1.4
   glassmorphism: ^3.0.0
   lottie: ^3.3.2
+  app_tracking_transparency: ^2.0.6+1
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+  <key>NSUserTrackingUsageDescription</key>
+    <string>We use your data to improve your experience and measure ad performance.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -29,18 +31,14 @@
 
 	<!-- Network -->
 	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+    </dict>
 
 	<!-- Camera -->
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera for profile pictures and document uploads.</string>
-
-	<!-- Location Permissions -->
-	<key>NSLocationUsageDescription</key>
-	<string>We need your location to enhance your experience.</string>
 
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need your location to provide better services and show nearby jobs.</string>
@@ -88,5 +86,37 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+ <!-- SKAdNetwork for ad attribution -->
+    <key>SKAdNetworkItems</key>
+    <array>
+        <dict>
+            <key>SKAdNetworkIdentifier</key>
+            <string>v9wttpbfk9.skadnetwork</string>
+        </dict>
+        <dict>
+            <key>SKAdNetworkIdentifier</key>
+            <string>n38lu8286q.skadnetwork</string>
+        </dict>
+    </array>
+
+    <!-- Facebook Meta Configuration -->
+    <key>FacebookAppID</key>
+    <string>1393151865889842</string>
+
+    <key>FacebookDisplayName</key>
+    <string>DoFix</string>
+
+    <key>FacebookClientToken</key>
+    <string>YOUR_REAL_CLIENT_TOKEN_HERE</string>
+
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>fb1393151865889842</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../controllers/tracking_controller.dart';
 import '../../helper/route_helper.dart';
 import '../../utils/dimensions.dart';
 import '../../utils/images.dart';
@@ -22,20 +23,20 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-
     super.initState();
-      _route(); // Call the navigation function
-  }
-void _route() {
-    Timer(const Duration(seconds: 2), () {
-      Get.offNamed(RouteHelper.getLoginRoute()); // Navigate after 2 seconds
-    });
+    _initApp();
   }
 
+  Future<void> _initApp() async {
+    // 1 Request tracking first (important for iOS)
+    await TrackingController.requestTracking();
 
+    // 2️ Splash delay
+    await Future.delayed(const Duration(seconds: 3));
 
-
-
+    // 3️ Navigate once only
+    Get.offNamed(RouteHelper.getLoginRoute());
+  }
 
   @override
   Widget build(BuildContext context) {
