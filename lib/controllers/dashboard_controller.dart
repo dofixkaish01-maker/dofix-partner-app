@@ -62,7 +62,6 @@ class DashBoardController extends GetxController implements GetxService {
   @override
   void onInit() {
     // TODO: implement onInit
-    // TODO: implement onInit
     super.onInit();
     // handleLocationPermission(Get.context!);
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1430,8 +1429,10 @@ class DashBoardController extends GetxController implements GetxService {
 
         if (responseData['content'] != null &&
             responseData['content']['bookings'] != null) {
-          bookingModel =
-              booking.BookingList.fromJson(responseData['content']['bookings']);
+          // bookingModel =
+          //     booking.BookingList.fromJson(responseData['content']['bookings']);
+          var bookingsJson = responseData['content']?['bookings'];
+          bookingModel = booking.BookingList.fromJson(bookingsJson);
 
           if (!isRefresh) {
             getProviderInfo();

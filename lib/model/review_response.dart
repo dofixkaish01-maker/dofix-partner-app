@@ -178,7 +178,7 @@ class Provider with _$Provider {
     @JsonKey(name: 'adhar_img') required String adharImg,
     @JsonKey(name: 'pan_number') required String panNumber,
     @JsonKey(name: 'pan_img') required String panImg,
-    @JsonKey(name: 'dl_number') required String dlNumber,
+    @JsonKey(name: 'dl_number')required String dlNumber,
     @JsonKey(name: 'dl_img') required String dlImg,
     @JsonKey(name: 'profile_img') required String profileImg,
     @JsonKey(name: 'service_availability') required int serviceAvailability,

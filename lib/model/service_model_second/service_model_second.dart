@@ -90,7 +90,8 @@ class ServiceModel {
     tax = double.tryParse(json['tax'].toString());
     orderCount = int.tryParse(json['order_count'].toString());
     isActive = int.tryParse(json['is_active'].toString());
-    ratingCount = int.tryParse(json['rating_count'].toString());
+    // ratingCount = int.tryParse(json['rating_count'].toString());
+    ratingCount = (json['rating_count'] as num?)?.toInt() ?? 0;
     avgRating = double.tryParse(json['avg_rating'].toString());
     minBiddingPrice = double.tryParse(json['min_bidding_price'].toString());
     deletedAt = json['deleted_at'];

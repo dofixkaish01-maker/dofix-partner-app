@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -120,6 +119,172 @@ class _$ProviderDashboardModelCopyWithImpl<$Res>
     return $ContentCopyWith<$Res>(_self.content!, (value) {
       return _then(_self.copyWith(content: value));
     });
+  }
+}
+
+/// Adds pattern-matching-related methods to [ProviderDashboardModel].
+extension ProviderDashboardModelPatterns on ProviderDashboardModel {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_ProviderDashboardModel value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderDashboardModel() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_ProviderDashboardModel value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderDashboardModel():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_ProviderDashboardModel value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderDashboardModel() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(@JsonKey(name: 'response_code') String? responseCode,
+            String? message, Content? content, List<dynamic>? errors)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderDashboardModel() when $default != null:
+        return $default(
+            _that.responseCode, _that.message, _that.content, _that.errors);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(@JsonKey(name: 'response_code') String? responseCode,
+            String? message, Content? content, List<dynamic>? errors)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderDashboardModel():
+        return $default(
+            _that.responseCode, _that.message, _that.content, _that.errors);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(@JsonKey(name: 'response_code') String? responseCode,
+            String? message, Content? content, List<dynamic>? errors)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderDashboardModel() when $default != null:
+        return $default(
+            _that.responseCode, _that.message, _that.content, _that.errors);
+      case _:
+        return null;
+    }
   }
 }
 
@@ -409,6 +574,190 @@ class _$ContentCopyWithImpl<$Res> implements $ContentCopyWith<$Res> {
     return $SubscriptionInfoCopyWith<$Res>(_self.subscriptionInfo!, (value) {
       return _then(_self.copyWith(subscriptionInfo: value));
     });
+  }
+}
+
+/// Adds pattern-matching-related methods to [Content].
+extension ContentPatterns on Content {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_Content value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _Content() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_Content value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Content():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_Content value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Content() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            @JsonKey(name: 'provider_info') ProviderInfo? providerInfo,
+            @JsonKey(name: 'booking_overview')
+            List<BookingOverview>? bookingOverview,
+            @JsonKey(name: 'promotional_cost_percentage')
+            PromotionalCostPercentage? promotionalCostPercentage,
+            @JsonKey(name: 'subscription_info')
+            SubscriptionInfo? subscriptionInfo)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _Content() when $default != null:
+        return $default(_that.providerInfo, _that.bookingOverview,
+            _that.promotionalCostPercentage, _that.subscriptionInfo);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            @JsonKey(name: 'provider_info') ProviderInfo? providerInfo,
+            @JsonKey(name: 'booking_overview')
+            List<BookingOverview>? bookingOverview,
+            @JsonKey(name: 'promotional_cost_percentage')
+            PromotionalCostPercentage? promotionalCostPercentage,
+            @JsonKey(name: 'subscription_info')
+            SubscriptionInfo? subscriptionInfo)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Content():
+        return $default(_that.providerInfo, _that.bookingOverview,
+            _that.promotionalCostPercentage, _that.subscriptionInfo);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            @JsonKey(name: 'provider_info') ProviderInfo? providerInfo,
+            @JsonKey(name: 'booking_overview')
+            List<BookingOverview>? bookingOverview,
+            @JsonKey(name: 'promotional_cost_percentage')
+            PromotionalCostPercentage? promotionalCostPercentage,
+            @JsonKey(name: 'subscription_info')
+            SubscriptionInfo? subscriptionInfo)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Content() when $default != null:
+        return $default(_that.providerInfo, _that.bookingOverview,
+            _that.promotionalCostPercentage, _that.subscriptionInfo);
+      case _:
+        return null;
+    }
   }
 }
 
@@ -1005,6 +1354,346 @@ class _$ProviderInfoCopyWithImpl<$Res> implements $ProviderInfoCopyWith<$Res> {
   }
 }
 
+/// Adds pattern-matching-related methods to [ProviderInfo].
+extension ProviderInfoPatterns on ProviderInfo {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_ProviderInfo value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderInfo() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_ProviderInfo value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderInfo():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_ProviderInfo value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderInfo() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            String? id,
+            @JsonKey(name: 'user_id') String? userId,
+            @JsonKey(name: 'company_name') String? companyName,
+            @JsonKey(name: 'full_name') String? fullName,
+            @JsonKey(name: 'company_address') String? companyAddress,
+            @JsonKey(name: 'contact_number') String? contactNumber,
+            @JsonKey(name: 'alt_contact_number') String? altContactNumber,
+            String? email,
+            @JsonKey(name: 'zone_id') String? zoneId,
+            Coordinates? coordinates,
+            @JsonKey(name: 'adhar_number') String? adharNumber,
+            @JsonKey(name: 'adhar_img') String? adharImg,
+            @JsonKey(name: 'pan_number') String? panNumber,
+            @JsonKey(name: 'pan_img') String? panImg,
+            @JsonKey(name: 'dl_number') String? dlNumber,
+            @JsonKey(name: 'dl_img') String? dlImg,
+            @JsonKey(name: 'profile_img') String? profileImg,
+            @JsonKey(name: 'service_availability') int? serviceAvailability,
+            @JsonKey(name: 'is_approved') int? isApproved,
+            @JsonKey(name: 'is_active') int? isActive,
+            @JsonKey(name: 'is_suspended') int? isSuspended,
+            @JsonKey(name: 'rating_count') int? ratingCount,
+            @JsonKey(name: 'avg_rating') int? avgRating,
+            @JsonKey(name: 'bank_docs') String? bankDocs,
+            @JsonKey(name: 'deleted_at') String? deletedAt,
+            @JsonKey(name: 'created_at') String? createdAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
+            @JsonKey(name: 'cash_limit_status') String? cashLimitStatus,
+            @JsonKey(name: 'logo_full_path') String? logoFullPath,
+            Owner? owner)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderInfo() when $default != null:
+        return $default(
+            _that.id,
+            _that.userId,
+            _that.companyName,
+            _that.fullName,
+            _that.companyAddress,
+            _that.contactNumber,
+            _that.altContactNumber,
+            _that.email,
+            _that.zoneId,
+            _that.coordinates,
+            _that.adharNumber,
+            _that.adharImg,
+            _that.panNumber,
+            _that.panImg,
+            _that.dlNumber,
+            _that.dlImg,
+            _that.profileImg,
+            _that.serviceAvailability,
+            _that.isApproved,
+            _that.isActive,
+            _that.isSuspended,
+            _that.ratingCount,
+            _that.avgRating,
+            _that.bankDocs,
+            _that.deletedAt,
+            _that.createdAt,
+            _that.updatedAt,
+            _that.cashLimitStatus,
+            _that.logoFullPath,
+            _that.owner);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            String? id,
+            @JsonKey(name: 'user_id') String? userId,
+            @JsonKey(name: 'company_name') String? companyName,
+            @JsonKey(name: 'full_name') String? fullName,
+            @JsonKey(name: 'company_address') String? companyAddress,
+            @JsonKey(name: 'contact_number') String? contactNumber,
+            @JsonKey(name: 'alt_contact_number') String? altContactNumber,
+            String? email,
+            @JsonKey(name: 'zone_id') String? zoneId,
+            Coordinates? coordinates,
+            @JsonKey(name: 'adhar_number') String? adharNumber,
+            @JsonKey(name: 'adhar_img') String? adharImg,
+            @JsonKey(name: 'pan_number') String? panNumber,
+            @JsonKey(name: 'pan_img') String? panImg,
+            @JsonKey(name: 'dl_number') String? dlNumber,
+            @JsonKey(name: 'dl_img') String? dlImg,
+            @JsonKey(name: 'profile_img') String? profileImg,
+            @JsonKey(name: 'service_availability') int? serviceAvailability,
+            @JsonKey(name: 'is_approved') int? isApproved,
+            @JsonKey(name: 'is_active') int? isActive,
+            @JsonKey(name: 'is_suspended') int? isSuspended,
+            @JsonKey(name: 'rating_count') int? ratingCount,
+            @JsonKey(name: 'avg_rating') int? avgRating,
+            @JsonKey(name: 'bank_docs') String? bankDocs,
+            @JsonKey(name: 'deleted_at') String? deletedAt,
+            @JsonKey(name: 'created_at') String? createdAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
+            @JsonKey(name: 'cash_limit_status') String? cashLimitStatus,
+            @JsonKey(name: 'logo_full_path') String? logoFullPath,
+            Owner? owner)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderInfo():
+        return $default(
+            _that.id,
+            _that.userId,
+            _that.companyName,
+            _that.fullName,
+            _that.companyAddress,
+            _that.contactNumber,
+            _that.altContactNumber,
+            _that.email,
+            _that.zoneId,
+            _that.coordinates,
+            _that.adharNumber,
+            _that.adharImg,
+            _that.panNumber,
+            _that.panImg,
+            _that.dlNumber,
+            _that.dlImg,
+            _that.profileImg,
+            _that.serviceAvailability,
+            _that.isApproved,
+            _that.isActive,
+            _that.isSuspended,
+            _that.ratingCount,
+            _that.avgRating,
+            _that.bankDocs,
+            _that.deletedAt,
+            _that.createdAt,
+            _that.updatedAt,
+            _that.cashLimitStatus,
+            _that.logoFullPath,
+            _that.owner);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            String? id,
+            @JsonKey(name: 'user_id') String? userId,
+            @JsonKey(name: 'company_name') String? companyName,
+            @JsonKey(name: 'full_name') String? fullName,
+            @JsonKey(name: 'company_address') String? companyAddress,
+            @JsonKey(name: 'contact_number') String? contactNumber,
+            @JsonKey(name: 'alt_contact_number') String? altContactNumber,
+            String? email,
+            @JsonKey(name: 'zone_id') String? zoneId,
+            Coordinates? coordinates,
+            @JsonKey(name: 'adhar_number') String? adharNumber,
+            @JsonKey(name: 'adhar_img') String? adharImg,
+            @JsonKey(name: 'pan_number') String? panNumber,
+            @JsonKey(name: 'pan_img') String? panImg,
+            @JsonKey(name: 'dl_number') String? dlNumber,
+            @JsonKey(name: 'dl_img') String? dlImg,
+            @JsonKey(name: 'profile_img') String? profileImg,
+            @JsonKey(name: 'service_availability') int? serviceAvailability,
+            @JsonKey(name: 'is_approved') int? isApproved,
+            @JsonKey(name: 'is_active') int? isActive,
+            @JsonKey(name: 'is_suspended') int? isSuspended,
+            @JsonKey(name: 'rating_count') int? ratingCount,
+            @JsonKey(name: 'avg_rating') int? avgRating,
+            @JsonKey(name: 'bank_docs') String? bankDocs,
+            @JsonKey(name: 'deleted_at') String? deletedAt,
+            @JsonKey(name: 'created_at') String? createdAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
+            @JsonKey(name: 'cash_limit_status') String? cashLimitStatus,
+            @JsonKey(name: 'logo_full_path') String? logoFullPath,
+            Owner? owner)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ProviderInfo() when $default != null:
+        return $default(
+            _that.id,
+            _that.userId,
+            _that.companyName,
+            _that.fullName,
+            _that.companyAddress,
+            _that.contactNumber,
+            _that.altContactNumber,
+            _that.email,
+            _that.zoneId,
+            _that.coordinates,
+            _that.adharNumber,
+            _that.adharImg,
+            _that.panNumber,
+            _that.panImg,
+            _that.dlNumber,
+            _that.dlImg,
+            _that.profileImg,
+            _that.serviceAvailability,
+            _that.isApproved,
+            _that.isActive,
+            _that.isSuspended,
+            _that.ratingCount,
+            _that.avgRating,
+            _that.bankDocs,
+            _that.deletedAt,
+            _that.createdAt,
+            _that.updatedAt,
+            _that.cashLimitStatus,
+            _that.logoFullPath,
+            _that.owner);
+      case _:
+        return null;
+    }
+  }
+}
+
 /// @nodoc
 @JsonSerializable()
 class _ProviderInfo implements ProviderInfo {
@@ -1562,6 +2251,163 @@ class _$CoordinatesCopyWithImpl<$Res> implements $CoordinatesCopyWith<$Res> {
   }
 }
 
+/// Adds pattern-matching-related methods to [Coordinates].
+extension CoordinatesPatterns on Coordinates {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_Coordinates value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _Coordinates() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_Coordinates value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Coordinates():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_Coordinates value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Coordinates() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(String? latitude, String? longitude)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _Coordinates() when $default != null:
+        return $default(_that.latitude, _that.longitude);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(String? latitude, String? longitude) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Coordinates():
+        return $default(_that.latitude, _that.longitude);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(String? latitude, String? longitude)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Coordinates() when $default != null:
+        return $default(_that.latitude, _that.longitude);
+      case _:
+        return null;
+    }
+  }
+}
+
 /// @nodoc
 @JsonSerializable()
 class _Coordinates implements Coordinates {
@@ -2083,6 +2929,382 @@ class _$OwnerCopyWithImpl<$Res> implements $OwnerCopyWith<$Res> {
     return $AccountCopyWith<$Res>(_self.account!, (value) {
       return _then(_self.copyWith(account: value));
     });
+  }
+}
+
+/// Adds pattern-matching-related methods to [Owner].
+extension OwnerPatterns on Owner {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_Owner value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _Owner() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_Owner value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Owner():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_Owner value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Owner() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            String? id,
+            @JsonKey(name: 'first_name') String? firstName,
+            @JsonKey(name: 'last_name') String? lastName,
+            String? email,
+            String? phone,
+            @JsonKey(name: 'identification_number')
+            String? identificationNumber,
+            @JsonKey(name: 'identification_type') String? identificationType,
+            @JsonKey(name: 'identification_image')
+            List<dynamic>? identificationImage,
+            @JsonKey(name: 'date_of_birth') String? dateOfBirth,
+            String? gender,
+            @JsonKey(name: 'profile_image') String? profileImage,
+            @JsonKey(name: 'fcm_token') String? fcmToken,
+            @JsonKey(name: 'is_phone_verified') int? isPhoneVerified,
+            @JsonKey(name: 'is_email_verified') int? isEmailVerified,
+            @JsonKey(name: 'phone_verified_at') String? phoneVerifiedAt,
+            @JsonKey(name: 'email_verified_at') String? emailVerifiedAt,
+            @JsonKey(name: 'is_active') int? isActive,
+            @JsonKey(name: 'user_type') String? userType,
+            @JsonKey(name: 'remember_token') String? rememberToken,
+            @JsonKey(name: 'deleted_at') String? deletedAt,
+            @JsonKey(name: 'created_at') String? createdAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
+            @JsonKey(name: 'wallet_balance') int? walletBalance,
+            @JsonKey(name: 'loyalty_point') int? loyaltyPoint,
+            @JsonKey(name: 'ref_code') String? refCode,
+            @JsonKey(name: 'referred_by') String? referredBy,
+            @JsonKey(name: 'login_hit_count') int? loginHitCount,
+            @JsonKey(name: 'is_temp_blocked') int? isTempBlocked,
+            @JsonKey(name: 'temp_block_time') String? tempBlockTime,
+            @JsonKey(name: 'current_language_key') String? currentLanguageKey,
+            @JsonKey(name: 'profile_image_full_path')
+            String? profileImageFullPath,
+            @JsonKey(name: 'identification_image_full_path')
+            List<dynamic>? identificationImageFullPath,
+            Account? account,
+            dynamic storage)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _Owner() when $default != null:
+        return $default(
+            _that.id,
+            _that.firstName,
+            _that.lastName,
+            _that.email,
+            _that.phone,
+            _that.identificationNumber,
+            _that.identificationType,
+            _that.identificationImage,
+            _that.dateOfBirth,
+            _that.gender,
+            _that.profileImage,
+            _that.fcmToken,
+            _that.isPhoneVerified,
+            _that.isEmailVerified,
+            _that.phoneVerifiedAt,
+            _that.emailVerifiedAt,
+            _that.isActive,
+            _that.userType,
+            _that.rememberToken,
+            _that.deletedAt,
+            _that.createdAt,
+            _that.updatedAt,
+            _that.walletBalance,
+            _that.loyaltyPoint,
+            _that.refCode,
+            _that.referredBy,
+            _that.loginHitCount,
+            _that.isTempBlocked,
+            _that.tempBlockTime,
+            _that.currentLanguageKey,
+            _that.profileImageFullPath,
+            _that.identificationImageFullPath,
+            _that.account,
+            _that.storage);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            String? id,
+            @JsonKey(name: 'first_name') String? firstName,
+            @JsonKey(name: 'last_name') String? lastName,
+            String? email,
+            String? phone,
+            @JsonKey(name: 'identification_number')
+            String? identificationNumber,
+            @JsonKey(name: 'identification_type') String? identificationType,
+            @JsonKey(name: 'identification_image')
+            List<dynamic>? identificationImage,
+            @JsonKey(name: 'date_of_birth') String? dateOfBirth,
+            String? gender,
+            @JsonKey(name: 'profile_image') String? profileImage,
+            @JsonKey(name: 'fcm_token') String? fcmToken,
+            @JsonKey(name: 'is_phone_verified') int? isPhoneVerified,
+            @JsonKey(name: 'is_email_verified') int? isEmailVerified,
+            @JsonKey(name: 'phone_verified_at') String? phoneVerifiedAt,
+            @JsonKey(name: 'email_verified_at') String? emailVerifiedAt,
+            @JsonKey(name: 'is_active') int? isActive,
+            @JsonKey(name: 'user_type') String? userType,
+            @JsonKey(name: 'remember_token') String? rememberToken,
+            @JsonKey(name: 'deleted_at') String? deletedAt,
+            @JsonKey(name: 'created_at') String? createdAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
+            @JsonKey(name: 'wallet_balance') int? walletBalance,
+            @JsonKey(name: 'loyalty_point') int? loyaltyPoint,
+            @JsonKey(name: 'ref_code') String? refCode,
+            @JsonKey(name: 'referred_by') String? referredBy,
+            @JsonKey(name: 'login_hit_count') int? loginHitCount,
+            @JsonKey(name: 'is_temp_blocked') int? isTempBlocked,
+            @JsonKey(name: 'temp_block_time') String? tempBlockTime,
+            @JsonKey(name: 'current_language_key') String? currentLanguageKey,
+            @JsonKey(name: 'profile_image_full_path')
+            String? profileImageFullPath,
+            @JsonKey(name: 'identification_image_full_path')
+            List<dynamic>? identificationImageFullPath,
+            Account? account,
+            dynamic storage)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Owner():
+        return $default(
+            _that.id,
+            _that.firstName,
+            _that.lastName,
+            _that.email,
+            _that.phone,
+            _that.identificationNumber,
+            _that.identificationType,
+            _that.identificationImage,
+            _that.dateOfBirth,
+            _that.gender,
+            _that.profileImage,
+            _that.fcmToken,
+            _that.isPhoneVerified,
+            _that.isEmailVerified,
+            _that.phoneVerifiedAt,
+            _that.emailVerifiedAt,
+            _that.isActive,
+            _that.userType,
+            _that.rememberToken,
+            _that.deletedAt,
+            _that.createdAt,
+            _that.updatedAt,
+            _that.walletBalance,
+            _that.loyaltyPoint,
+            _that.refCode,
+            _that.referredBy,
+            _that.loginHitCount,
+            _that.isTempBlocked,
+            _that.tempBlockTime,
+            _that.currentLanguageKey,
+            _that.profileImageFullPath,
+            _that.identificationImageFullPath,
+            _that.account,
+            _that.storage);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            String? id,
+            @JsonKey(name: 'first_name') String? firstName,
+            @JsonKey(name: 'last_name') String? lastName,
+            String? email,
+            String? phone,
+            @JsonKey(name: 'identification_number')
+            String? identificationNumber,
+            @JsonKey(name: 'identification_type') String? identificationType,
+            @JsonKey(name: 'identification_image')
+            List<dynamic>? identificationImage,
+            @JsonKey(name: 'date_of_birth') String? dateOfBirth,
+            String? gender,
+            @JsonKey(name: 'profile_image') String? profileImage,
+            @JsonKey(name: 'fcm_token') String? fcmToken,
+            @JsonKey(name: 'is_phone_verified') int? isPhoneVerified,
+            @JsonKey(name: 'is_email_verified') int? isEmailVerified,
+            @JsonKey(name: 'phone_verified_at') String? phoneVerifiedAt,
+            @JsonKey(name: 'email_verified_at') String? emailVerifiedAt,
+            @JsonKey(name: 'is_active') int? isActive,
+            @JsonKey(name: 'user_type') String? userType,
+            @JsonKey(name: 'remember_token') String? rememberToken,
+            @JsonKey(name: 'deleted_at') String? deletedAt,
+            @JsonKey(name: 'created_at') String? createdAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
+            @JsonKey(name: 'wallet_balance') int? walletBalance,
+            @JsonKey(name: 'loyalty_point') int? loyaltyPoint,
+            @JsonKey(name: 'ref_code') String? refCode,
+            @JsonKey(name: 'referred_by') String? referredBy,
+            @JsonKey(name: 'login_hit_count') int? loginHitCount,
+            @JsonKey(name: 'is_temp_blocked') int? isTempBlocked,
+            @JsonKey(name: 'temp_block_time') String? tempBlockTime,
+            @JsonKey(name: 'current_language_key') String? currentLanguageKey,
+            @JsonKey(name: 'profile_image_full_path')
+            String? profileImageFullPath,
+            @JsonKey(name: 'identification_image_full_path')
+            List<dynamic>? identificationImageFullPath,
+            Account? account,
+            dynamic storage)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Owner() when $default != null:
+        return $default(
+            _that.id,
+            _that.firstName,
+            _that.lastName,
+            _that.email,
+            _that.phone,
+            _that.identificationNumber,
+            _that.identificationType,
+            _that.identificationImage,
+            _that.dateOfBirth,
+            _that.gender,
+            _that.profileImage,
+            _that.fcmToken,
+            _that.isPhoneVerified,
+            _that.isEmailVerified,
+            _that.phoneVerifiedAt,
+            _that.emailVerifiedAt,
+            _that.isActive,
+            _that.userType,
+            _that.rememberToken,
+            _that.deletedAt,
+            _that.createdAt,
+            _that.updatedAt,
+            _that.walletBalance,
+            _that.loyaltyPoint,
+            _that.refCode,
+            _that.referredBy,
+            _that.loginHitCount,
+            _that.isTempBlocked,
+            _that.tempBlockTime,
+            _that.currentLanguageKey,
+            _that.profileImageFullPath,
+            _that.identificationImageFullPath,
+            _that.account,
+            _that.storage);
+      case _:
+        return null;
+    }
   }
 }
 
@@ -2788,6 +4010,226 @@ class _$AccountCopyWithImpl<$Res> implements $AccountCopyWith<$Res> {
   }
 }
 
+/// Adds pattern-matching-related methods to [Account].
+extension AccountPatterns on Account {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_Account value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _Account() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_Account value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Account():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_Account value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Account() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            String? id,
+            @JsonKey(name: 'user_id') String? userId,
+            @JsonKey(name: 'balance_pending') int? balancePending,
+            @JsonKey(name: 'received_balance') int? receivedBalance,
+            @JsonKey(name: 'account_payable') int? accountPayable,
+            @JsonKey(name: 'account_receivable') int? accountReceivable,
+            @JsonKey(name: 'total_withdrawn') int? totalWithdrawn,
+            @JsonKey(name: 'total_expense') String? totalExpense,
+            @JsonKey(name: 'created_at') String? createdAt,
+            @JsonKey(name: 'updated_at') String? updatedAt)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _Account() when $default != null:
+        return $default(
+            _that.id,
+            _that.userId,
+            _that.balancePending,
+            _that.receivedBalance,
+            _that.accountPayable,
+            _that.accountReceivable,
+            _that.totalWithdrawn,
+            _that.totalExpense,
+            _that.createdAt,
+            _that.updatedAt);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            String? id,
+            @JsonKey(name: 'user_id') String? userId,
+            @JsonKey(name: 'balance_pending') int? balancePending,
+            @JsonKey(name: 'received_balance') int? receivedBalance,
+            @JsonKey(name: 'account_payable') int? accountPayable,
+            @JsonKey(name: 'account_receivable') int? accountReceivable,
+            @JsonKey(name: 'total_withdrawn') int? totalWithdrawn,
+            @JsonKey(name: 'total_expense') String? totalExpense,
+            @JsonKey(name: 'created_at') String? createdAt,
+            @JsonKey(name: 'updated_at') String? updatedAt)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Account():
+        return $default(
+            _that.id,
+            _that.userId,
+            _that.balancePending,
+            _that.receivedBalance,
+            _that.accountPayable,
+            _that.accountReceivable,
+            _that.totalWithdrawn,
+            _that.totalExpense,
+            _that.createdAt,
+            _that.updatedAt);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            String? id,
+            @JsonKey(name: 'user_id') String? userId,
+            @JsonKey(name: 'balance_pending') int? balancePending,
+            @JsonKey(name: 'received_balance') int? receivedBalance,
+            @JsonKey(name: 'account_payable') int? accountPayable,
+            @JsonKey(name: 'account_receivable') int? accountReceivable,
+            @JsonKey(name: 'total_withdrawn') int? totalWithdrawn,
+            @JsonKey(name: 'total_expense') String? totalExpense,
+            @JsonKey(name: 'created_at') String? createdAt,
+            @JsonKey(name: 'updated_at') String? updatedAt)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Account() when $default != null:
+        return $default(
+            _that.id,
+            _that.userId,
+            _that.balancePending,
+            _that.receivedBalance,
+            _that.accountPayable,
+            _that.accountReceivable,
+            _that.totalWithdrawn,
+            _that.totalExpense,
+            _that.createdAt,
+            _that.updatedAt);
+      case _:
+        return null;
+    }
+  }
+}
+
 /// @nodoc
 @JsonSerializable()
 class _Account implements Account {
@@ -3059,6 +4501,169 @@ class _$BookingOverviewCopyWithImpl<$Res>
   }
 }
 
+/// Adds pattern-matching-related methods to [BookingOverview].
+extension BookingOverviewPatterns on BookingOverview {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BookingOverview value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _BookingOverview() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BookingOverview value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _BookingOverview():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_BookingOverview value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _BookingOverview() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            @JsonKey(name: 'booking_status') String? bookingStatus, int? total)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _BookingOverview() when $default != null:
+        return $default(_that.bookingStatus, _that.total);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            @JsonKey(name: 'booking_status') String? bookingStatus, int? total)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _BookingOverview():
+        return $default(_that.bookingStatus, _that.total);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            @JsonKey(name: 'booking_status') String? bookingStatus, int? total)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _BookingOverview() when $default != null:
+        return $default(_that.bookingStatus, _that.total);
+      case _:
+        return null;
+    }
+  }
+}
+
 /// @nodoc
 @JsonSerializable()
 class _BookingOverview implements BookingOverview {
@@ -3228,6 +4833,163 @@ class _$PromotionalCostPercentageCopyWithImpl<$Res>
           : coupon // ignore: cast_nullable_to_non_nullable
               as int?,
     ));
+  }
+}
+
+/// Adds pattern-matching-related methods to [PromotionalCostPercentage].
+extension PromotionalCostPercentagePatterns on PromotionalCostPercentage {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_PromotionalCostPercentage value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _PromotionalCostPercentage() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_PromotionalCostPercentage value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _PromotionalCostPercentage():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_PromotionalCostPercentage value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _PromotionalCostPercentage() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(int? discount, int? campaign, int? coupon)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _PromotionalCostPercentage() when $default != null:
+        return $default(_that.discount, _that.campaign, _that.coupon);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(int? discount, int? campaign, int? coupon) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _PromotionalCostPercentage():
+        return $default(_that.discount, _that.campaign, _that.coupon);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(int? discount, int? campaign, int? coupon)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _PromotionalCostPercentage() when $default != null:
+        return $default(_that.discount, _that.campaign, _that.coupon);
+      case _:
+        return null;
+    }
   }
 }
 
@@ -3440,6 +5202,202 @@ class _$SubscriptionInfoCopyWithImpl<$Res>
           : applicableVat // ignore: cast_nullable_to_non_nullable
               as int?,
     ));
+  }
+}
+
+/// Adds pattern-matching-related methods to [SubscriptionInfo].
+extension SubscriptionInfoPatterns on SubscriptionInfo {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_SubscriptionInfo value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SubscriptionInfo() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_SubscriptionInfo value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SubscriptionInfo():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_SubscriptionInfo value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SubscriptionInfo() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            @JsonKey(name: 'total_subscription') int? totalSubscription,
+            String? status,
+            @JsonKey(name: 'subscribed_package_details')
+            dynamic subscribedPackageDetails,
+            @JsonKey(name: 'renewal_package_details')
+            dynamic renewalPackageDetails,
+            @JsonKey(name: 'applicable_vat') int? applicableVat)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SubscriptionInfo() when $default != null:
+        return $default(
+            _that.totalSubscription,
+            _that.status,
+            _that.subscribedPackageDetails,
+            _that.renewalPackageDetails,
+            _that.applicableVat);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            @JsonKey(name: 'total_subscription') int? totalSubscription,
+            String? status,
+            @JsonKey(name: 'subscribed_package_details')
+            dynamic subscribedPackageDetails,
+            @JsonKey(name: 'renewal_package_details')
+            dynamic renewalPackageDetails,
+            @JsonKey(name: 'applicable_vat') int? applicableVat)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SubscriptionInfo():
+        return $default(
+            _that.totalSubscription,
+            _that.status,
+            _that.subscribedPackageDetails,
+            _that.renewalPackageDetails,
+            _that.applicableVat);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            @JsonKey(name: 'total_subscription') int? totalSubscription,
+            String? status,
+            @JsonKey(name: 'subscribed_package_details')
+            dynamic subscribedPackageDetails,
+            @JsonKey(name: 'renewal_package_details')
+            dynamic renewalPackageDetails,
+            @JsonKey(name: 'applicable_vat') int? applicableVat)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SubscriptionInfo() when $default != null:
+        return $default(
+            _that.totalSubscription,
+            _that.status,
+            _that.subscribedPackageDetails,
+            _that.renewalPackageDetails,
+            _that.applicableVat);
+      case _:
+        return null;
+    }
   }
 }
 

@@ -35,7 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  // void _startAutoRefresh() {
+  //   _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
+  //     await controller.getListOfBookings(isRefresh: true);
+  //     await controller.getBookingCounts(getAccountInfoAlso: false);
+  //   });
+  // }
   void _startAutoRefresh() {
+    _timer?.cancel();   // pehle old timer band
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
       await controller.getListOfBookings(isRefresh: true);
       await controller.getBookingCounts(getAccountInfoAlso: false);
@@ -56,9 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   TopComponent(),
+                  // Visibility(.
+                  //   visible: ((controller.bookingModel.data ?? []).isNotEmpty &&
+                  //       controller.bookingModel.data != null),
+                  //   child: SecondComponents(),
+                  // ),
                   Visibility(
-                    visible: ((controller.bookingModel.data ?? []).isNotEmpty &&
-                        controller.bookingModel.data != null),
+                    visible: controller.bookingModel.data?.isNotEmpty ?? false,
                     child: SecondComponents(),
                   ),
                   ThirdComponent(),

@@ -61,76 +61,159 @@ class ApiClient extends GetxController implements GetxService {
   //   }
   // }
 
+  // Future<Response> getData(
+  //   String uri, {
+  //   Map<String, dynamic>? query,
+  //   Map<String, String>? headers,
+  //   String method = 'POST', // Default method
+  //   dynamic body,
+  // }) async {
+  //   try {
+  //     final uriWithQuery = query != null
+  //         ? Uri.parse('$appBaseUrl$uri').replace(queryParameters: query)
+  //         : Uri.parse('$appBaseUrl$uri');
+  //     log('====> API Call: $uriWithQuery\nHeader: ${headers ?? mainHeaders}');
+  //     log('====> API body: $body}');
+  //
+  //     http.Response response;
+  //
+  //     // switch (method.toUpperCase()) {
+  //     //   case 'GET':
+  //     //     response = await http.get(uriWithQuery, headers: headers ?? mainHeaders)
+  //     //         .timeout(Duration(seconds: timeoutInSeconds));
+  //     //     break;
+  //     //   case 'POST':
+  //     //     response = await http.post(uriWithQuery, headers: headers ?? mainHeaders, body: body)
+  //     //         .timeout(Duration(seconds: timeoutInSeconds));
+  //     //     break;
+  //     //   case 'PUT':
+  //     //     response = await http.put(uriWithQuery, headers: headers ?? mainHeaders, body: body)
+  //     //         .timeout(Duration(seconds: timeoutInSeconds));
+  //     //     break;
+  //     //   case 'DELETE':
+  //     //     response = await http.delete(uriWithQuery, headers: headers ?? mainHeaders)
+  //     //         .timeout(Duration(seconds: timeoutInSeconds));
+  //     //     break;
+  //     //   case 'PATCH':
+  //     //     response = await http.patch(uriWithQuery, headers: headers ?? mainHeaders, body: body)
+  //     //         .timeout(Duration(seconds: timeoutInSeconds));
+  //     //     break;
+  //     //   default:
+  //     //     throw UnsupportedError('HTTP method not supported');
+  //     // }
+  //
+  //     switch (method.toUpperCase()) {
+  //       case 'GET':
+  //         response = await http
+  //             .get(uriWithQuery, headers: headers ?? mainHeaders)
+  //             .timeout(Duration(seconds: timeoutInSeconds));
+  //         break;
+  //       case 'POST':
+  //         response = await http
+  //             .post(uriWithQuery,
+  //                 headers: headers ?? mainHeaders, body: jsonEncode(body))
+  //             .timeout(Duration(seconds: timeoutInSeconds));
+  //         break;
+  //       case 'PUT':
+  //         response = await http
+  //             .put(uriWithQuery, headers: headers ?? mainHeaders, body: body)
+  //             .timeout(Duration(seconds: timeoutInSeconds));
+  //         break;
+  //       case 'DELETE':
+  //         response = await http
+  //             .delete(uriWithQuery, headers: headers ?? mainHeaders)
+  //             .timeout(Duration(seconds: timeoutInSeconds));
+  //         break;
+  //       default:
+  //         throw UnsupportedError('HTTP method not supported');
+  //     }
+  //
+  //     debugPrint('====> API Response: ${response.body}');
+  //     return handleResponse(response, uri);
+  //   } catch (e) {
+  //     return const Response(statusCode: 1, statusText: noInternetMessage);
+  //   }
+  // }
+
   Future<Response> getData(
-    String uri, {
-    Map<String, dynamic>? query,
-    Map<String, String>? headers,
-    String method = 'POST', // Default method
-    dynamic body,
-  }) async {
+      String uri, {
+        Map<String, dynamic>? query,
+        Map<String, String>? headers,
+        String method = 'POST',
+        dynamic body,
+      }) async {
     try {
       final uriWithQuery = query != null
           ? Uri.parse('$appBaseUrl$uri').replace(queryParameters: query)
           : Uri.parse('$appBaseUrl$uri');
-      log('====> API Call: $uriWithQuery\nHeader: ${headers ?? mainHeaders}');
-      log('====> API body: $body}');
+
+      // Ensure JSON headers always present
+      final requestHeaders = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        ...mainHeaders,
+        ...?headers,
+      };
+
+      log('====> API Call: $uriWithQuery');
+      log('====> Headers: $requestHeaders');
+      log('====> Body: $body');
 
       http.Response response;
-
-      // switch (method.toUpperCase()) {
-      //   case 'GET':
-      //     response = await http.get(uriWithQuery, headers: headers ?? mainHeaders)
-      //         .timeout(Duration(seconds: timeoutInSeconds));
-      //     break;
-      //   case 'POST':
-      //     response = await http.post(uriWithQuery, headers: headers ?? mainHeaders, body: body)
-      //         .timeout(Duration(seconds: timeoutInSeconds));
-      //     break;
-      //   case 'PUT':
-      //     response = await http.put(uriWithQuery, headers: headers ?? mainHeaders, body: body)
-      //         .timeout(Duration(seconds: timeoutInSeconds));
-      //     break;
-      //   case 'DELETE':
-      //     response = await http.delete(uriWithQuery, headers: headers ?? mainHeaders)
-      //         .timeout(Duration(seconds: timeoutInSeconds));
-      //     break;
-      //   case 'PATCH':
-      //     response = await http.patch(uriWithQuery, headers: headers ?? mainHeaders, body: body)
-      //         .timeout(Duration(seconds: timeoutInSeconds));
-      //     break;
-      //   default:
-      //     throw UnsupportedError('HTTP method not supported');
-      // }
 
       switch (method.toUpperCase()) {
         case 'GET':
           response = await http
-              .get(uriWithQuery, headers: headers ?? mainHeaders)
+              .get(uriWithQuery, headers: requestHeaders)
               .timeout(Duration(seconds: timeoutInSeconds));
           break;
+
         case 'POST':
           response = await http
-              .post(uriWithQuery,
-                  headers: headers ?? mainHeaders, body: jsonEncode(body))
+              .post(
+            uriWithQuery,
+            headers: requestHeaders,
+            body: body != null ? jsonEncode(body) : null,
+          )
               .timeout(Duration(seconds: timeoutInSeconds));
           break;
+
         case 'PUT':
           response = await http
-              .put(uriWithQuery, headers: headers ?? mainHeaders, body: body)
+              .put(
+            uriWithQuery,
+            headers: requestHeaders,
+            body: body != null ? jsonEncode(body) : null,
+          )
               .timeout(Duration(seconds: timeoutInSeconds));
           break;
+
         case 'DELETE':
           response = await http
-              .delete(uriWithQuery, headers: headers ?? mainHeaders)
+              .delete(uriWithQuery, headers: requestHeaders)
               .timeout(Duration(seconds: timeoutInSeconds));
           break;
+
+        case 'PATCH':
+          response = await http
+              .patch(
+            uriWithQuery,
+            headers: requestHeaders,
+            body: body != null ? jsonEncode(body) : null,
+          )
+              .timeout(Duration(seconds: timeoutInSeconds));
+          break;
+
         default:
           throw UnsupportedError('HTTP method not supported');
       }
 
-      debugPrint('====> API Response: ${response.body}');
+      debugPrint('====> Status: ${response.statusCode}');
+      debugPrint('====> Response: ${response.body}');
+
       return handleResponse(response, uri);
     } catch (e) {
+      debugPrint('====> API ERROR: $e');
       return const Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
