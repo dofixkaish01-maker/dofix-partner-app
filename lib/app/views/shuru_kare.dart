@@ -1649,11 +1649,11 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                       final authController =
                                       Get.find<AuthController>();
 
-                                      /// 1️⃣ validate media
+                                      ///  validate media
                                       if (!dashboardController
                                           .validateJobStartImages()) return;
 
-                                      /// 2️⃣ upload media
+                                      /// upload media
                                       Map<String, String> body = {
                                         "booking_id": widget.booking.content!.id
                                             .toString(),
@@ -1671,7 +1671,7 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                         postVideoName: 'post_work_video',
                                       );
 
-                                      /// 3️⃣ send OTP
+                                      ///  send OTP
                                       await authController.sendCustomerOtpApi(
                                         phone: widget.booking.content?.customer
                                             ?.phone ??
@@ -1683,7 +1683,7 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                             .toString(),
                                       );
 
-                                      /// 4️⃣ go to OTP screen ✅
+                                      ///  go to OTP screen
                                       Get.to(
                                               () => CustomerOtpVerificationScreen(
                                             phoneNo: widget.booking.content
