@@ -1,22 +1,38 @@
 import 'package:flutter/material.dart';
-
 import '../../utils/images.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  const CustomBottomNavBar({super.key, required this.currentIndex, required this.onTap});
+  const CustomBottomNavBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
 
   @override
   _CustomBottomNavBarState createState() => _CustomBottomNavBarState();
 }
 
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
+  Alignment _alignmentForIndex(int i) {
+    switch (i) {
+      case 0:
+        return const Alignment(-0.75, 0);
+      case 1:
+        return const Alignment(-0.25, 0);
+      case 2:
+        return const Alignment(0.25, 0);
+      default:
+        return const Alignment(0.75, 0);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [
           BoxShadow(color: Colors.black12, blurRadius: 5),
@@ -25,11 +41,35 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
+          /// ❌ OLD POSITION LOGIC (Fragile - commented only)
+          /*
           Positioned(
             top: -10,
-            left: MediaQuery.of(context).size.width / 4 * widget.currentIndex + (widget.currentIndex == 0?17:widget.currentIndex == 1?10:widget.currentIndex == 2?15:20),
+            left: MediaQuery.of(context).size.width / 4 * widget.currentIndex +
+                (widget.currentIndex == 0
+                    ? 17
+                    : widget.currentIndex == 1
+                        ? 10
+                        : widget.currentIndex == 2
+                            ? 15
+                            : 20),
             child: CustomIndicator(),
           ),
+          */
+
+          /// ✅ NEW RESPONSIVE INDICATOR (Same UI, Proper Alignment)
+          Positioned(
+            top: -10,
+            left: 0,
+            right: 0,
+            child: AnimatedAlign(
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOut,
+              alignment: _alignmentForIndex(widget.currentIndex),
+              child: CustomIndicator(),
+            ),
+          ),
+
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Row(
@@ -55,9 +95,21 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ImageIcon(AssetImage(icon), size: 28, color: isSelected ? Color(0xfff207FA8) : Colors.grey),
+          ImageIcon(
+            AssetImage(icon),
+            size: 28,
+            color: isSelected
+                ? const Color(0xFF207FA8) // ✅ fixed hex
+                : Colors.grey,
+          ),
           const SizedBox(height: 4),
-          Text(label, style: TextStyle(fontSize: 12, color: isSelected ? Color(0xfff207FA8) : Colors.grey)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: isSelected ? const Color(0xFF207FA8) : Colors.grey,
+            ),
+          ),
         ],
       ),
     );
@@ -70,13 +122,12 @@ class CustomIndicator extends StatelessWidget {
     return Container(
       width: 50,
       height: 25,
-      decoration: BoxDecoration(
-       image: DecorationImage(
-         image: AssetImage(Images.icIndicator),
-         fit: BoxFit.fill,
-       ),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(Images.icIndicator),
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }
 }
-

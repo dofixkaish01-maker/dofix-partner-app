@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class CustomBookingDetailsItems extends StatelessWidget {
   final Detail detail;
+
   const CustomBookingDetailsItems({
     super.key,
     required this.detail,
@@ -35,10 +36,10 @@ class CustomBookingDetailsItems extends StatelessWidget {
                 Text(
                   detail.variantKey ?? "",
                   style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                  ),
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                      overflow: TextOverflow.ellipsis),
                 ),
                 SizedBox(
                   height: 3,
@@ -66,48 +67,45 @@ class CustomBookingDetailsItems extends StatelessWidget {
             )
           ],
         ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: 34,
-              width: 100,
-              padding: EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 7,
+        Flexible(
+          child: Container(
+            height: 34,
+            width: 100,
+            padding: EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 7,
+            ),
+            decoration: BoxDecoration(
+              color: Color(0xFF207FA8).withAlpha(
+                (0.1 * 255).toInt(),
               ),
-              decoration: BoxDecoration(
-                color: Color(0xFF207FA8).withAlpha(
-                  (0.1 * 255).toInt(),
-                ),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "X ${detail.quantity ?? 0}",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF207FA8),
-                      ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "X ${detail.quantity ?? 0}",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF207FA8),
                     ),
-                    Text(
-                      " = ${detail.totalCost.toString()}",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF207FA8),
-                      ),
+                  ),
+                  Text(
+                    " = ${detail.totalCost.toString()}",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF207FA8),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        )
+          ),
+        ),
       ],
     );
   }

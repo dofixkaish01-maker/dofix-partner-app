@@ -110,66 +110,65 @@ class _BookingScreenState extends State<BookingScreen>
     int index,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Stack(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: Dimensions.fontSize14,
-                        fontFamily: 'Albert Sans',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  )
-                ],
+              /// TITLE
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: Dimensions.fontSize14,
+                  fontFamily: 'Albert Sans',
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-              SizedBox(height: 10),
+
+              const SizedBox(height: 8),
+
+              /// LOCATION
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ImageIcon(
-                    AssetImage("assets/icons/ic_location.png"),
-                    size: 12,
+                    const AssetImage("assets/icons/ic_location.png"),
+                    size: 14,
                     color: primaryAppColor,
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
                       location,
-                      // style: TextStyle(
-                      //   color: Colors.black.withAlpha(102),
-                      //   fontSize: 12,
-                      //   fontFamily: 'Albert Sans',
-                      //   fontWeight: FontWeight.w500,
-                      // ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.black.withAlpha(140),
                         fontSize: Dimensions.fontSize12,
                         fontFamily: 'Albert Sans',
                         fontWeight: FontWeight.w500,
+                        height: 1.3,
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+
+              const SizedBox(height: 8),
+
+              /// TIME
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  ImageIcon(
+                  const ImageIcon(
                     AssetImage("assets/icons/ic_clock.png"),
-                    size: 12,
-                    color: const Color(0xFF207FA7),
+                    size: 14,
+                    color: Color(0xFF207FA7),
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 6),
                   Text(
                     time,
                     style: TextStyle(
@@ -181,30 +180,43 @@ class _BookingScreenState extends State<BookingScreen>
                   ),
                 ],
               ),
+
+              const SizedBox(height: 8),
+
+              /// CALENDAR + BUTTON (Responsive Clean Layout)
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      ImageIcon(
-                        AssetImage("assets/icons/ic_calender.png"),
-                        size: 12,
-                        color: const Color(0xFF207FA7),
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        calender,
-                        style: TextStyle(
-                          color: Colors.black.withAlpha(102),
-                          fontSize: Dimensions.fontSize12,
-                          fontFamily: 'Albert Sans',
-                          fontWeight: FontWeight.w500,
+                  /// LEFT - CALENDAR
+                  Expanded(
+                    child: Row(
+                      children: [
+                        const ImageIcon(
+                          AssetImage("assets/icons/ic_calender.png"),
+                          size: 14,
+                          color: Color(0xFF207FA7),
                         ),
-                      )
-                    ],
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            calender,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black.withAlpha(102),
+                              fontSize: Dimensions.fontSize12,
+                              fontFamily: 'Albert Sans',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+
+                  const SizedBox(width: 10),
+
+                  /// RIGHT - BUTTON (Logic untouched)
                   isPending
                       ? GestureDetector(
                           onTap: () {
@@ -229,25 +241,24 @@ class _BookingScreenState extends State<BookingScreen>
                               ),
                             );
                           },
-                          child: Container(
-                            margin: EdgeInsets.zero,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 12,
-                            ),
-                            decoration: ShapeDecoration(
-                              color: Color(0xFF207FA7),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                            ),
-                            child: Text(
-                              'Suru Karein',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Dimensions.fontSize12,
-                                fontFamily: 'Albert Sans',
-                                fontWeight: FontWeight.w500,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 12),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF207FA7),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 10),
+                              child: Text(
+                                'Suru Karein',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: Dimensions.fontSize12,
+                                  fontFamily: 'Albert Sans',
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ),
@@ -264,66 +275,50 @@ class _BookingScreenState extends State<BookingScreen>
                               ),
                             );
                           },
-                          child: Container(
-                            margin: EdgeInsets.zero,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 12,
-                            ),
-                            decoration: ShapeDecoration(
-                              color: Color(0xFF207FA7),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                            ),
-                            child: Text(
-                              "View Details",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Dimensions.fontSize12,
-                                fontFamily: 'Albert Sans',
-                                fontWeight: FontWeight.w600,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 12),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF207FA7),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 10),
+                              child: Text(
+                                "View Details",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: Dimensions.fontSize12,
+                                  fontFamily: 'Albert Sans',
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
                         ),
                 ],
               ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              width: 1,
-                              strokeAlign: BorderSide.strokeAlignCenter,
-                              color: Colors.black.withAlpha(38)),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+
+              const SizedBox(height: 14),
+
+              /// SEPARATOR LINE
+              Divider(
+                color: Colors.black.withAlpha(38),
+                thickness: 1,
               ),
             ],
           ),
 
-          // Canceled Banner
+          /// CANCELLED BANNER (same logic)
           if (isCancelled)
-            Positioned(
+            const Positioned(
               top: 0,
               right: 0,
               child: Banner(
                 message: "Canceled",
                 location: BannerLocation.topEnd,
                 color: Colors.red,
-                textStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: Dimensions.fontSize12,
-                  fontFamily: 'Albert Sans',
-                  fontWeight: FontWeight.bold,
-                ),
               ),
             ),
         ],
@@ -355,15 +350,15 @@ class _BookingScreenState extends State<BookingScreen>
             curve: Curves.easeOut,
           )),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
             child: Container(
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.white,
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: const Offset(0, 1),
+                    color: Colors.black.withOpacity(0.00),
+                    spreadRadius: 0,
+                    blurRadius: 0,
+                    offset: const Offset(0, 0),
                   ),
                 ],
               ),
@@ -395,36 +390,39 @@ class _BookingScreenState extends State<BookingScreen>
   Widget build(BuildContext context) {
     return GetBuilder<DashBoardController>(builder: (controller) {
       return Scaffold(
-        body: Column(
-          children: [
-            TabBar(
-              controller: _tabController,
-              isScrollable: true,
-              labelColor: primaryAppColor,
-              unselectedLabelColor: Colors.black.withAlpha(102),
-              indicatorColor: primaryAppColor,
-              tabs: const [
-                Tab(text: 'Pending'),
-                Tab(text: 'Follow up'),
-                Tab(text: 'Pura hua'),
-                Tab(text: 'Cancelled'),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
+        backgroundColor: const Color(0xFFF7F8FA),
+        body: SafeArea(
+          child: Column(
+            children: [
+              TabBar(
                 controller: _tabController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: List.generate(statusList.length, (index) {
-                  return SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: buildListView(),
-                    ),
-                  );
-                }),
+                isScrollable: true,
+                labelColor: primaryAppColor,
+                unselectedLabelColor: Colors.black.withAlpha(102),
+                indicatorColor: primaryAppColor,
+                tabs: const [
+                  Tab(text: 'Pending'),
+                  Tab(text: 'Follow up'),
+                  Tab(text: 'Pura hua'),
+                  Tab(text: 'Cancelled'),
+                ],
               ),
-            ),
-          ],
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: List.generate(statusList.length, (index) {
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: buildListView(),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     });

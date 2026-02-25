@@ -7,6 +7,7 @@ import '../widgets/custom_nav_bar.dart';
 
 class DashboardScreen extends StatefulWidget {
   final int pageIndex;
+
   const DashboardScreen({
     Key? key,
     required this.pageIndex,
@@ -72,6 +73,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   int currentPage = 0;
+
   void _setPage(int pageIndex) {
     setState(() {
       _pageController!.jumpToPage(pageIndex);

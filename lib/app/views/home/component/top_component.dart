@@ -64,6 +64,7 @@ class _TopComponentState extends State<TopComponent> {
                         },
                         child: Text(
                           "SeeAll",
+                          style: TextStyle(color: Color(0xff3683ab)),
                         ),
                       ),
                     )
@@ -78,132 +79,135 @@ class _TopComponentState extends State<TopComponent> {
               SizedBox(
                 height: 16,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Container(
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFE9F2F6),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: controller.bookingCountResponse
-                                          .content?.bookingsCount?.completed
-                                          .toString(),
-                                      style: TextStyle(
-                                        color: const Color(0xFF207FA7),
-                                        fontSize: 30,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w800,
-                                        height: 1.40,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFE9F2F6),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: controller.bookingCountResponse
+                                            .content?.bookingsCount?.completed
+                                            .toString(),
+                                        style: TextStyle(
+                                          color: const Color(0xFF207FA7),
+                                          fontSize: 30,
+                                          fontFamily: 'Albert Sans',
+                                          fontWeight: FontWeight.w800,
+                                          height: 1.40,
+                                        ),
                                       ),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          '/${controller.bookingCountResponse.content?.bookingsCount?.total.toString() == "null" ? "0" : controller.bookingCountResponse.content?.bookingsCount?.total.toString()}',
-                                      style: TextStyle(
-                                        color: const Color(0xFF207FA7),
-                                        fontSize: 16,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w800,
-                                        height: 1.40,
+                                      TextSpan(
+                                        text:
+                                            '/${controller.bookingCountResponse.content?.bookingsCount?.total.toString() == "null" ? "0" : controller.bookingCountResponse.content?.bookingsCount?.total.toString()}',
+                                        style: TextStyle(
+                                          color: const Color(0xFF207FA7),
+                                          fontSize: 16,
+                                          fontFamily: 'Albert Sans',
+                                          fontWeight: FontWeight.w800,
+                                          height: 1.40,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                'Jobs Delivered',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: const Color(0xFF212121),
-                                  fontSize: 14,
-                                  fontFamily: 'Albert Sans',
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.40,
-                                ),
-                              )
-                            ],
+                                Text(
+                                  'Jobs Delivered',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: const Color(0xFF212121),
+                                    fontSize: 14,
+                                    fontFamily: 'Albert Sans',
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.40,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )),
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Container(
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFE9F2F6),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: controller.bookingCountResponse
-                                          .content?.bookingsCount?.canceled
-                                          .toString(),
-                                      style: TextStyle(
-                                        color: const Color(0xFF207FA7),
-                                        fontSize: 30,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w800,
-                                        height: 1.40,
+                    )),
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFE9F2F6),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: controller.bookingCountResponse
+                                            .content?.bookingsCount?.canceled
+                                            .toString(),
+                                        style: TextStyle(
+                                          color: const Color(0xFF207FA7),
+                                          fontSize: 30,
+                                          fontFamily: 'Albert Sans',
+                                          fontWeight: FontWeight.w800,
+                                          height: 1.40,
+                                        ),
                                       ),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          '/${controller.bookingCountResponse.content?.bookingsCount?.total.toString() == "null" ? "0" : controller.bookingCountResponse.content?.bookingsCount?.total.toString()}',
-                                      style: TextStyle(
-                                        color: const Color(0xFF207FA7),
-                                        fontSize: 16,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w800,
-                                        height: 1.40,
+                                      TextSpan(
+                                        text:
+                                            '/${controller.bookingCountResponse.content?.bookingsCount?.total.toString() == "null" ? "0" : controller.bookingCountResponse.content?.bookingsCount?.total.toString()}',
+                                        style: TextStyle(
+                                          color: const Color(0xFF207FA7),
+                                          fontSize: 16,
+                                          fontFamily: 'Albert Sans',
+                                          fontWeight: FontWeight.w800,
+                                          height: 1.40,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                'Jobs Cancelled',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: const Color(0xFF212121),
-                                  fontSize: 14,
-                                  fontFamily: 'Albert Sans',
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.40,
-                                ),
-                              )
-                            ],
+                                Text(
+                                  'Jobs Cancelled',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: const Color(0xFF212121),
+                                    fontSize: 14,
+                                    fontFamily: 'Albert Sans',
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.40,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )),
-                ],
+                    )),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 16,

@@ -30,7 +30,7 @@ class _Naya_kaamState extends State<Naya_kaam> {
         builder: (controller) {
           return WillPopScope(
             onWillPop: () async {
-              /// 👈 signal bhej rahe hain ki refresh chahiye
+              /// signal bhej rahe hain ki refresh chahiye
               Get.back(result: true);
               return false;
             },
@@ -59,7 +59,7 @@ class _Naya_kaamState extends State<Naya_kaam> {
                           ),
                           Text(
                             "${controller.bookingModel.data?.where((e) => e.bookingStatus == "completed").length ?? 0}"
-                                "/${controller.bookingModel.data?.length ?? 0}",
+                            "/${controller.bookingModel.data?.length ?? 0}",
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
@@ -87,20 +87,21 @@ class _Naya_kaamState extends State<Naya_kaam> {
                       )
                     else
 
-                    /// BOOKINGS LIST
+                      /// BOOKINGS LIST
                       ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 80),
                         itemCount: controller.bookingModel.data!.length,
-                        separatorBuilder: (_, __) =>
-                        const SizedBox(height: 16),
+                        separatorBuilder: (_, __) => const SizedBox(height: 16),
                         itemBuilder: (context, index) {
-                          final booking =
-                          controller.bookingModel.data![index];
+                          final booking = controller.bookingModel.data![index];
                           return _bookingCard(booking);
                         },
                       ),
+                    const SizedBox(
+                      height: 200,
+                    )
                   ],
                 ),
               ),
@@ -113,139 +114,286 @@ class _Naya_kaamState extends State<Naya_kaam> {
 }
 
 Widget _bookingCard(booking) {
-  return Container(
-    padding: const EdgeInsets.all(14),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(14),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.05),
-          blurRadius: 6,
-          offset: const Offset(0, 3),
-        )
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+  final timeText =
+      DateFormat("hh:mm a").format(DateTime.parse(booking.serviceSchedule));
 
-        /// TIME
-        Text(
-          DateFormat("hh:mm a")
-              .format(DateTime.parse(booking.serviceSchedule)),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+  final serviceName = booking.subCategory?.name ?? '';
+  final addressText =
+      booking.serviceAddress?.address ?? "Address not available";
+
+  final isPaid = booking.isPaid == 1;
+  final paidText = isPaid ? "PAID" : "UNPAID";
+
+  final paymentMethodText =
+      booking.paymentMethod?.replaceAll('_', ' ').toUpperCase() ?? '';
+
+  final bookingStatus = booking.bookingStatus;
+
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      final isSmall = constraints.maxWidth < 360;
+
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+          border: Border.all(color: Colors.black.withOpacity(0.04)),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(14),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// HEADER
+                Row(
+                  children: [
+                    Text(
+                      timeText,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        height: 1.1,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      paidText,
+                      style: TextStyle(
+                        color: isPaid ? Colors.green : Colors.red,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 10),
+
+                /// SERVICE NAME
+                Text(
+                  serviceName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w700),
+                ),
+
+                const SizedBox(height: 6),
+
+                /// ADDRESS
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.location_on_outlined,
+                        size: 16, color: Colors.grey),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        addressText,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 13.5,
+                          height: 1.25,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 12),
+                Container(height: 1, color: Colors.black.withOpacity(0.06)),
+                const SizedBox(height: 12),
+
+                ///  RESPONSIVE FOOTER (NO OVERFLOW)
+                // Wrap(
+                //   spacing: 10,
+                //   runSpacing: 10,
+                //   crossAxisAlignment: WrapCrossAlignment.center,
+                //   children: [
+                //     /// STATUS CHIP (same logic)
+                //     _statusChip(
+                //       bookingStatus,
+                //       _bookingStatusColor(bookingStatus),
+                //     ),
+                //
+                //     const Spacer(),
+                //     /// PAYMENT METHOD (same logic)
+                //     if (paymentMethodText.isNotEmpty)
+                //       ConstrainedBox(
+                //         constraints: BoxConstraints(
+                //           maxWidth: isSmall ? 170 : 220, // prevents overflow
+                //         ),
+                //         child: Container(
+                //           padding: const EdgeInsets.symmetric(
+                //               horizontal: 10, vertical: 5),
+                //           decoration: BoxDecoration(
+                //             color: Colors.indigo.withOpacity(0.12),
+                //             borderRadius: BorderRadius.circular(999),
+                //             border: Border.all(
+                //               color: Colors.indigo.withOpacity(0.18),
+                //             ),
+                //           ),
+                //           child: Row(
+                //             mainAxisSize: MainAxisSize.min,
+                //             children: [
+                //               const Icon(
+                //                 Icons.account_balance_wallet_outlined,
+                //                 size: 14,
+                //                 color: Colors.indigo,
+                //               ),
+                //               const SizedBox(width: 6),
+                //               Expanded(
+                //                 child: Text(
+                //                   paymentMethodText,
+                //                   maxLines: 1,
+                //                   overflow: TextOverflow.ellipsis,
+                //                   style: const TextStyle(
+                //                     fontSize: 12,
+                //                     color: Colors.indigo,
+                //                     fontWeight: FontWeight.w800,
+                //                   ),
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //
+                //     /// VIEW DETAILS BUTTON (same onTap)
+                //     SizedBox(
+                //       width: isSmall ? constraints.maxWidth : null, // small screen: full width
+                //       child: InkWell(
+                //         borderRadius: BorderRadius.circular(10),
+                //         onTap: () {
+                //           Get.to(() => ShuruKare(id: booking.id ?? ""));
+                //         },
+                //         child: Container(
+                //           alignment: Alignment.center,
+                //           padding: EdgeInsets.symmetric(
+                //             horizontal: 14,
+                //             vertical: isSmall ? 10 : 8,
+                //           ),
+                //           decoration: BoxDecoration(
+                //             color: primaryAppColor,
+                //             borderRadius: BorderRadius.circular(10),
+                //           ),
+                //           child: Text(
+                //             "View Details",
+                //             style: TextStyle(
+                //               color: Colors.white,
+                //               fontSize: isSmall ? 12 : 12,
+                //               fontWeight: FontWeight.w700,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+
+                Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// LEFT: STATUS CHIP
+                        _statusChip(
+                          bookingStatus,
+                          _bookingStatusColor(bookingStatus),
+                        ),
+
+                        /// PUSH RIGHT
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+
+                            /// RIGHT: PAYMENT METHOD
+                            child: paymentMethodText.isNotEmpty
+                                ? Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.indigo.withOpacity(0.12),
+                                      borderRadius: BorderRadius.circular(999),
+                                      border: Border.all(
+                                        color: Colors.indigo.withOpacity(0.18),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.account_balance_wallet_outlined,
+                                          size: 14,
+                                          color: Colors.indigo,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          paymentMethodText,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.indigo,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    /// BUTTON FULL WIDTH (overflow safe)
+                    SizedBox(
+                      width: double.infinity,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(10),
+                        onTap: () {
+                          Get.to(() => ShuruKare(id: booking.id ?? ""));
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: primaryAppColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Text(
+                            "View Details",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
-
-        const SizedBox(height: 6),
-
-        /// SERVICE NAME
-        Text(
-          booking.subCategory?.name ?? '',
-          style: const TextStyle(fontSize: 14),
-        ),
-
-        const SizedBox(height: 6),
-
-        /// ADDRESS
-        Text(
-          booking.serviceAddress?.address ?? "Address not available",
-          style: const TextStyle(color: Colors.grey),
-        ),
-
-        const SizedBox(height: 10),
-
-        /// STATUS ROW
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-
-            /// SERVICE STATUS
-            _statusChip(
-              booking.bookingStatus,
-              _bookingStatusColor(booking.bookingStatus),
-            ),
-
-            /// PAYMENT STATUS
-            Text(
-              booking.isPaid == 1 ? "PAID" : "UNPAID",
-              style: TextStyle(
-                color: booking.isPaid == 1
-                    ? Colors.green
-                    : Colors.red,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 8),
-
-        /// PAYMENT METHOD + BUTTON
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-
-            /// PAYMENT METHOD
-            Container(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.indigo.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.account_balance_wallet_outlined,
-                    size: 14,
-                    color: Colors.indigo,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    booking.paymentMethod
-                        ?.replaceAll('_', ' ')
-                        .toUpperCase() ??
-                        '',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.indigo,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            /// VIEW DETAILS BUTTON
-            GestureDetector(
-              onTap: () {
-                Get.to(() => ShuruKare(id: booking.id ?? ""));
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 14, vertical: 6),
-                decoration: BoxDecoration(
-                  color: primaryAppColor,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Text(
-                  "View Details",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
+      );
+    },
   );
 }
 
