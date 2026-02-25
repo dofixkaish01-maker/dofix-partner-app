@@ -114,11 +114,13 @@ class DashBoardController extends GetxController implements GetxService {
   var notificationModel = NotificationModel(null, null, []).obs;
 
   // normally ye auth / storage se aata hai
-  late String? token=authRepo.apiClient.token;
+  late String? token = authRepo.apiClient.token;
+
   // final String token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NWZhYWFjNi1jMWQyLTRkNGMtYmViMS0wNDE5NmRkMmZhOGUiLCJqdGkiOiI2NGNiZTZjMzg4MWU2NTdjNjc4NGMyOWNkNjc0ZGQ1NDVhN2Q0ZTk5NDc1YmQzYTQwZTBlZjFmYzJmNTQyNzE4ODEzNWMxNGYxNjRmYmZjMiIsImlhdCI6MTc2OTY2NDUzMy43NDE4ODMwMzk0NzQ0ODczMDQ2ODc1LCJuYmYiOjE3Njk2NjQ1MzMuNzQxODg0OTQ2ODIzMTIwMTE3MTg3NSwiZXhwIjoxODAxMjAwNTMzLjc0MDg3ODEwNTE2MzU3NDIxODc1LCJzdWIiOiIyMjZhMTA3OS00ZGIzLTQ5YzUtYWQ0Ni0yY2NkNDc1OTlmN2UiLCJzY29wZXMiOltdfQ.VXggwgDH_PIOc0ItfOqhYVEE-0_iZYusKT29PQcUMj9x6aDWFZ5_ZFywzTm3SzoEiOXxAaVblulhf08fcyDT7vVxIhFyKIlhbuDJ2JIkMCLf3dzTjCszjzAiRd7DjckrcXh9qvvdEC2nypTLWplzGnEdETQllWhkG5U0BCCqMljxWTrP1FWvfjD5JnITsNOvUIiF439nsTYijRYtdi4EVuImx-2xy83uyIMFX8D1TuPnK2BrTDjZxOvDKNbG3xOzlgd8ZanxmvbZPBjfR3WE4zKKV4Mdz98JBPfDVdjPw_cMgvB6OyZa6gutRyTHz0pJsGFrAxD-IwvDAPoAqoBoChJKscKo32-WKNGQHDImhkA8evSM9y7-z1OeZuDT0vcp3KyIyOXYF9REJDnk3loF57Z3SRPz4R3zCEpPhOBGZOrY_OvgO3L0coFNu4ssMpIIXRZgAEEvbGJwuGs0bsMiUkJDC-hgL9fKZbSBBD7rdd7MRaTN8ZDz3z-z89xQ01kjtyqnxqkl0DQjoSMTcA_H2Wcocj42Ojj0D5i7rpV2T9YsSXIgckZzD9kDZko7vi7falfcTUWJjrQ2qS1XjjefB5Ixy5Ov_fVicu4jdPKYF3VGVRz2A71THDPp9BBHeKJL9eMFzG_wpGZl8c_tUwVs_ZHAOQXg1MiOqSkL40McpXw';
   // final String userId = '226a1079-4db3-49c5-ad46-2ccd47599f7e';
 
-  late String userId = providerDashboardModel.content?.providerInfo?.userId ?? "";
+  late String userId =
+      providerDashboardModel.content?.providerInfo?.userId ?? "";
   final String userType = 'provider';
 
   Future<void> fetchNotifications() async {
@@ -151,8 +153,9 @@ class DashBoardController extends GetxController implements GetxService {
     try {
       final response = await authRepo.getAccountInfo();
 
-      registrationFeeStatus.value =
-          response.body?['content']?['provider_info']?['registration_fee_status'] ?? 0;
+      registrationFeeStatus.value = response.body?['content']?['provider_info']
+              ?['registration_fee_status'] ??
+          0;
 
       return registrationFeeStatus.value;
     } catch (err) {
@@ -185,10 +188,9 @@ class DashBoardController extends GetxController implements GetxService {
 
       final response = await authRepo.getAccountInfo();
 
-      registrationFeeStatus.value =
-          response.body?['content']?['provider_info']
-          ?['registration_fee_status'] ??
-              0;
+      registrationFeeStatus.value = response.body?['content']?['provider_info']
+              ?['registration_fee_status'] ??
+          0;
 
       debugPrint(
           "REFRESH registration_fee_status => ${registrationFeeStatus.value}");
@@ -197,14 +199,12 @@ class DashBoardController extends GetxController implements GetxService {
       if (registrationFeeStatus.value == 0) {
         Get.offAll(() => const RegistrationFeeScreen());
       }
-
     } catch (e) {
       debugPrint("Error in refreshAndNavigateIfUnpaid: $e");
     } finally {
       isLoading.value = false;
     }
   }
-
 
   bool _isLoginLoading = false;
   CategoryModel? categoryList = CategoryModel(data: []);
@@ -277,7 +277,8 @@ class DashBoardController extends GetxController implements GetxService {
     } else {
       // seed list till index
       while (_jobStartImages.length < index) {
-        _jobStartImages.add(File('__dummy__')); // placeholder, UI me use nahi hoga
+        _jobStartImages
+            .add(File('__dummy__')); // placeholder, UI me use nahi hoga
       }
       _jobStartImages.add(file);
     }
@@ -329,7 +330,6 @@ class DashBoardController extends GetxController implements GetxService {
     }
     return true;
   }
-
 
   void clearJobStartMedia() {
     _jobStartImages.clear();
@@ -1032,8 +1032,8 @@ class DashBoardController extends GetxController implements GetxService {
       }
     } catch (e) {
       isBookingDetailsLoading = false;
-      showCustomSnackBar("Something went wrong. Please try again. $e",
-          isError: true);
+      // showCustomSnackBar("Something went wrong. Please try again. $e",
+      //     isError: true);
       debugPrint("Error fetching categories: $e");
       closeSnackBarIfActive();
     } finally {
@@ -2312,7 +2312,8 @@ class DashBoardController extends GetxController implements GetxService {
   }
 
   // changes
-  Future<void> getExtraServicesList({required String categoryid,required String subCategoryId}) async {
+  Future<void> getExtraServicesList(
+      {required String categoryid, required String subCategoryId}) async {
     showLoading();
     try {
       Map<String, String> body = {
@@ -2379,8 +2380,7 @@ class DashBoardController extends GetxController implements GetxService {
   }
 
   Future<void> bookAddons({required String bookingId}) async {
-    final url = Uri.parse(
-        '${AppConstants.baseUrl}${AppConstants.bookAddOns}');
+    final url = Uri.parse('${AppConstants.baseUrl}${AppConstants.bookAddOns}');
     final token = authRepo.getUserToken();
 
     final headers = {
@@ -2394,7 +2394,8 @@ class DashBoardController extends GetxController implements GetxService {
       }
 
       return {
-        'service_id': item.serviceId, // MUST BE INT (change service id:- addon service)
+        'service_id': item.serviceId,
+        // MUST BE INT (change service id:- addon service)
         'variant_key': item.variantName,
         'quantity': item.quantity,
         'service_cost': item.price,
@@ -2417,11 +2418,10 @@ class DashBoardController extends GetxController implements GetxService {
       request.body = jsonEncode(body);
 
       final response = await request.send().timeout(
-        const Duration(seconds: 20),
-      );
+            const Duration(seconds: 20),
+          );
 
-      final responseBody =
-      await response.stream.bytesToString();
+      final responseBody = await response.stream.bytesToString();
 
       log("STATUS: ${response.statusCode}");
       log("BODY: $responseBody");

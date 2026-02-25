@@ -1,5 +1,6 @@
 import 'package:dofix_technichian/app/views/dashboard/dashboard_screen.dart';
 import 'package:dofix_technichian/controllers/dashboard_controller.dart';
+import 'package:dofix_technichian/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
@@ -62,11 +63,11 @@ class _SecondComponentsState extends State<SecondComponents> {
                       dashBoardController.bookingModel.data != null &&
                       pendingBookings.isNotEmpty),
               child: Container(
-                height: 280,
-                margin: EdgeInsets.symmetric(vertical: 10),
+                height: 250,
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(color: Colors.black12, blurRadius: 5),
                   ],
                 ),
@@ -74,38 +75,37 @@ class _SecondComponentsState extends State<SecondComponents> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(
-                        bottom: 25.0,
-                        top: 20,
-                        left: 10,
-                        right: 10,
+                        top: 14,
+                        left: 12,
+                        right: 12,
+                        bottom: 8,
                       ),
                       child: Row(
                         children: [
                           Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "Aaj ka kaam",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            child: Text(
+                              "Aaj ka kaam",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                           GestureDetector(
                             onTap: () => Get.offAll(
-                              () => DashboardScreen(
+                                  () => DashboardScreen(
                                 pageIndex: 1,
                               ),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                               child: Text(
                                 "See All",
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.black,
+                                  color: Color(0xff3683ab),
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
@@ -114,165 +114,148 @@ class _SecondComponentsState extends State<SecondComponents> {
                         ],
                       ),
                     ),
+
+                    const SizedBox(height: 6),
+
                     Flexible(
                       child: CardSwiper(
                         controller: controller,
-                        cardsCount: (pendingBookings.length) < 3
-                            ? pendingBookings.length
-                            : 3,
+                        cardsCount: (pendingBookings.length) < 3 ? pendingBookings.length : 3,
                         onSwipe: _onSwipe,
                         onUndo: _onUndo,
-                        numberOfCardsDisplayed: (pendingBookings.length) < 3
-                            ? pendingBookings.length
-                            : 3,
+                        numberOfCardsDisplayed:
+                        (pendingBookings.length) < 3 ? pendingBookings.length : 3,
                         allowedSwipeDirection:
-                            AllowedSwipeDirection.only(left: true, right: true),
+                        AllowedSwipeDirection.only(left: true, right: true),
                         isLoop: true,
                         backCardOffset: const Offset(0, 20),
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         cardBuilder: (
-                          context,
-                          index,
-                          horizontalThresholdPercentage,
-                          verticalThresholdPercentage,
-                        ) =>
+                            context,
+                            index,
+                            horizontalThresholdPercentage,
+                            verticalThresholdPercentage,
+                            ) =>
                             Container(
-                          height: 150,
-                          decoration: ShapeDecoration(
-                            color: cardColors[index % cardColors.length],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                5,
-                              ),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 10,
-                                  top: 16,
-                                  right: 10,
+                              height: 150,
+                              decoration: ShapeDecoration(
+                                color: cardColors[index % cardColors.length],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                        child: Text(
-                                      '${pendingBookings[index].subCategory.name}',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    )),
-                                    Expanded(
-                                        child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                    /// TOP ROW: SERVICE + TIME
+                                    Row(
                                       children: [
+                                        Expanded(
+                                          child: Text(
+                                            '${pendingBookings[index].subCategory.name}',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontFamily: 'Albert Sans',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
                                         Text(
                                           DateFormat("hh:mm a")
                                               .format(DateTime.parse(
-                                                  pendingBookings[index]
-                                                      .serviceSchedule))
+                                              pendingBookings[index].serviceSchedule))
                                               .toString(),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            color:
-                                                Colors.black.withOpacity(0.40),
+                                            color: Colors.black.withOpacity(0.45),
                                             fontFamily: 'Albert Sans',
                                             fontSize: 12,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ],
-                                    )),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10, top: 12, right: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                        child: Text(
+                                    ),
+
+                                    const SizedBox(height: 10),
+
+                                    /// ADDRESS
+                                    Text(
                                       "${pendingBookings[index].serviceAddress?.address ?? 'Address not available'}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color: Colors.black.withOpacity(0.40),
+                                        color: Colors.black.withOpacity(0.45),
                                         fontFamily: 'Albert Sans',
                                         fontSize: 12,
                                         fontWeight: FontWeight.w500,
+                                        height: 1.25,
                                       ),
-                                    )),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 10,
-                                  top: 12,
-                                  right: 10,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                        child: Text(
-                                      "₹ ${pendingBookings[index].totalBookingAmount}",
-                                      style: TextStyle(
-                                        color: const Color(0xFF207FA7),
-                                        fontSize: 16,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    )),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.to(() => ShuruKare(
-                                              id: pendingBookings[index].id ??
-                                                  "",
-                                            ));
-                                      },
-                                      child: Container(
-                                        width: 80,
-                                        height: 30,
-                                        decoration: ShapeDecoration(
-                                          shape: RoundedRectangleBorder(
-                                            side: BorderSide(
-                                              width: 1,
-                                              color: const Color(0xFF207FA7),
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                        ),
-                                        child: Center(
+                                    ),
+
+                                    const Spacer(),
+
+                                    /// AMOUNT + START BUTTON
+                                    Row(
+                                      children: [
+                                        Expanded(
                                           child: Text(
-                                            'Start',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: const Color(0xFF207FA7),
-                                              fontSize: 12,
+                                            "₹ ${pendingBookings[index].totalBookingAmount}",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              color: Color(0xFF207FA7),
+                                              fontSize: 16,
                                               fontFamily: 'Albert Sans',
-                                              fontWeight: FontWeight.w600,
+                                              fontWeight: FontWeight.w700,
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    )
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(() => ShuruKare(
+                                              id: pendingBookings[index].id ?? "",
+                                            ));
+                                          },
+                                          child: Container(
+                                            width: 84,
+                                            height: 32,
+                                            decoration: ShapeDecoration(
+                                              shape: RoundedRectangleBorder(
+                                                side: const BorderSide(
+                                                  width: 1,
+                                                  color: Color(0xFF207FA7),
+                                                ),
+                                                borderRadius: BorderRadius.circular(6),
+                                              ),
+                                            ),
+                                            child: const Center(
+                                              child: Text(
+                                                'Start',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: Color(0xFF207FA7),
+                                                  fontSize: 12,
+                                                  fontFamily: 'Albert Sans',
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 2),
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          ),
-                        ),
+                            ),
                       ),
                     ),
                   ],

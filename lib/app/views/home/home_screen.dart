@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //   });
   // }
   void _startAutoRefresh() {
-    _timer?.cancel();   // pehle old timer band
+    _timer?.cancel(); // pehle old timer band
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
       await controller.getListOfBookings(isRefresh: true);
       await controller.getBookingCounts(getAccountInfoAlso: false);
@@ -73,6 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: SecondComponents(),
                   ),
                   ThirdComponent(),
+                  const SizedBox(
+                    height: 80,
+                  )
                 ],
               ),
             ),
