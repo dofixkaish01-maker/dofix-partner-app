@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:in_app_update/in_app_update.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/dashboard_controller.dart';
+import '../../../controllers/tracking_controller.dart';
 import '../../../helper/route_helper.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,8 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Get.find<DashBoardController>().getPagesData(isLogin: true);
-    _route(); // Call the navigation function
     checkForAppUpdate();
+    Future.delayed(Duration(seconds: 3), () {
+      _route();
+      TrackingController.requestTracking();
+    });
   }
 
   Future<void> _route() async {
