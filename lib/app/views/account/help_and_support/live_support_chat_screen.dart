@@ -166,9 +166,7 @@ class _ChatAppBarTitle extends StatelessWidget {
             ),
             Text(
               "Online • Replies in seconds",
-              style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 12),
+              style: TextStyle(color: Colors.white70, fontSize: 12),
             ),
           ],
         )
@@ -234,8 +232,8 @@ class _ChatInputBar extends StatelessWidget {
                             : primaryAppColor.withOpacity(0.3),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.send,
-                          color: Colors.white, size: 18),
+                      child:
+                          const Icon(Icons.send, color: Colors.white, size: 18),
                     ),
                   ),
                 );
@@ -267,8 +265,7 @@ class _ChatBubble extends StatelessWidget {
         return Transform.scale(scale: value, child: child);
       },
       child: Align(
-        alignment:
-        isMe ? Alignment.centerRight : Alignment.centerLeft,
+        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
         child: Container(
           margin: const EdgeInsets.only(bottom: 10),
           constraints: const BoxConstraints(maxWidth: 300),
@@ -307,9 +304,7 @@ class _ChatBubble extends StatelessWidget {
                 _time(message.createdAt),
                 style: TextStyle(
                   fontSize: 11,
-                  color: isMe
-                      ? Colors.white70
-                      : Colors.grey,
+                  color: isMe ? Colors.white70 : Colors.grey,
                 ),
               ),
             ],

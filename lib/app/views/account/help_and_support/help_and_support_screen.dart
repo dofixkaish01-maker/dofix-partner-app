@@ -55,8 +55,13 @@ class HelpSupportScreen extends StatelessWidget {
                   subtitle: "Chat with support team",
                   icon: const Icon(CupertinoIcons.chat_bubble_text,
                       color: primaryColor),
-                  onTap: () {
-                    Get.to(() => const SupportChatScreen());
+                  onTap: () async {
+                    final Uri url = Uri.parse("https://text.at/7b47dbc2-a629-4ab1-80ab-f5d50c319844");
+
+                    await launchUrl(
+                      url,
+                      mode: LaunchMode.inAppWebView,
+                    );
                   },
                 ),
               ],
