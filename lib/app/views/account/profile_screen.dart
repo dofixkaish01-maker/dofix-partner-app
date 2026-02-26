@@ -41,48 +41,47 @@ class _AccountScreenState extends State<AccountScreen> {
   static const Color primaryColor = Color(0xff227fa8);
 
   @override
-// 🔥 Only UI improved, logic untouched
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<DashBoardController>(builder: (controller) {
-      return SafeArea(
-        child: Scaffold(
-          backgroundColor: const Color(0xffF6F8FB),
-          appBar: CustomAppBar(
-            title: 'Account',
-            isSearchButtonExist: false,
-            isBackButtonExist: true,
-            isTitleExist: false,
-            drawerButton: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Image.asset(
-                Images.iclogo,
-                height: 70,
-                width: 70,
-              ),
+      return Scaffold(
+        backgroundColor: const Color(0xffF6F8FB),
+        appBar: CustomAppBar(
+          title: 'Account',
+          isSearchButtonExist: false,
+          isBackButtonExist: true,
+          isTitleExist: false,
+          drawerButton: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Image.asset(
+              Images.iclogo,
+              height: 70,
+              width: 70,
             ),
           ),
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 65),
-            child: FloatingActionButton.extended(
-              backgroundColor: primaryColor,
-              onPressed: () {
-                Get.to(() => const HelpSupportScreen());
-              },
-              label: Row(
-                children: [
-                  const Icon(Icons.support_agent_rounded, color: Colors.white),
-                  const SizedBox(width: 7),
-                  Text(
-                    'Help & Support',
-                    style: GoogleFonts.roboto(color: Colors.white),
-                  )
-                ],
-              ),
+        ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 65),
+          child: FloatingActionButton.extended(
+            backgroundColor: primaryColor,
+            onPressed: () {
+              Get.to(() => const HelpSupportScreen());
+            },
+            label: Row(
+              children: [
+                const Icon(Icons.support_agent_rounded, color: Colors.white),
+                const SizedBox(width: 7),
+                Text(
+                  'Help & Support',
+                  style: GoogleFonts.roboto(color: Colors.white),
+                )
+              ],
             ),
           ),
-          body: Column(
+        ),
+        body: SafeArea(
+          child: Column(
             children: [
               /// SCROLLABLE CONTENT
               Expanded(
@@ -99,17 +98,17 @@ class _AccountScreenState extends State<AccountScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 16),
-
+          
                         /// STATUS CARD (unchanged logic)
                         Obx(() {
                           if (controller.accountIsActive.value == -1) {
                             return const Center(
                                 child: CircularProgressIndicator());
                           }
-
+          
                           final bool isActive =
                               controller.accountIsActive.value == 1;
-
+          
                           return Container(
                             width: double.infinity,
                             padding: const EdgeInsets.all(16),
@@ -152,9 +151,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             ),
                           );
                         }),
-
+          
                         const SizedBox(height: 24),
-
+          
                         /// 🔥 MAIN ACCOUNT SECTION
                         _buildSectionCard([
                           _buildMenuItem(
@@ -199,9 +198,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             },
                           ),
                         ]),
-
+          
                         const SizedBox(height: 24),
-
+          
                         /// 🔥 LEGAL SECTION (Separate)
                         Text(
                           "Legal",
@@ -211,9 +210,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: Colors.grey,
                           ),
                         ),
-
+          
                         const SizedBox(height: 12),
-
+          
                         _buildSectionCard([
                           _buildMenuItem(
                             title: "Privacy Policy",
@@ -238,14 +237,14 @@ class _AccountScreenState extends State<AccountScreen> {
                             },
                           ),
                         ]),
-
+          
                         const SizedBox(height: 100),
                       ],
                     ),
                   ),
                 ),
               ),
-
+          
               /// 🔥 FIXED LOGOUT BUTTON
               Container(
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
@@ -370,121 +369,247 @@ class _AccountScreenState extends State<AccountScreen> {
   //   );
   // }
 
+  // void _showLogoutDialog() {
+  //   Get.dialog(
+  //     Dialog(
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(20),
+  //       ),
+  //       insetPadding: const EdgeInsets.symmetric(horizontal: 28),
+  //       child: Container(
+  //         padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+  //         decoration: BoxDecoration(
+  //           color: Colors.white,
+  //           borderRadius: BorderRadius.circular(20),
+  //         ),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             /// 🔴 Icon
+  //             Container(
+  //               height: 64,
+  //               width: 64,
+  //               decoration: BoxDecoration(
+  //                 color: Colors.red.withOpacity(0.10),
+  //                 shape: BoxShape.circle,
+  //               ),
+  //               child: const Icon(
+  //                 Icons.logout_rounded,
+  //                 color: Colors.red,
+  //                 size: 30,
+  //               ),
+  //             ),
+  //
+  //             const SizedBox(height: 18),
+  //
+  //             /// Title
+  //             const Text(
+  //               "Confirm Logout",
+  //               style: TextStyle(
+  //                 fontSize: 18,
+  //                 fontWeight: FontWeight.w700,
+  //                 color: Colors.black,
+  //               ),
+  //             ),
+  //
+  //             const SizedBox(height: 10),
+  //
+  //             /// Description
+  //             const Text(
+  //               "Kya aap sure hain ki aap apne account se logout karna chahte ho?",
+  //               textAlign: TextAlign.center,
+  //               style: TextStyle(
+  //                 fontSize: 14,
+  //                 height: 1.4,
+  //                 color: Colors.black54,
+  //               ),
+  //             ),
+  //
+  //             const SizedBox(height: 28),
+  //
+  //             /// Buttons Row
+  //             Row(
+  //               children: [
+  //                 /// Cancel Button
+  //                 Expanded(
+  //                   child: OutlinedButton(
+  //                     style: OutlinedButton.styleFrom(
+  //                       side: BorderSide(
+  //                         color: Colors.grey.withOpacity(0.4),
+  //                       ),
+  //                       padding: const EdgeInsets.symmetric(vertical: 14),
+  //                       shape: RoundedRectangleBorder(
+  //                         borderRadius: BorderRadius.circular(12),
+  //                       ),
+  //                     ),
+  //                     onPressed: () => Get.back(),
+  //                     child: const Text(
+  //                       "Cancel",
+  //                       style: TextStyle(
+  //                         color: Colors.black87,
+  //                         fontWeight: FontWeight.w600,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //
+  //                 const SizedBox(width: 14),
+  //
+  //                 /// Logout Button
+  //                 Expanded(
+  //                   child: ElevatedButton(
+  //                     style: ElevatedButton.styleFrom(
+  //                       backgroundColor: Colors.red,
+  //                       elevation: 0,
+  //                       padding: const EdgeInsets.symmetric(vertical: 14),
+  //                       shape: RoundedRectangleBorder(
+  //                         borderRadius: BorderRadius.circular(12),
+  //                       ),
+  //                     ),
+  //                     onPressed: () {
+  //                       Get.back(); // dialog close
+  //                       Get.find<AuthController>().logout();
+  //                     },
+  //                     child: const Text(
+  //                       "Log Out",
+  //                       style: TextStyle(
+  //                         fontWeight: FontWeight.w600,
+  //                         color: Colors.white,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //     barrierDismissible: false,
+  //   );
+  // }
+
   void _showLogoutDialog() {
     Get.dialog(
-      Dialog(
+      AlertDialog(
+        backgroundColor: Colors.white,
+        elevation: 8,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
         ),
-        insetPadding: const EdgeInsets.symmetric(horizontal: 28),
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+        contentPadding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+        titlePadding: EdgeInsets.zero,
+        actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+        title: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+
+            /// Icon
+            Container(
+              height: 70,
+              width: 70,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.red.withOpacity(0.15),
+                    Colors.red.withOpacity(0.05),
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.logout_rounded,
+                color: Colors.red,
+                size: 32,
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            const Text(
+              "Confirm Logout",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+          ],
+        ),
+        content: const Text(
+          "Kya aap sure hain ki aap apne account se logout karna chahte ho?",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 14,
+            height: 1.5,
+            color: Colors.black54,
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+        ),
+        actions: [
+          /// Divider
+          Divider(
+            height: 28,
+            color: Colors.grey.withOpacity(0.2),
+          ),
+
+          Row(
             children: [
-              /// 🔴 Icon
-              Container(
-                height: 64,
-                width: 64,
-                decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.10),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.logout_rounded,
-                  color: Colors.red,
-                  size: 30,
-                ),
-              ),
-
-              const SizedBox(height: 18),
-
-              /// Title
-              const Text(
-                "Confirm Logout",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              /// Description
-              const Text(
-                "Kya aap sure hain ki aap apne account se logout karna chahte ho?",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  height: 1.4,
-                  color: Colors.black54,
-                ),
-              ),
-
-              const SizedBox(height: 28),
-
-              /// Buttons Row
-              Row(
-                children: [
-                  /// Cancel Button
-                  Expanded(
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: Colors.grey.withOpacity(0.4),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: () => Get.back(),
-                      child: const Text(
-                        "Cancel",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+              /// Cancel Button
+              Expanded(
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    side: BorderSide(
+                      color: Colors.grey.withOpacity(0.4),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-
-                  const SizedBox(width: 14),
-
-                  /// Logout Button
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: () {
-                        Get.back(); // dialog close
-                        Get.find<AuthController>().logout();
-                      },
-                      child: const Text(
-                        "Log Out",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
+                  onPressed: () => Get.back(),
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
                     ),
                   ),
-                ],
+                ),
+              ),
+
+              const SizedBox(width: 14),
+
+              /// Logout Button
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  onPressed: () {
+                    Get.back();
+                    Get.find<AuthController>().logout();
+                  },
+                  child: const Text(
+                    "Log Out",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
-        ),
+        ],
       ),
       barrierDismissible: false,
     );

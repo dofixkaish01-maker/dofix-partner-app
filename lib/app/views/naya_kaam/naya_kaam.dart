@@ -99,9 +99,6 @@ class _Naya_kaamState extends State<Naya_kaam> {
                           return _bookingCard(booking);
                         },
                       ),
-                    const SizedBox(
-                      height: 200,
-                    )
                   ],
                 ),
               ),

@@ -86,109 +86,111 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen>
           position: _slideAnimation,
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                /// Hero Icon
-                Hero(
-                  tag: 'notification_icon_${widget.item.id}',
-                  child: Container(
-                    height: 70,
-                    width: 70,
+            child: SafeArea(
+              child: Column(
+                children: [
+                  /// Hero Icon
+                  Hero(
+                    tag: 'notification_icon_${widget.item.id}',
+                    child: Container(
+                      height: 70,
+                      width: 70,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withOpacity(0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.notifications_rounded,
+                        color: Colors.blue,
+                        size: 34,
+                      ),
+                    ),
+                  ),
+              
+                  sizedBox12(),
+              
+                  /// Date
+                  Text(
+                    formatDate(widget.item.created_at),
+                    style: albertSansRegular.copyWith(
+                      fontSize: 12,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+              
+                  sizedBox20(),
+              
+                  /// Notification Card
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.15),
-                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 14,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
                     ),
-                    child: const Icon(
-                      Icons.notifications_rounded,
-                      color: Colors.blue,
-                      size: 34,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// Title
+                        Text(
+                          widget.item.title ?? '',
+                          style: albertSansRegular.copyWith(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+              
+                        sizedBox12(),
+              
+                        /// Divider
+                        Divider(color: Colors.grey.shade300),
+              
+                        sizedBox12(),
+              
+                        /// Body
+                        Text(
+                          widget.item.body ?? '',
+                          style: albertSansRegular.copyWith(
+                            fontSize: 15,
+                            height: 1.5,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-
-                sizedBox12(),
-
-                /// Date
-                Text(
-                  formatDate(widget.item.created_at),
-                  style: albertSansRegular.copyWith(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-
-                sizedBox20(),
-
-                /// Notification Card
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(18),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
-                        blurRadius: 14,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /// Title
-                      Text(
-                        widget.item.title ?? '',
-                        style: albertSansRegular.copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
+              
+                  const Spacer(),
+              
+                  /// Action Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-
-                      sizedBox12(),
-
-                      /// Divider
-                      Divider(color: Colors.grey.shade300),
-
-                      sizedBox12(),
-
-                      /// Body
-                      Text(
-                        widget.item.body ?? '',
-                        style: albertSansRegular.copyWith(
-                          fontSize: 15,
-                          height: 1.5,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const Spacer(),
-
-                /// Action Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: const Text(
+                        'Got it',
+                        style: TextStyle(fontSize: 15),
                       ),
                     ),
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: const Text(
-                      'Got it',
-                      style: TextStyle(fontSize: 15),
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
