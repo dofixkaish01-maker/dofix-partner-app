@@ -16,6 +16,8 @@ import '../../widgets/custom_button_widget.dart';
 import '../../widgets/custom_wallet_balance.dart';
 import '../../widgets/transaction_tile.dart';
 
+const primaryColor = Color(0xFF207FA7);
+
 enum TransactionType {
   none,
   payable,
@@ -95,7 +97,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                       Row(
                         children: [
                           const Icon(Icons.account_balance_wallet,
-                              color: Color(0xFF207FA7)),
+                              color: primaryColor),
                           const SizedBox(width: 8),
                           const Expanded(
                             child: Text(
@@ -119,13 +121,13 @@ class _PaiseScreenState extends State<PaiseScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF207FA7).withOpacity(0.08),
+                          color: primaryColor.withOpacity(0.08),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           children: [
                             const Icon(Icons.miscellaneous_services,
-                                color: Color(0xFF207FA7)),
+                                color: primaryColor),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -174,7 +176,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [
-                              Color(0xFF207FA7),
+                              primaryColor,
                               Color(0xFF3FA9D6),
                             ],
                           ),
@@ -280,7 +282,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                         height: 48,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF207FA7),
+                            backgroundColor: primaryColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -446,152 +448,154 @@ class _PaiseScreenState extends State<PaiseScreen> {
                           children: [
                             Expanded(
                               child: Container(
-                                decoration: ShapeDecoration(
-                                  color: const Color(0xFFE9F2F6),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
+                                padding: const EdgeInsets.all(14),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(color: Colors.black.withOpacity(0.06)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
                                 ),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 10),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        transactionType ==
-                                                TransactionType.payable
-                                            ? "Payable balance".tr
-                                            : transactionType ==
-                                                    TransactionType.withdrawAble
-                                                ? "Available balance".tr
-                                                : transactionType ==
-                                                        TransactionType
-                                                            .adjustAndPayable
-                                                    ? "Final payable balance".tr
-                                                    : transactionType ==
-                                                            TransactionType
-                                                                .adjustWithdrawAble
-                                                        ? "Final receivable balance"
-                                                            .tr
-                                                        : transactionType ==
-                                                                TransactionType
-                                                                    .adjust
-                                                            ? "Adjustable balance"
-                                                                .tr
-                                                            : "Empty Balance"
-                                                                .tr,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: const Color(0xFF212121),
-                                          fontSize: 14,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w500,
-                                          height: 1.40,
-                                        ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    /// Header strip (small tag style)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFE9F2F6),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.black.withOpacity(0.05)),
                                       ),
-                                      SizedBox(height: 2),
-                                      Text(
-                                        '₹ $transactionAmount',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: const Color(0xFF207FA7),
-                                          fontSize: 20,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w700,
-                                          height: 1.40,
-                                        ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.account_balance_wallet_rounded,
+                                            size: 18,
+                                            color: primaryAppColor.withOpacity(0.9),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Text(
+                                              transactionType == TransactionType.payable
+                                                  ? "Payable balance".tr
+                                                  : transactionType == TransactionType.withdrawAble
+                                                  ? "Available balance".tr
+                                                  : transactionType == TransactionType.adjustAndPayable
+                                                  ? "Final payable balance".tr
+                                                  : transactionType ==
+                                                  TransactionType.adjustWithdrawAble
+                                                  ? "Final receivable balance".tr
+                                                  : transactionType == TransactionType.adjust
+                                                  ? "Adjustable balance".tr
+                                                  : "Empty Balance".tr,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: Color(0xFF212121),
+                                                fontSize: 14,
+                                                fontFamily: 'Albert Sans',
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.3,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(height: 2),
-                                      CustomButtonWidget(
-                                        buttonText: transactionType ==
-                                                TransactionType.payable
+                                    ),
+
+                                    const SizedBox(height: 14),
+
+                                    /// Amount
+                                    Text(
+                                      '₹ $transactionAmount',
+                                      style: const TextStyle(
+                                        color: primaryAppColor,
+                                        fontSize: 26,
+                                        fontFamily: 'Albert Sans',
+                                        fontWeight: FontWeight.w800,
+                                        height: 1.1,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 6),
+
+                                    /// Helper line
+                                    Text(
+                                      "Tap the button below to continue",
+                                      style: TextStyle(
+                                        color: Colors.black.withOpacity(0.55),
+                                        fontSize: 12,
+                                        fontFamily: 'Albert Sans',
+                                        fontWeight: FontWeight.w500,
+                                        height: 1.4,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 14),
+
+                                    /// Button (full width)
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: CustomButtonWidget(
+                                        buttonText: transactionType == TransactionType.payable
                                             ? "Pay Now".tr
+                                            : transactionType == TransactionType.withdrawAble
+                                            ? "withdraw".tr
+                                            : transactionType == TransactionType.adjustAndPayable
+                                            ? "Adjust and Pay".tr
                                             : transactionType ==
-                                                    TransactionType.withdrawAble
-                                                ? "withdraw".tr
-                                                : transactionType ==
-                                                        TransactionType
-                                                            .adjustAndPayable
-                                                    ? "Adjust and Pay".tr
-                                                    : transactionType ==
-                                                            TransactionType
-                                                                .adjustWithdrawAble
-                                                        // ? "Adjust and Withdraw".tr
-                                                        ? "Withdraw".tr
-                                                        : transactionType ==
-                                                                TransactionType
-                                                                    .adjust
-                                                            ? "Adjust".tr
-                                                            : "Empty balance"
-                                                                .tr,
-                                        onPressed: transactionType ==
-                                                TransactionType.none
+                                            TransactionType.adjustWithdrawAble
+                                        // ? "Adjust and Withdraw".tr
+                                            ? "Withdraw".tr
+                                            : transactionType == TransactionType.adjust
+                                            ? "Adjust".tr
+                                            : "Empty balance".tr,
+                                        onPressed: transactionType == TransactionType.none
                                             ? () {
-                                                showCustomSnackBar(
-                                                    "No amount to withdraw.");
-                                              }
+                                          showCustomSnackBar("No amount to withdraw.");
+                                        }
                                             : () async {
-                                                await Get.find<
-                                                        DashBoardController>()
-                                                    .getConfigData();
-                                                var config = Get.find<
-                                                        DashBoardController>()
-                                                    .configModel
-                                                    .content;
-                                                if (transactionType ==
-                                                        TransactionType
-                                                            .payable ||
-                                                    transactionType ==
-                                                        TransactionType
-                                                            .adjustAndPayable) {
-                                                  if (config?.digitalPayment ==
-                                                      0) {
-                                                    showCustomSnackBar(
-                                                        "no_payment_option_available"
-                                                            .tr);
-                                                  } else if ((config
-                                                              ?.minimumPayableAmount ??
-                                                          0) <=
-                                                      transactionAmount) {
-                                                    Get.find<
-                                                            DashBoardController>()
-                                                        .updateIndex(-1,
-                                                            isUpdate: false);
-                                                    showModalBottomSheet(
-                                                      context: context,
-                                                      useRootNavigator: true,
-                                                      isScrollControlled: true,
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      builder: (context) =>
-                                                          PaymentMethodDialog(
-                                                              amount:
-                                                                  transactionAmount),
-                                                    );
-                                                  } else {
-                                                    showCustomSnackBar(
-                                                        "${'Minimum Payable Amount'.tr} ${config?.minimumPayableAmount ?? 0}");
-                                                  }
-                                                } else if (transactionType ==
-                                                        TransactionType
-                                                            .withdrawAble ||
-                                                    transactionType ==
-                                                        TransactionType
-                                                            .adjustWithdrawAble) {
-                                                  await accountController
-                                                      .adjustMyBalance();
-                                                  Get.to(
-                                                      WithdrawRequestScreen());
-                                                } else if (transactionType ==
-                                                    TransactionType.adjust) {
-                                                  await accountController
-                                                      .adjustMyBalance();
-                                                }
-                                              },
-                                      )
-                                    ],
-                                  ),
+                                          await Get.find<DashBoardController>().getConfigData();
+                                          var config =
+                                              Get.find<DashBoardController>().configModel.content;
+                                          if (transactionType == TransactionType.payable ||
+                                              transactionType == TransactionType.adjustAndPayable) {
+                                            if (config?.digitalPayment == 0) {
+                                              showCustomSnackBar("no_payment_option_available".tr);
+                                            } else if ((config?.minimumPayableAmount ?? 0) <=
+                                                transactionAmount) {
+                                              Get.find<DashBoardController>()
+                                                  .updateIndex(-1, isUpdate: false);
+                                              showModalBottomSheet(
+                                                context: context,
+                                                useRootNavigator: true,
+                                                isScrollControlled: true,
+                                                backgroundColor: Colors.transparent,
+                                                builder: (context) =>
+                                                    PaymentMethodDialog(amount: transactionAmount),
+                                              );
+                                            } else {
+                                              showCustomSnackBar(
+                                                  "${'Minimum Payable Amount'.tr} ${config?.minimumPayableAmount ?? 0}");
+                                            }
+                                          } else if (transactionType == TransactionType.withdrawAble ||
+                                              transactionType ==
+                                                  TransactionType.adjustWithdrawAble) {
+                                            await accountController.adjustMyBalance();
+                                            Get.to(WithdrawRequestScreen());
+                                          } else if (transactionType == TransactionType.adjust) {
+                                            await accountController.adjustMyBalance();
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -624,7 +628,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                         '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.receivedBalance ?? 0}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color: const Color(0xFF207FA7),
+                                          color: primaryColor,
                                           fontSize: 20,
                                           fontFamily: 'Albert Sans',
                                           fontWeight: FontWeight.w700,
@@ -711,7 +715,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                       '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.accountReceivable ?? 0}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color: const Color(0xFF207FA7),
+                                        color: primaryColor,
                                         fontSize: 20,
                                         fontFamily: 'Albert Sans',
                                         fontWeight: FontWeight.w700,
@@ -763,7 +767,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                       '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.balancePending ?? 0}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color: const Color(0xFF207FA7),
+                                        color: primaryColor,
                                         fontSize: 20,
                                         fontFamily: 'Albert Sans',
                                         fontWeight: FontWeight.w700,
@@ -807,7 +811,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                       '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.totalWithdrawn ?? 0}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color: const Color(0xFF207FA7),
+                                        color: primaryColor,
                                         fontSize: 20,
                                         fontFamily: 'Albert Sans',
                                         fontWeight: FontWeight.w700,
