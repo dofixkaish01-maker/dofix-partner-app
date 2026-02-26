@@ -100,111 +100,113 @@ class _ShuruKareState extends State<ShuruKare> {
           ),
           body: !(Get.find<DashBoardController>().isBookingDetailsLoading ??
                   true)
-              ? SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: 43,
-                              decoration:
-                                  BoxDecoration(color: Color(0xfffE9F2F6)),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                      child: Row(
-                                    children: [
-                                      Text(
-                                        "Booking ID: ",
+              ? SafeArea(
+                child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 43,
+                                decoration:
+                                    BoxDecoration(color: Color(0xfffE9F2F6)),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                        child: Row(
+                                      children: [
+                                        Text(
+                                          "Booking ID: ",
+                                          style: albertSansRegular.copyWith(
+                                              color: Colors.grey),
+                                        ),
+                                        Text(
+                                          "#${Get.find<DashBoardController>().bookingDetails?.content?.readableId}",
+                                          style: albertSansRegular.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xff207FA8)),
+                                        )
+                                      ],
+                                    )),
+                                    Expanded(
+                                      child: Text(
+                                        Get.find<DashBoardController>()
+                                                    .bookingDetails
+                                                    ?.content
+                                                    ?.isPaid ==
+                                                0
+                                            ? "Unpaid"
+                                            : "Paid",
+                                        textAlign: TextAlign.end,
                                         style: albertSansRegular.copyWith(
-                                            color: Colors.grey),
-                                      ),
-                                      Text(
-                                        "#${Get.find<DashBoardController>().bookingDetails?.content?.readableId}",
-                                        style: albertSansRegular.copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xff207FA8)),
-                                      )
-                                    ],
-                                  )),
-                                  Expanded(
-                                    child: Text(
-                                      Get.find<DashBoardController>()
-                                                  .bookingDetails
-                                                  ?.content
-                                                  ?.isPaid ==
-                                              0
-                                          ? "Unpaid"
-                                          : "Paid",
-                                      textAlign: TextAlign.end,
-                                      style: albertSansRegular.copyWith(
-                                        color: Color(0xff207FA8),
+                                          color: Color(0xff207FA8),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                ],
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Visibility(
-                        visible: (dashboardController
-                                .bookingDetails?.content?.bookingStatus !=
-                            'completed'),
-                        child: InkWell(
-                          onTap: () async {
-                            String phone = Get.find<DashBoardController>()
-                                    .bookingDetails
-                                    ?.content
-                                    ?.customer
-                                    ?.phone ??
-                                "";
-                            if (phone.isNotEmpty) {
-                              final Uri phoneUri = Uri(
-                                scheme: 'tel',
-                                path: phone,
-                              );
-                              if (await canLaunchUrl(
-                                phoneUri,
-                              )) {
-                                await launchUrl(
-                                  phoneUri,
-                                  mode: LaunchMode.externalApplication,
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Visibility(
+                          visible: (dashboardController
+                                  .bookingDetails?.content?.bookingStatus !=
+                              'completed'),
+                          child: InkWell(
+                            onTap: () async {
+                              String phone = Get.find<DashBoardController>()
+                                      .bookingDetails
+                                      ?.content
+                                      ?.customer
+                                      ?.phone ??
+                                  "";
+                              if (phone.isNotEmpty) {
+                                final Uri phoneUri = Uri(
+                                  scheme: 'tel',
+                                  path: phone,
                                 );
-                              } else {}
-                            }
-                          },
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: Colors.blueAccent, width: 1),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Center(
-                                  child: Text(
-                                    "Call Customer",
-                                    style: TextStyle(
-                                      color: primaryAppColor,
-                                      fontSize: 14,
-                                      fontFamily: 'Albert Sans',
-                                      fontWeight: FontWeight.w500,
+                                if (await canLaunchUrl(
+                                  phoneUri,
+                                )) {
+                                  await launchUrl(
+                                    phoneUri,
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                } else {}
+                              }
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Colors.blueAccent, width: 1),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Center(
+                                    child: Text(
+                                      "Call Customer",
+                                      style: TextStyle(
+                                        color: primaryAppColor,
+                                        fontSize: 14,
+                                        fontFamily: 'Albert Sans',
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -212,588 +214,588 @@ class _ShuruKareState extends State<ShuruKare> {
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (mainServices.isNotEmpty) ...[
-                              Row(
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (mainServices.isNotEmpty) ...[
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Main Service",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Container(
+                                        height: 1,
+                                        color: Colors.black.withOpacity(0.15),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: mainServices.length,
+                                  itemBuilder: (context, index) {
+                                    final detail = mainServices[index];
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 16.0),
+                                      child: CustomBookingDetailsItems(
+                                          detail: detail),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Visibility(
+                          visible: (dashboardController
+                                  .bookingDetails?.content?.bookingStatus ==
+                              'completed'),
+                          child: Obx(() {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "Main Service",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.black,
+                                  if (dashboardController
+                                      .savedAddonModelList.isNotEmpty) ...[
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Addon Service",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          child: Container(
+                                            height: 1,
+                                            color:
+                                                Colors.black.withOpacity(0.15),
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: dashboardController
+                                          .savedAddonModelList.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 16.0),
+                                          child: CustomAddonListingItem(
+                                            variantName: dashboardController
+                                                .savedAddonModelList[index]
+                                                .variantKey!,
+                                            servicename: dashboardController
+                                                .savedAddonModelList[index]
+                                                .serviceName!,
+                                            singleCost: dashboardController
+                                                .savedAddonModelList[index]
+                                                .serviceCost
+                                                .toString(),
+                                            quantityCount: dashboardController
+                                                .savedAddonModelList[index]
+                                                .quantity
+                                                .toString(),
+                                            totalCost: dashboardController
+                                                .savedAddonModelList[index]
+                                                .totalCost
+                                                .toString(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            );
+                          }),
+                        ),
+                        Visibility(
+                          visible: (dashboardController
+                                  .bookingDetails?.content?.bookingStatus ==
+                              'completed'),
+                          child: const SizedBox(
+                            height: 15,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  DetailsComponent(
+                                    title: 'Scheduled date',
+                                    subTitel: DateFormat("dd-MM-yyyy").format(
+                                      DateTime.parse(
+                                        (Get.find<DashBoardController>()
+                                                    .bookingDetails
+                                                    ?.content
+                                                    ?.serviceSchedule ??
+                                                DateTime.now().toString())
+                                            .toString(),
+                                      ),
+                                    ),
+                                    image: 'assets/icons/ic_calender.png',
                                   ),
-                                  SizedBox(width: 8),
-                                  Expanded(
-                                    child: Container(
-                                      height: 1,
-                                      color: Colors.black.withOpacity(0.15),
-                                    ),
+                                  DetailsComponent(
+                                    title: 'Scheduled time',
+                                    subTitel: DateFormat("hh:mm a")
+                                        .format(
+                                          DateTime.parse(
+                                            (Get.find<DashBoardController>()
+                                                        .bookingDetails
+                                                        ?.content
+                                                        ?.serviceSchedule ??
+                                                    DateTime.now().toString())
+                                                .toString(),
+                                          ),
+                                        )
+                                        .toString(),
+                                    image: 'assets/icons/ic_calender.png',
                                   ),
                                 ],
                               ),
                               SizedBox(
-                                height: 4,
+                                height: 35,
                               ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: mainServices.length,
-                                itemBuilder: (context, index) {
-                                  final detail = mainServices[index];
-                                  return Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 16.0),
-                                    child: CustomBookingDetailsItems(
-                                        detail: detail),
-                                  );
-                                },
+                              DetailsComponent(
+                                title: 'Problem title',
+                                subTitel: controller.bookingDetails?.content
+                                        ?.detail?.first.service?.name ??
+                                    "No Title",
+                                image: 'assets/icons/ic_tool.png',
                               ),
-                            ],
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Visibility(
-                        visible: (dashboardController
-                                .bookingDetails?.content?.bookingStatus ==
-                            'completed'),
-                        child: Obx(() {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (dashboardController
-                                    .savedAddonModelList.isNotEmpty) ...[
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Addon Service",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Expanded(
-                                        child: Container(
-                                          height: 1,
-                                          color:
-                                              Colors.black.withOpacity(0.15),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: dashboardController
-                                        .savedAddonModelList.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(
-                                            bottom: 16.0),
-                                        child: CustomAddonListingItem(
-                                          variantName: dashboardController
-                                              .savedAddonModelList[index]
-                                              .variantKey!,
-                                          servicename: dashboardController
-                                              .savedAddonModelList[index]
-                                              .serviceName!,
-                                          singleCost: dashboardController
-                                              .savedAddonModelList[index]
-                                              .serviceCost
-                                              .toString(),
-                                          quantityCount: dashboardController
-                                              .savedAddonModelList[index]
-                                              .quantity
-                                              .toString(),
-                                          totalCost: dashboardController
-                                              .savedAddonModelList[index]
-                                              .totalCost
-                                              .toString(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ],
-                            ),
-                          );
-                        }),
-                      ),
-                      Visibility(
-                        visible: (dashboardController
-                                .bookingDetails?.content?.bookingStatus ==
-                            'completed'),
-                        child: const SizedBox(
-                          height: 15,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              children: [
-                                DetailsComponent(
-                                  title: 'Scheduled date',
-                                  subTitel: DateFormat("dd-MM-yyyy").format(
-                                    DateTime.parse(
-                                      (Get.find<DashBoardController>()
-                                                  .bookingDetails
-                                                  ?.content
-                                                  ?.serviceSchedule ??
-                                              DateTime.now().toString())
-                                          .toString(),
-                                    ),
-                                  ),
-                                  image: 'assets/icons/ic_calender.png',
-                                ),
-                                DetailsComponent(
-                                  title: 'Scheduled time',
-                                  subTitel: DateFormat("hh:mm a")
-                                      .format(
-                                        DateTime.parse(
-                                          (Get.find<DashBoardController>()
-                                                      .bookingDetails
-                                                      ?.content
-                                                      ?.serviceSchedule ??
-                                                  DateTime.now().toString())
-                                              .toString(),
-                                        ),
-                                      )
-                                      .toString(),
-                                  image: 'assets/icons/ic_calender.png',
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 35,
-                            ),
-                            DetailsComponent(
-                              title: 'Problem title',
-                              subTitel: controller.bookingDetails?.content
-                                      ?.detail?.first.service?.name ??
-                                  "No Title",
-                              image: 'assets/icons/ic_tool.png',
-                            ),
-                            const SizedBox(
-                              height: 25,
-                            ),
-                            DetailsComponent(
-                              title: 'Additional Comment',
-                              subTitel: (Get.find<DashBoardController>()
-                                              .bookingDetails
-                                              ?.content
-                                              ?.message !=
-                                          null &&
-                                      Get.find<DashBoardController>()
-                                              .bookingDetails
-                                              ?.content
-                                              ?.message !=
-                                          '')
-                                  ? Get.find<DashBoardController>()
+                              const SizedBox(
+                                height: 25,
+                              ),
+                              DetailsComponent(
+                                title: 'Additional Comment',
+                                subTitel: (Get.find<DashBoardController>()
+                                                .bookingDetails
+                                                ?.content
+                                                ?.message !=
+                                            null &&
+                                        Get.find<DashBoardController>()
+                                                .bookingDetails
+                                                ?.content
+                                                ?.message !=
+                                            '')
+                                    ? Get.find<DashBoardController>()
+                                            .bookingDetails
+                                            ?.content
+                                            ?.message ??
+                                        "No Description Provided"
+                                    : "No Description Provided",
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              if (Get.find<DashBoardController>()
                                           .bookingDetails
                                           ?.content
-                                          ?.message ??
-                                      "No Description Provided"
-                                  : "No Description Provided",
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            if (Get.find<DashBoardController>()
-                                        .bookingDetails
-                                        ?.content
-                                        ?.bookingStatus ==
-                                    'ongoing' &&
-                                Get.find<DashBoardController>()
-                                        .bookingDetails
-                                        ?.content
-                                        ?.isPreWorkMediaUploaded ==
-                                    false &&
-                                Get.find<DashBoardController>()
-                                        .bookingDetails
-                                        ?.content
-                                        ?.isPostWorkMediaUploaded ==
-                                    false)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Job Start ki photos aur videos",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
+                                          ?.bookingStatus ==
+                                      'ongoing' &&
+                                  Get.find<DashBoardController>()
+                                          .bookingDetails
+                                          ?.content
+                                          ?.isPreWorkMediaUploaded ==
+                                      false &&
+                                  Get.find<DashBoardController>()
+                                          .bookingDetails
+                                          ?.content
+                                          ?.isPostWorkMediaUploaded ==
+                                      false)
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Job Start ki photos aur videos",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: List.generate(
-                                      3,
-                                      (index) {
-                                        final controller =
-                                            Get.find<DashBoardController>();
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: List.generate(
+                                        3,
+                                        (index) {
+                                          final controller =
+                                              Get.find<DashBoardController>();
 
-                                        File? image;
-                                        if (controller.jobStartImages.length >
-                                                index &&
-                                            controller.jobStartImages[index]
-                                                .path.isNotEmpty &&
-                                            controller.jobStartImages[index]
-                                                    .path !=
-                                                '__dummy__') {
-                                          image = controller
-                                              .jobStartImages[index];
-                                        }
+                                          File? image;
+                                          if (controller.jobStartImages.length >
+                                                  index &&
+                                              controller.jobStartImages[index]
+                                                  .path.isNotEmpty &&
+                                              controller.jobStartImages[index]
+                                                      .path !=
+                                                  '__dummy__') {
+                                            image = controller
+                                                .jobStartImages[index];
+                                          }
 
-                                        return UploadMediaWidget(
-                                          label: "Add Photo",
-                                          icon: Icons.image_outlined,
-                                          imageFile: image,
-                                          errorText:
-                                              controller.jobStartImageError,
-                                          onTap: () async {
-                                            final result =
-                                                await pickFromCamera(context);
-                                            if (result != null &&
-                                                result['file'] != null) {
-                                              controller.addJobStartImageAt(
-                                                index,
-                                                result['file'],
-                                              );
-                                            }
-                                          },
-                                        );
-                                      },
+                                          return UploadMediaWidget(
+                                            label: "Add Photo",
+                                            icon: Icons.image_outlined,
+                                            imageFile: image,
+                                            errorText:
+                                                controller.jobStartImageError,
+                                            onTap: () async {
+                                              final result =
+                                                  await pickFromCamera(context);
+                                              if (result != null &&
+                                                  result['file'] != null) {
+                                                controller.addJobStartImageAt(
+                                                  index,
+                                                  result['file'],
+                                                );
+                                              }
+                                            },
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  UploadMediaWidget(
-                                    label: "Add Video",
-                                    icon: Icons.videocam_outlined,
-                                    onTap: () async {
-                                      final videoFile =
-                                          await Navigator.push<File?>(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => VideoRecorderWidget(
-                                            // TODO : Change it to 10 seconds
-                                            maxSeconds: 10,
-                                          ),
-                                        ),
-                                      );
-                                      log("Video Path FIle: $videoFile");
-                                      log("Video Path: ${videoFile?.path}");
-                                      if (videoFile != null) {
-                                        Get.find<DashBoardController>()
-                                            .setJobStartVideo(videoFile);
-                                        _videoPlayerController?.dispose();
-                                        _videoPlayerController =
-                                            VideoPlayerController.file(
-                                                videoFile)
-                                              ..initialize().then(
-                                                (_) {
-                                                  setState(() {});
-                                                  _videoPlayerController
-                                                      ?.pause();
-                                                },
-                                              );
-                                      }
-                                    },
-                                    imageFile: null,
-                                    width: double.infinity,
-                                    height: 160,
-                                    showChild:
-                                        (_videoPlayerController != null &&
-                                            _videoPlayerController!
-                                                .value.isInitialized &&
-                                            Get.find<DashBoardController>()
-                                                    .jobStartVideo !=
-                                                null),
-                                    child: (_videoPlayerController != null &&
-                                            _videoPlayerController!
-                                                .value.isInitialized &&
-                                            Get.find<DashBoardController>()
-                                                    .jobStartVideo !=
-                                                null)
-                                        ? Container(
-                                            width: double.infinity,
-                                            height: 200,
-                                            // or any height you want for the video area
-                                            color: Colors.black,
-                                            child: Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                                _videoPlayerController !=
-                                                            null &&
-                                                        _videoPlayerController!
-                                                            .value
-                                                            .isInitialized
-                                                    ? VideoPlayer(
-                                                        _videoPlayerController!)
-                                                    : Center(
-                                                        child:
-                                                            CircularProgressIndicator()),
-                                                if (_videoPlayerController !=
-                                                        null &&
-                                                    _videoPlayerController!
-                                                        .value.isInitialized)
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        if (_videoPlayerController!
-                                                            .value
-                                                            .isPlaying) {
-                                                          _videoPlayerController!
-                                                              .pause();
-                                                        } else {
-                                                          _videoPlayerController!
-                                                              .play();
-                                                        }
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      color:
-                                                          Colors.transparent,
-                                                      child: Icon(
-                                                        _videoPlayerController!
-                                                                .value
-                                                                .isPlaying
-                                                            ? Icons
-                                                                .pause_circle_filled
-                                                            : Icons
-                                                                .play_circle_filled,
-                                                        color: Colors.white,
-                                                        size: 56,
-                                                      ),
-                                                    ),
-                                                  ),
-                                              ],
+                                    const SizedBox(height: 12),
+                                    UploadMediaWidget(
+                                      label: "Add Video",
+                                      icon: Icons.videocam_outlined,
+                                      onTap: () async {
+                                        final videoFile =
+                                            await Navigator.push<File?>(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => VideoRecorderWidget(
+                                              // TODO : Change it to 10 seconds
+                                              maxSeconds: 10,
                                             ),
-                                          )
-                                        : null,
-                                  ),
-                                  const SizedBox(height: 12),
-                                ],
-                              ),
-                            if (Get.find<DashBoardController>()
-                                        .bookingDetails
-                                        ?.content
-                                        ?.bookingStatus ==
-                                    'ongoing' &&
-                                Get.find<DashBoardController>()
-                                        .bookingDetails
-                                        ?.content
-                                        ?.isPostWorkMediaUploaded ==
-                                    false &&
-                                Get.find<DashBoardController>()
-                                        .bookingDetails
-                                        ?.content
-                                        ?.isPreWorkMediaUploaded ==
-                                    true)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Job Complete ki photos aur videos",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: List.generate(
-                                      3,
-                                      (index) {
-                                        final images =
-                                            Get.find<DashBoardController>()
-                                                .jobStartImages;
-                                        log("Image at index $index: ${images.length > index ? images[index].path : 'No image'}");
-                                        return GetBuilder<
-                                            DashBoardController>(
-                                          builder: (controller) {
-                                            return Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                UploadMediaWidget(
-                                                  label: "Add Photo",
-                                                  icon: Icons.image_outlined,
-                                                  onTap: () async {
-                                                    final result =
-                                                        await pickFromCamera(
-                                                            context);
-
-                                                    if (result != null &&
-                                                        result['file'] !=
-                                                            null) {
-                                                      controller
-                                                          .addJobStartImageAt(
-                                                        index,
-                                                        result['file'],
-                                                      );
-                                                    }
+                                          ),
+                                        );
+                                        log("Video Path FIle: $videoFile");
+                                        log("Video Path: ${videoFile?.path}");
+                                        if (videoFile != null) {
+                                          Get.find<DashBoardController>()
+                                              .setJobStartVideo(videoFile);
+                                          _videoPlayerController?.dispose();
+                                          _videoPlayerController =
+                                              VideoPlayerController.file(
+                                                  videoFile)
+                                                ..initialize().then(
+                                                  (_) {
+                                                    setState(() {});
+                                                    _videoPlayerController
+                                                        ?.pause();
                                                   },
-                                                  imageFile:
-                                                      images.length > index
-                                                          ? images[index]
-                                                          : null,
-                                                  errorText: controller
-                                                      .jobStartImageError,
-                                                  width: 100,
-                                                  height: 100,
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
+                                                );
+                                        }
                                       },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  UploadMediaWidget(
-                                    label: "Add Video",
-                                    icon: Icons.videocam_outlined,
-                                    onTap: () async {
-                                      final videoFile =
-                                          await Navigator.push<File?>(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => VideoRecorderWidget(
-                                            // TODO : Change it to 10 seconds
-                                            maxSeconds: 10,
-                                          ),
-                                        ),
-                                      );
-                                      log("Video Path FIle: $videoFile");
-                                      log("Video Path: ${videoFile?.path}");
-                                      if (videoFile != null) {
-                                        Get.find<DashBoardController>()
-                                            .setJobStartVideo(videoFile);
-                                        _videoPlayerController?.dispose();
-                                        _videoPlayerController =
-                                            VideoPlayerController.file(
-                                                videoFile)
-                                              ..initialize().then(
-                                                (_) {
-                                                  setState(() {});
-                                                  _videoPlayerController
-                                                      ?.pause();
-                                                },
-                                              );
-                                      }
-                                    },
-                                    imageFile: null,
-                                    width: double.infinity,
-                                    height: 160,
-                                    showChild:
-                                        (_videoPlayerController != null &&
-                                            _videoPlayerController!
-                                                .value.isInitialized &&
-                                            Get.find<DashBoardController>()
-                                                    .jobStartVideo !=
-                                                null),
-                                    child: (_videoPlayerController != null &&
-                                            _videoPlayerController!
-                                                .value.isInitialized &&
-                                            Get.find<DashBoardController>()
-                                                    .jobStartVideo !=
-                                                null)
-                                        ? Container(
-                                            width: double.infinity,
-                                            height: 200,
-                                            // or any height you want for the video area
-                                            color: Colors.black,
-                                            child: Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                                _videoPlayerController !=
-                                                            null &&
-                                                        _videoPlayerController!
-                                                            .value
-                                                            .isInitialized
-                                                    ? VideoPlayer(
-                                                        _videoPlayerController!)
-                                                    : Center(
-                                                        child:
-                                                            CircularProgressIndicator()),
-                                                if (_videoPlayerController !=
-                                                        null &&
-                                                    _videoPlayerController!
-                                                        .value.isInitialized)
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        if (_videoPlayerController!
-                                                            .value
-                                                            .isPlaying) {
+                                      imageFile: null,
+                                      width: double.infinity,
+                                      height: 160,
+                                      showChild:
+                                          (_videoPlayerController != null &&
+                                              _videoPlayerController!
+                                                  .value.isInitialized &&
+                                              Get.find<DashBoardController>()
+                                                      .jobStartVideo !=
+                                                  null),
+                                      child: (_videoPlayerController != null &&
+                                              _videoPlayerController!
+                                                  .value.isInitialized &&
+                                              Get.find<DashBoardController>()
+                                                      .jobStartVideo !=
+                                                  null)
+                                          ? Container(
+                                              width: double.infinity,
+                                              height: 200,
+                                              // or any height you want for the video area
+                                              color: Colors.black,
+                                              child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  _videoPlayerController !=
+                                                              null &&
                                                           _videoPlayerController!
-                                                              .pause();
-                                                        } else {
+                                                              .value
+                                                              .isInitialized
+                                                      ? VideoPlayer(
+                                                          _videoPlayerController!)
+                                                      : Center(
+                                                          child:
+                                                              CircularProgressIndicator()),
+                                                  if (_videoPlayerController !=
+                                                          null &&
+                                                      _videoPlayerController!
+                                                          .value.isInitialized)
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          if (_videoPlayerController!
+                                                              .value
+                                                              .isPlaying) {
+                                                            _videoPlayerController!
+                                                                .pause();
+                                                          } else {
+                                                            _videoPlayerController!
+                                                                .play();
+                                                          }
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        color:
+                                                            Colors.transparent,
+                                                        child: Icon(
                                                           _videoPlayerController!
-                                                              .play();
-                                                        }
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      color:
-                                                          Colors.transparent,
-                                                      child: Icon(
-                                                        _videoPlayerController!
-                                                                .value
-                                                                .isPlaying
-                                                            ? Icons
-                                                                .pause_circle_filled
-                                                            : Icons
-                                                                .play_circle_filled,
-                                                        color: Colors.white,
-                                                        size: 56,
+                                                                  .value
+                                                                  .isPlaying
+                                                              ? Icons
+                                                                  .pause_circle_filled
+                                                              : Icons
+                                                                  .play_circle_filled,
+                                                          color: Colors.white,
+                                                          size: 56,
+                                                        ),
                                                       ),
                                                     ),
+                                                ],
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                    const SizedBox(height: 12),
+                                  ],
+                                ),
+                              if (Get.find<DashBoardController>()
+                                          .bookingDetails
+                                          ?.content
+                                          ?.bookingStatus ==
+                                      'ongoing' &&
+                                  Get.find<DashBoardController>()
+                                          .bookingDetails
+                                          ?.content
+                                          ?.isPostWorkMediaUploaded ==
+                                      false &&
+                                  Get.find<DashBoardController>()
+                                          .bookingDetails
+                                          ?.content
+                                          ?.isPreWorkMediaUploaded ==
+                                      true)
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Job Complete ki photos aur videos",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: List.generate(
+                                        3,
+                                        (index) {
+                                          final images =
+                                              Get.find<DashBoardController>()
+                                                  .jobStartImages;
+                                          log("Image at index $index: ${images.length > index ? images[index].path : 'No image'}");
+                                          return GetBuilder<
+                                              DashBoardController>(
+                                            builder: (controller) {
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  UploadMediaWidget(
+                                                    label: "Add Photo",
+                                                    icon: Icons.image_outlined,
+                                                    onTap: () async {
+                                                      final result =
+                                                          await pickFromCamera(
+                                                              context);
+
+                                                      if (result != null &&
+                                                          result['file'] !=
+                                                              null) {
+                                                        controller
+                                                            .addJobStartImageAt(
+                                                          index,
+                                                          result['file'],
+                                                        );
+                                                      }
+                                                    },
+                                                    imageFile:
+                                                        images.length > index
+                                                            ? images[index]
+                                                            : null,
+                                                    errorText: controller
+                                                        .jobStartImageError,
+                                                    width: 100,
+                                                    height: 100,
                                                   ),
-                                              ],
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    UploadMediaWidget(
+                                      label: "Add Video",
+                                      icon: Icons.videocam_outlined,
+                                      onTap: () async {
+                                        final videoFile =
+                                            await Navigator.push<File?>(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => VideoRecorderWidget(
+                                              // TODO : Change it to 10 seconds
+                                              maxSeconds: 10,
                                             ),
-                                          )
-                                        : null,
-                                  ),
-                                  const SizedBox(height: 12),
-                                ],
-                              ),
-                          ],
+                                          ),
+                                        );
+                                        log("Video Path FIle: $videoFile");
+                                        log("Video Path: ${videoFile?.path}");
+                                        if (videoFile != null) {
+                                          Get.find<DashBoardController>()
+                                              .setJobStartVideo(videoFile);
+                                          _videoPlayerController?.dispose();
+                                          _videoPlayerController =
+                                              VideoPlayerController.file(
+                                                  videoFile)
+                                                ..initialize().then(
+                                                  (_) {
+                                                    setState(() {});
+                                                    _videoPlayerController
+                                                        ?.pause();
+                                                  },
+                                                );
+                                        }
+                                      },
+                                      imageFile: null,
+                                      width: double.infinity,
+                                      height: 160,
+                                      showChild:
+                                          (_videoPlayerController != null &&
+                                              _videoPlayerController!
+                                                  .value.isInitialized &&
+                                              Get.find<DashBoardController>()
+                                                      .jobStartVideo !=
+                                                  null),
+                                      child: (_videoPlayerController != null &&
+                                              _videoPlayerController!
+                                                  .value.isInitialized &&
+                                              Get.find<DashBoardController>()
+                                                      .jobStartVideo !=
+                                                  null)
+                                          ? Container(
+                                              width: double.infinity,
+                                              height: 200,
+                                              // or any height you want for the video area
+                                              color: Colors.black,
+                                              child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  _videoPlayerController !=
+                                                              null &&
+                                                          _videoPlayerController!
+                                                              .value
+                                                              .isInitialized
+                                                      ? VideoPlayer(
+                                                          _videoPlayerController!)
+                                                      : Center(
+                                                          child:
+                                                              CircularProgressIndicator()),
+                                                  if (_videoPlayerController !=
+                                                          null &&
+                                                      _videoPlayerController!
+                                                          .value.isInitialized)
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          if (_videoPlayerController!
+                                                              .value
+                                                              .isPlaying) {
+                                                            _videoPlayerController!
+                                                                .pause();
+                                                          } else {
+                                                            _videoPlayerController!
+                                                                .play();
+                                                          }
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        color:
+                                                            Colors.transparent,
+                                                        child: Icon(
+                                                          _videoPlayerController!
+                                                                  .value
+                                                                  .isPlaying
+                                                              ? Icons
+                                                                  .pause_circle_filled
+                                                              : Icons
+                                                                  .play_circle_filled,
+                                                          color: Colors.white,
+                                                          size: 56,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                    const SizedBox(height: 12),
+                                  ],
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                )
+              )
               : Center(
                   child: Text("Fetching Data..."),
                 ),

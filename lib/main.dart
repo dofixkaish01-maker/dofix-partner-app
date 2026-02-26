@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'helper/di_dart.dart' as di;
+import 'helper/network_service.dart';
 import 'helper/route_helper.dart';
 
 ///  Background notification handler
@@ -30,6 +31,40 @@ Future<void> main() async {
 
   /// DI init
   await di.init();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Get.put(NetworkService(), permanent: true);
 
   runApp(const MyApp());
 }
