@@ -19,9 +19,9 @@ class _TopComponentState extends State<TopComponent> {
   Widget build(BuildContext context) {
     hideLoading();
     return GetBuilder<DashBoardController>(builder: (controller) {
-      final pendingBookings = (controller.bookingModel.data ?? [])
-          .where((b) => b.bookingStatus == "accepted")
-          .toList();
+      // final pendingBookings = (controller.bookingModel.data ?? [])
+      //     .where((b) => b.bookingStatus == "accepted")
+      //     .toList();
       debugPrint(
           "TopComponent: ${controller.providerModel.content?.avgRating}");
       return Padding(
@@ -39,19 +39,38 @@ class _TopComponentState extends State<TopComponent> {
                 padding: const EdgeInsets.only(
                   bottom: 50.0,
                   top: 20,
-                  left: 10,
-                  right: 10,
+                  left: 16,
+                  right: 16,
                 ),
                 child: Row(
                   children: [
+                    Container(
+                      width: 34,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE9F2F6),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.leaderboard,
+                          color: Color(0xff3683ab),
+                          size: 20,
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Apni performance dekhein",
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontFamily: 'Albert Sans',
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.none,
                           ),
                         ),
                       ),
@@ -64,7 +83,10 @@ class _TopComponentState extends State<TopComponent> {
                         },
                         child: Text(
                           "SeeAll",
-                          style: TextStyle(color: Color(0xff3683ab)),
+                          style: TextStyle(
+                              color: Color(0xff3683ab),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500),
                         ),
                       ),
                     )
@@ -212,25 +234,25 @@ class _TopComponentState extends State<TopComponent> {
               SizedBox(
                 height: 16,
               ),
-              Visibility(
-                visible: pendingBookings.isNotEmpty,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Aaj ke ${pendingBookings.length ?? 0} kaam pending hai',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: const Color(0xFFC61414),
-                        fontSize: 14,
-                        fontFamily: 'Albert Sans',
-                        fontWeight: FontWeight.w500,
-                        height: 1.40,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Visibility(
+              //   visible: pendingBookings.isNotEmpty,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Text(
+              //         'Aaj ke ${pendingBookings.length ?? 0} kaam pending hai',
+              //         textAlign: TextAlign.center,
+              //         style: TextStyle(
+              //           color: const Color(0xFFC61414),
+              //           fontSize: 14,
+              //           fontFamily: 'Albert Sans',
+              //           fontWeight: FontWeight.w500,
+              //           height: 1.40,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: 16,
               ),

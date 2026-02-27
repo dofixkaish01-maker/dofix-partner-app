@@ -451,12 +451,15 @@ class DashboardScreenState extends State<DashboardScreen> {
                                         Expanded(
                                           child: Text(
                                             category.categoryName,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                fontFamily: 'Albert Sans',
+                                                fontWeight: FontWeight.w600,
+                                                decoration: TextDecoration.none,
+                                              ),
                                           ),
                                         ),
                                         GestureDetector(
