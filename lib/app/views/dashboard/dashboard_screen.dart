@@ -451,15 +451,15 @@ class DashboardScreenState extends State<DashboardScreen> {
                                         Expanded(
                                           child: Text(
                                             category.categoryName,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                                fontFamily: 'Albert Sans',
-                                                fontWeight: FontWeight.w600,
-                                                decoration: TextDecoration.none,
-                                              ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              fontFamily: 'Albert Sans',
+                                              fontWeight: FontWeight.w600,
+                                              decoration: TextDecoration.none,
+                                            ),
                                           ),
                                         ),
                                         GestureDetector(
@@ -541,13 +541,16 @@ class DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ];
                       },
-                      body: PageView.builder(
-                        controller: _pageController,
-                        itemCount: controller.screens.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return controller.screens[index];
-                        },
+                      body: RefreshIndicator(
+                        onRefresh: () => _onRefresh(),
+                        child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: controller.screens.length,
+                          // physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return controller.screens[index];
+                          },
+                        ),
                       ),
                     ),
                   ),

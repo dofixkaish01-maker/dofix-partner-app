@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TopComponent extends StatefulWidget {
-  const TopComponent({
-    super.key,
-  });
+  const TopComponent({super.key});
 
   @override
   _TopComponentState createState() => _TopComponentState();
@@ -18,222 +16,230 @@ class _TopComponentState extends State<TopComponent> {
   @override
   Widget build(BuildContext context) {
     hideLoading();
+
     return GetBuilder<DashBoardController>(builder: (controller) {
       // final pendingBookings = (controller.bookingModel.data ?? [])
       //     .where((b) => b.bookingStatus == "accepted")
       //     .toList();
-      debugPrint(
-          "TopComponent: ${controller.providerModel.content?.avgRating}");
+
+      debugPrint("TopComponent: ${controller.providerModel.content?.avgRating}");
+
       return Padding(
         padding: const EdgeInsets.only(top: 10.0),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
+            // borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.black.withOpacity(0.06)),
             boxShadow: [
-              BoxShadow(color: Colors.black12, blurRadius: 5),
+              BoxShadow(
+                color: Colors.black.withOpacity(0.06),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
+              ),
+              BoxShadow(
+                color: Colors.black.withOpacity(0.03),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
             ],
           ),
           child: Column(
             children: [
+              /// HEADER
               Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 50.0,
-                  top: 20,
-                  left: 16,
-                  right: 16,
-                ),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
                 child: Row(
                   children: [
                     Container(
-                      width: 34,
-                      height: 34,
+                      width: 38,
+                      height: 38,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE9F2F6),
-                        borderRadius: BorderRadius.circular(10),
+                        color: primaryAppColor.withOpacity(0.10),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Icon(
-                          Icons.leaderboard,
-                          color: Color(0xff3683ab),
+                          Icons.leaderboard_rounded,
+                          color: primaryAppColor,
                           size: 20,
                         ),
                       ),
                     ),
+                    const SizedBox(width: 10),
                     Expanded(
+                      child: Text(
+                        "Apni performance dekhein",
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontFamily: 'Albert Sans',
+                          fontWeight: FontWeight.w700,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ),
+
+                    /// SeeAll
+                    InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () {
+                        Get.find<DashBoardController>().getReviews();
+                      },
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
                         child: Text(
-                          "Apni performance dekhein",
-                          overflow: TextOverflow.ellipsis,
+                          "SeeAll",
                           style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontFamily: 'Albert Sans',
+                            color: primaryAppColor,
+                            fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            decoration: TextDecoration.none,
                           ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.find<DashBoardController>().getReviews();
-                        },
-                        child: Text(
-                          "SeeAll",
-                          style: TextStyle(
-                              color: Color(0xff3683ab),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
-              RatingGauge(
-                rating: double.parse(
-                    (controller.providerModel.content?.avgRating ?? 0)
-                        .toString()),
-              ),
-              SizedBox(
-                height: 16,
-              ),
+
+              /// DIVIDER (subtle)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Divider(
+                  height: 1,
+                  color: Colors.black.withOpacity(0.06),
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              /// GAUGE + INFO ROW (more balanced)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    /// Gauge
+                    Expanded(
+                      flex: 5,
+                      child: RatingGauge(
+                        rating: double.parse(
+                          (controller.providerModel.content?.avgRating ?? 0)
+                              .toString(),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 10),
+
+                    /// Quick summary (UI only)
+                    // Expanded(
+                    //   flex: 4,
+                    //   child: Container(
+                    //     padding: const EdgeInsets.all(12),
+                    //     decoration: BoxDecoration(
+                    //       color: primaryAppColor.withOpacity(0.06),
+                    //       borderRadius: BorderRadius.circular(14),
+                    //       border: Border.all(
+                    //         color: primaryAppColor.withOpacity(0.14),
+                    //       ),
+                    //     ),
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         const Text(
+                    //           "Overall",
+                    //           style: TextStyle(
+                    //             fontSize: 12,
+                    //             fontWeight: FontWeight.w600,
+                    //             color: Color(0xFF6B7280),
+                    //             fontFamily: 'Albert Sans',
+                    //           ),
+                    //         ),
+                    //         const SizedBox(height: 6),
+                    //         Text(
+                    //           "${double.parse((controller.providerModel.content?.avgRating ?? 0).toString()).toStringAsFixed(1)}/5",
+                    //           style: const TextStyle(
+                    //             fontSize: 18,
+                    //             fontWeight: FontWeight.w800,
+                    //             color: primaryAppColor,
+                    //             fontFamily: 'Albert Sans',
+                    //             height: 1.0,
+                    //           ),
+                    //         ),
+                    //         const SizedBox(height: 8),
+                    //         Row(
+                    //           children: const [
+                    //             Icon(Icons.star_rounded,
+                    //                 color: Colors.orange, size: 18),
+                    //             SizedBox(width: 6),
+                    //             Expanded(
+                    //               child: Text(
+                    //                 "Customer rating score",
+                    //                 maxLines: 1,
+                    //                 overflow: TextOverflow.ellipsis,
+                    //                 style: TextStyle(
+                    //                   fontSize: 12,
+                    //                   fontWeight: FontWeight.w600,
+                    //                   color: Color(0xFF111827),
+                    //                   fontFamily: 'Albert Sans',
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 14),
+
+              /// STATS CARDS
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
                   children: [
                     Expanded(
-                        child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFE9F2F6),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: controller.bookingCountResponse
-                                            .content?.bookingsCount?.completed
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: const Color(0xFF207FA7),
-                                          fontSize: 30,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w800,
-                                          height: 1.40,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text:
-                                            '/${controller.bookingCountResponse.content?.bookingsCount?.total.toString() == "null" ? "0" : controller.bookingCountResponse.content?.bookingsCount?.total.toString()}',
-                                        style: TextStyle(
-                                          color: const Color(0xFF207FA7),
-                                          fontSize: 16,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w800,
-                                          height: 1.40,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                Text(
-                                  'Jobs Delivered',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: const Color(0xFF212121),
-                                    fontSize: 14,
-                                    fontFamily: 'Albert Sans',
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.40,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                      child: _StatTile(
+                        icon: Icons.check_circle_rounded,
+                        iconBg: Colors.green.withOpacity(0.10),
+                        iconColor: Colors.green,
+                        title: "Jobs Delivered",
+                        // same logic, same data
+                        primary: controller.bookingCountResponse.content
+                            ?.bookingsCount?.completed
+                            .toString(),
+                        secondary:
+                        '/${controller.bookingCountResponse.content?.bookingsCount?.total.toString() == "null" ? "0" : controller.bookingCountResponse.content?.bookingsCount?.total.toString()}',
                       ),
-                    )),
+                    ),
+                    const SizedBox(width: 10),
                     Expanded(
-                        child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFE9F2F6),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: controller.bookingCountResponse
-                                            .content?.bookingsCount?.canceled
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: const Color(0xFF207FA7),
-                                          fontSize: 30,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w800,
-                                          height: 1.40,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text:
-                                            '/${controller.bookingCountResponse.content?.bookingsCount?.total.toString() == "null" ? "0" : controller.bookingCountResponse.content?.bookingsCount?.total.toString()}',
-                                        style: TextStyle(
-                                          color: const Color(0xFF207FA7),
-                                          fontSize: 16,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w800,
-                                          height: 1.40,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                Text(
-                                  'Jobs Cancelled',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: const Color(0xFF212121),
-                                    fontSize: 14,
-                                    fontFamily: 'Albert Sans',
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.40,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                      child: _StatTile(
+                        icon: Icons.cancel_rounded,
+                        iconBg: Colors.red.withOpacity(0.10),
+                        iconColor: Colors.red,
+                        title: "Jobs Cancelled",
+                        // same logic, same data
+                        primary: controller.bookingCountResponse.content
+                            ?.bookingsCount?.canceled
+                            .toString(),
+                        secondary:
+                        '/${controller.bookingCountResponse.content?.bookingsCount?.total.toString() == "null" ? "0" : controller.bookingCountResponse.content?.bookingsCount?.total.toString()}',
                       ),
-                    )),
+                    ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: 16,
-              ),
+
+              const SizedBox(height: 14),
+
               // Visibility(
               //   visible: pendingBookings.isNotEmpty,
               //   child: Row(
@@ -253,14 +259,107 @@ class _TopComponentState extends State<TopComponent> {
               //     ],
               //   ),
               // ),
-              SizedBox(
-                height: 16,
-              ),
+
+              const SizedBox(height: 16),
             ],
           ),
         ),
       );
     });
+  }
+}
+
+class _StatTile extends StatelessWidget {
+  final IconData icon;
+  final Color iconBg;
+  final Color iconColor;
+  final String title;
+  final String? primary;
+  final String secondary;
+
+  const _StatTile({
+    required this.icon,
+    required this.iconBg,
+    required this.iconColor,
+    required this.title,
+    required this.primary,
+    required this.secondary,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOut,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFE9F2F6),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.black.withOpacity(0.06)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// icon + title
+          Row(
+            children: [
+              Container(
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                  color: iconBg,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: iconColor, size: 18),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Color(0xFF212121),
+                    fontSize: 13,
+                    fontFamily: 'Albert Sans',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+
+          /// value
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: primary ?? "0",
+                  style: const TextStyle(
+                    color: primaryAppColor,
+                    fontSize: 22,
+                    fontFamily: 'Albert Sans',
+                    fontWeight: FontWeight.w800,
+                    height: 1.0,
+                  ),
+                ),
+                TextSpan(
+                  text: secondary,
+                  style: const TextStyle(
+                    color: primaryAppColor,
+                    fontSize: 14,
+                    fontFamily: 'Albert Sans',
+                    fontWeight: FontWeight.w700,
+                    height: 1.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -279,7 +378,7 @@ class RatingGauge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
+      height: 92,
       width: 200,
       child: Stack(
         alignment: Alignment.center,
@@ -292,21 +391,35 @@ class RatingGauge extends StatelessWidget {
               strokeWidth,
             ),
           ),
+
+          /// Center content (clean)
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 rating.toStringAsFixed(1),
                 style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'Albert Sans',
+                  color: Colors.black,
                 ),
               ),
+              const SizedBox(height: 2),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: const [
-                  Text("Rating", style: TextStyle(fontSize: 14)),
-                  Icon(Icons.star, color: Colors.orange, size: 18),
+                  Text(
+                    "Rating",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF6B7280),
+                      fontFamily: 'Albert Sans',
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Icon(Icons.star_rounded, color: Colors.orange, size: 16),
                 ],
               ),
             ],

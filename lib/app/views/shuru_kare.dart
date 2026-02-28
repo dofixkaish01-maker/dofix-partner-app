@@ -101,7 +101,7 @@ class _ShuruKareState extends State<ShuruKare> {
           body: !(Get.find<DashBoardController>().isBookingDetailsLoading ??
                   true)
               ? SafeArea(
-                child: SingleChildScrollView(
+                  child: SingleChildScrollView(
                     child: Column(
                       children: [
                         Row(
@@ -193,7 +193,7 @@ class _ShuruKareState extends State<ShuruKare> {
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   border: Border.all(
-                                      color: Colors.blueAccent, width: 1),
+                                      color: primaryAppColor, width: 1),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                                 child: Padding(
@@ -795,29 +795,28 @@ class _ShuruKareState extends State<ShuruKare> {
                       ],
                     ),
                   ),
-              )
+                )
               : Center(
                   child: Text("Fetching Data..."),
                 ),
           bottomNavigationBar: SingleChildScrollView(
-            child:
-                !(Get.find<DashBoardController>().isBookingDetailsLoading ??
-                        true)
-                    ? GetBuilder<DashBoardController>(
-                        builder: (controller) {
-                          return controller.bookingDetails != null
-                              ? CustomBottomContainer(
-                                  booking: controller.bookingDetails!,
-                                  onBookingUpdated: () {
-                                    if (widget.onBookingUpdated != null) {
-                                      widget.onBookingUpdated!();
-                                    }
-                                  },
-                                )
-                              : SizedBox.shrink();
-                        },
-                      )
-                    : Container(),
+            child: !(Get.find<DashBoardController>().isBookingDetailsLoading ??
+                    true)
+                ? GetBuilder<DashBoardController>(
+                    builder: (controller) {
+                      return controller.bookingDetails != null
+                          ? CustomBottomContainer(
+                              booking: controller.bookingDetails!,
+                              onBookingUpdated: () {
+                                if (widget.onBookingUpdated != null) {
+                                  widget.onBookingUpdated!();
+                                }
+                              },
+                            )
+                          : SizedBox.shrink();
+                    },
+                  )
+                : Container(),
           ),
         );
       },

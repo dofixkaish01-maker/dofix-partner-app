@@ -85,7 +85,7 @@ class _ThirdComponentState extends State<ThirdComponent> {
               ),
 
               const SizedBox(height: 14),
-              Divider(height: 1, thickness: 1, color: Colors.black12),
+              Divider(height: 0.5, thickness: 0.5, color: Colors.grey.shade200),
               const SizedBox(height: 14),
 
               Visibility(

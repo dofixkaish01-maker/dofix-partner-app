@@ -1078,11 +1078,11 @@ class DashBoardController extends GetxController implements GetxService {
         hideLoading();
         showCustomSnackBar(responseData['message'], isError: true);
       }
-    }  catch (e, st) {
-  debugPrint("Error fetching providerInfo: $e\n$st");
-  closeSnackBarIfActive();
-  // showCustomSnackBar("Something went wrong. Please try again.", isError: true);
-} finally {
+    } catch (e, st) {
+      debugPrint("Error fetching providerInfo: $e\n$st");
+      closeSnackBarIfActive();
+      // showCustomSnackBar("Something went wrong. Please try again.", isError: true);
+    } finally {
       _isLoginLoading = false;
       // showCustomSnackBar("Something went wrong. Please try again.", isError: true);
       hideLoading();
