@@ -5,6 +5,7 @@ import 'package:dofix_technichian/app/views/home/component/category_components.d
 import 'package:dofix_technichian/controllers/dashboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../controllers/account_controller.dart';
 import '../../../views/home/component/banner_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -56,9 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: RefreshIndicator(
-            onRefresh: () async {
-              await controller.getListOfBookings(isRefresh: true);
-            },
+            onRefresh: _onRefresh,
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -83,5 +82,21 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     });
+  }
+  Future<void> _onRefresh() async {
+    final dashCtrl = Get.find<DashBoardController>();
+    final accCtrl = Get.find<AccountController>();
+
+    // 1. Latest account info
+    await dashCtrl.getAccountInfo(true);
+
+    // 2. Latest category info
+    await accCtrl.fetchCategory();
+
+    // 3. Latest bookings
+    await dashCtrl.getListOfBookings(isRefresh: true);
+
+    // 4. Optional: unpaid refresh
+    await dashCtrl.refreshAndNavigateIfUnpaid();
   }
 }
