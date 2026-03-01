@@ -19,9 +19,9 @@ class _PartnerFaqScreenState extends State<PartnerFaqScreen> {
 
   final List<FaqItem> generalFaq = [
     FaqItem(
-      question: "Booking mujhe kaise milti hai?",
+      question: "Kaam kaise milega?",
       answer:
-          "Customer jab service book karta hai, system relevant partner role ke basis par booking aapko show karta hai.",
+          "App par aapke location aur skill ke according service requests milengi. Aap request accept karke customer ke paas ja sakte hain.",
     ),
     FaqItem(
       question: "Booking accept karne ke baad kya hota hai?",
@@ -29,22 +29,57 @@ class _PartnerFaqScreenState extends State<PartnerFaqScreen> {
           "Accept karne ke baad booking aapke ongoing list me chali jaati hai aur aap kaam complete kar sakte hain.",
     ),
     FaqItem(
-      question: "Customer cancel kare to?",
+      question: "Uniform aur ID Card milega?",
       answer:
-          "Cancel hone par booking cancelled tab me chali jaati hai aur earnings me include nahi hoti.",
+      "Company approved uniform aur ID card provide kiya jayega (agar policy me ho).",
+    ),
+    FaqItem(
+      question: "Rating aur review ka kya importance hai?",
+      answer:
+      "High rating wale partners ko zyada aur priority booking milti hai. Achhi service dena zaroori hai.",
+    ),
+    FaqItem(
+      question: "Kya main apni timing choose kar sakta hoon?",
+      answer:
+      "Haan, aap apni availability app me set kar sakte hain.",
+    ),
+    FaqItem(
+      question: "Kya main multiple services add kar sakta hoon?",
+      answer:
+      "Nhi Kr Skte.",
+    ),
+    FaqItem(
+      question: "Agar customer cancel kare to kya hoga?",
+      answer:
+          "Customer cancellation policy ke hisab se applicable charges partner ko mil sakte hain (terms & conditions ke according).",
+    ),
+    FaqItem(
+      question: "Partner account block kab ho sakta hai?",
+      answer:
+      "Fake job completionCustomer complaint\nPoor rating\nCompany policy violatian.",
+    ),
+    FaqItem(
+      question: "Partner Kitni Holiday le sakte hai OR Kitni Job Chord Sakte hai ?",
+      answer:
+      "Hafte me 1 or Mahine me 4.",
     ),
   ];
 
   final List<FaqItem> paymentFaq = [
     FaqItem(
-      question: "Payment kaise collect karna hai?",
+      question: "Payment kaise milega?",
       answer:
-          "Kaam complete hone ke baad aap cash ya online payment receive kar sakte hain.",
+          "Payment weekly ya daily settlement ke through direct bank account me transfer kiya jata hai.",
     ),
     FaqItem(
-      question: "Online payment reflect hone me kitna time lagta hai?",
+      question: "Commission kitna katega?",
       answer:
-          "Online payment usually turant reflect ho jata hai, lekin kabhi kabhi 2-5 minute lag sakte hain.",
+      "DoFix har completed service par fixed percentage commission charge karta hai. (Yaha aap apna % likh sakte hain).",
+    ),
+    FaqItem(
+      question: "Agar payment issue ho to kya karein?",
+      answer:
+          "App ke support section me complaint raise karein ya DoFix Partner Support team se contact karein.",
     ),
     FaqItem(
       question: "Earnings kaise track kare?",

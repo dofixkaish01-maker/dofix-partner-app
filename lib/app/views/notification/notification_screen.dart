@@ -29,78 +29,76 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade100,
-        appBar: CustomAppBar(
-          title: 'Notifications',
-          isSearchButtonExist: false,
-          isBackButtonExist: true,
-          isTitleExist: false,
-          drawerButton: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Image.asset(
-              Images.iclogo,
-              height: 70,
-              width: 70,
-            ),
+    return Scaffold(
+      backgroundColor: Colors.grey.shade100,
+      appBar: CustomAppBar(
+        title: 'Notifications',
+        isSearchButtonExist: false,
+        isBackButtonExist: true,
+        isTitleExist: false,
+        drawerButton: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Image.asset(
+            Images.iclogo,
+            height: 70,
+            width: 70,
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Obx(() {
-            /// Loading
-            if (controller.isNotificationLoading.value) {
-              return NotificationShimmer(
-              );
-            }
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Obx(() {
+          /// Loading
+          if (controller.isNotificationLoading.value) {
+            return NotificationShimmer(
+            );
+          }
 
-            final notifications =
-                controller.notificationModel.value.content ?? [];
+          final notifications =
+              controller.notificationModel.value.content ?? [];
 
-            /// Empty State
-            if (notifications.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(
-                      Icons.notifications_none_rounded,
-                      size: 60,
-                      color: Colors.grey,
+          /// Empty State
+          if (notifications.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(
+                    Icons.notifications_none_rounded,
+                    size: 60,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'No notifications yet',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black54,
                     ),
-                    SizedBox(height: 12),
-                    Text(
-                      'No notifications yet',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            /// Notification List
-            return RefreshIndicator(
-              onRefresh: controller.fetchNotifications,
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                itemCount: notifications.length,
-                itemBuilder: (context, index) {
-                  final item = notifications[index];
-
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: NotificationCard(
-                      item: item,
-                  ));
-                },
+                  ),
+                ],
               ),
             );
-          }),
-        ),
+          }
+
+          /// Notification List
+          return RefreshIndicator(
+            onRefresh: controller.fetchNotifications,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              itemCount: notifications.length,
+              itemBuilder: (context, index) {
+                final item = notifications[index];
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: NotificationCard(
+                    item: item,
+                ));
+              },
+            ),
+          );
+        }),
       ),
     );
   }

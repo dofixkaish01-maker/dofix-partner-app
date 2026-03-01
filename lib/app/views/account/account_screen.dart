@@ -16,6 +16,8 @@ import '../../widgets/custom_button_widget.dart';
 import '../../widgets/custom_wallet_balance.dart';
 import '../../widgets/transaction_tile.dart';
 
+const primaryColor = Color(0xFF207FA7);
+
 enum TransactionType {
   none,
   payable,
@@ -95,7 +97,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                       Row(
                         children: [
                           const Icon(Icons.account_balance_wallet,
-                              color: Color(0xFF207FA7)),
+                              color: primaryColor),
                           const SizedBox(width: 8),
                           const Expanded(
                             child: Text(
@@ -119,13 +121,13 @@ class _PaiseScreenState extends State<PaiseScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF207FA7).withOpacity(0.08),
+                          color: primaryColor.withOpacity(0.08),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           children: [
                             const Icon(Icons.miscellaneous_services,
-                                color: Color(0xFF207FA7)),
+                                color: primaryColor),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -174,7 +176,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [
-                              Color(0xFF207FA7),
+                              primaryColor,
                               Color(0xFF3FA9D6),
                             ],
                           ),
@@ -280,7 +282,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
                         height: 48,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF207FA7),
+                            backgroundColor: primaryColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -418,7 +420,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
               },
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Column(
                     children: [
                       // SizedBox(
@@ -446,64 +448,119 @@ class _PaiseScreenState extends State<PaiseScreen> {
                           children: [
                             Expanded(
                               child: Container(
-                                decoration: ShapeDecoration(
-                                  color: const Color(0xFFE9F2F6),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
+                                padding: const EdgeInsets.all(14),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                      color: Colors.black.withOpacity(0.06)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
                                 ),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 10),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        transactionType ==
-                                                TransactionType.payable
-                                            ? "Payable balance".tr
-                                            : transactionType ==
-                                                    TransactionType.withdrawAble
-                                                ? "Available balance".tr
-                                                : transactionType ==
-                                                        TransactionType
-                                                            .adjustAndPayable
-                                                    ? "Final payable balance".tr
-                                                    : transactionType ==
-                                                            TransactionType
-                                                                .adjustWithdrawAble
-                                                        ? "Final receivable balance"
-                                                            .tr
-                                                        : transactionType ==
-                                                                TransactionType
-                                                                    .adjust
-                                                            ? "Adjustable balance"
-                                                                .tr
-                                                            : "Empty Balance"
-                                                                .tr,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: const Color(0xFF212121),
-                                          fontSize: 14,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w500,
-                                          height: 1.40,
-                                        ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    /// Header strip (small tag style)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFE9F2F6),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            color:
+                                                Colors.black.withOpacity(0.05)),
                                       ),
-                                      SizedBox(height: 2),
-                                      Text(
-                                        '₹ $transactionAmount',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: const Color(0xFF207FA7),
-                                          fontSize: 20,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w700,
-                                          height: 1.40,
-                                        ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons
+                                                .account_balance_wallet_rounded,
+                                            size: 18,
+                                            color: primaryAppColor
+                                                .withOpacity(0.9),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Text(
+                                              transactionType ==
+                                                      TransactionType.payable
+                                                  ? "Payable balance".tr
+                                                  : transactionType ==
+                                                          TransactionType
+                                                              .withdrawAble
+                                                      ? "Available balance".tr
+                                                      : transactionType ==
+                                                              TransactionType
+                                                                  .adjustAndPayable
+                                                          ? "Final payable balance"
+                                                              .tr
+                                                          : transactionType ==
+                                                                  TransactionType
+                                                                      .adjustWithdrawAble
+                                                              ? "Final receivable balance"
+                                                                  .tr
+                                                              : transactionType ==
+                                                                      TransactionType
+                                                                          .adjust
+                                                                  ? "Adjustable balance"
+                                                                      .tr
+                                                                  : "Empty Balance"
+                                                                      .tr,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: Color(0xFF212121),
+                                                fontSize: 14,
+                                                fontFamily: 'Albert Sans',
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.3,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(height: 2),
-                                      CustomButtonWidget(
+                                    ),
+
+                                    const SizedBox(height: 14),
+
+                                    /// Amount
+                                    Text(
+                                      '₹ $transactionAmount',
+                                      style: const TextStyle(
+                                        color: primaryAppColor,
+                                        fontSize: 26,
+                                        fontFamily: 'Albert Sans',
+                                        fontWeight: FontWeight.w800,
+                                        height: 1.1,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 6),
+
+                                    /// Helper line
+                                    Text(
+                                      "Tap the button below to continue",
+                                      style: TextStyle(
+                                        color: Colors.black.withOpacity(0.55),
+                                        fontSize: 12,
+                                        fontFamily: 'Albert Sans',
+                                        fontWeight: FontWeight.w500,
+                                        height: 1.4,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 14),
+
+                                    /// Button (full width)
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: CustomButtonWidget(
                                         buttonText: transactionType ==
                                                 TransactionType.payable
                                             ? "Pay Now".tr
@@ -589,9 +646,9 @@ class _PaiseScreenState extends State<PaiseScreen> {
                                                       .adjustMyBalance();
                                                 }
                                               },
-                                      )
-                                    ],
-                                  ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -606,48 +663,48 @@ class _PaiseScreenState extends State<PaiseScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: Container(
-                                decoration: ShapeDecoration(
-                                  color: const Color(0xFFE9F2F6),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 10),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.receivedBalance ?? 0}',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: const Color(0xFF207FA7),
-                                          fontSize: 20,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w700,
-                                          height: 1.40,
-                                        ),
-                                      ),
-                                      SizedBox(height: 2),
-                                      Text(
-                                        'Total Earning',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: const Color(0xFF212121),
-                                          fontSize: 14,
-                                          fontFamily: 'Albert Sans',
-                                          fontWeight: FontWeight.w500,
-                                          height: 1.40,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // Expanded(
+                            //   child: Container(
+                            //     decoration: ShapeDecoration(
+                            //       color: const Color(0xFFE9F2F6),
+                            //       shape: RoundedRectangleBorder(
+                            //           borderRadius: BorderRadius.circular(5)),
+                            //     ),
+                            //     padding: EdgeInsets.symmetric(
+                            //         vertical: 10, horizontal: 10),
+                            //     child: Center(
+                            //       child: Column(
+                            //         mainAxisAlignment:
+                            //             MainAxisAlignment.spaceBetween,
+                            //         children: [
+                            //           Text(
+                            //             '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.receivedBalance ?? 0}',
+                            //             textAlign: TextAlign.center,
+                            //             style: TextStyle(
+                            //               color: primaryColor,
+                            //               fontSize: 20,
+                            //               fontFamily: 'Albert Sans',
+                            //               fontWeight: FontWeight.w700,
+                            //               height: 1.40,
+                            //             ),
+                            //           ),
+                            //           SizedBox(height: 2),
+                            //           Text(
+                            //             'Total Earning',
+                            //             textAlign: TextAlign.center,
+                            //             style: TextStyle(
+                            //               color: const Color(0xFF212121),
+                            //               fontSize: 14,
+                            //               fontFamily: 'Albert Sans',
+                            //               fontWeight: FontWeight.w500,
+                            //               height: 1.40,
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             // Expanded(
                             //   child: Container(
                             //     decoration: ShapeDecoration(
@@ -690,50 +747,164 @@ class _PaiseScreenState extends State<PaiseScreen> {
                             //     ),
                             //   ),
                             // ),
+
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.all(14),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                      color: Colors.black.withOpacity(0.06)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    /// Label Row
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.trending_up_rounded,
+                                          size: 18,
+                                          color: primaryColor.withOpacity(0.8),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        const Text(
+                                          'Total Earning',
+                                          style: TextStyle(
+                                            color: Color(0xFF212121),
+                                            fontSize: 13,
+                                            fontFamily: 'Albert Sans',
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 10),
+
+                                    /// Amount
+                                    Text(
+                                      '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.receivedBalance ?? 0}',
+                                      style: const TextStyle(
+                                        color: primaryColor,
+                                        fontSize: 24,
+                                        fontFamily: 'Albert Sans',
+                                        fontWeight: FontWeight.w800,
+                                        height: 1.1,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 6),
+
+                                    /// Small Helper Text (Optional but clean)
+                                    Text(
+                                      'All time received earnings',
+                                      style: TextStyle(
+                                        color: Colors.black.withOpacity(0.55),
+                                        fontSize: 12,
+                                        fontFamily: 'Albert Sans',
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                             SizedBox(
                               width: 10,
                             ),
                             Expanded(
-                                child: Container(
-                              decoration: ShapeDecoration(
-                                color: const Color(0xFFE9F2F6),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 10),
-                              child: Center(
+                              child: Container(
+                                padding: const EdgeInsets.all(14),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                      color: Colors.black.withOpacity(0.06)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
                                 child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.accountReceivable ?? 0}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: const Color(0xFF207FA7),
-                                        fontSize: 20,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w700,
-                                        height: 1.40,
+                                    /// Label Row (Responsive)
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.account_balance_wallet_rounded,
+                                          size: 18,
+                                          color: primaryColor.withOpacity(0.8),
+                                        ),
+                                        const SizedBox(width: 8),
+
+                                        ///  Important: Expanded added
+                                        Expanded(
+                                          child: Text(
+                                            'Receivable Balance',
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              color: Color(0xFF212121),
+                                              fontSize: 13,
+                                              fontFamily: 'Albert Sans',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 10),
+
+                                    /// Amount (Wrap Safe)
+                                    FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.accountReceivable ?? 0}',
+                                        style: const TextStyle(
+                                          color: primaryColor,
+                                          fontSize: 24,
+                                          fontFamily: 'Albert Sans',
+                                          fontWeight: FontWeight.w800,
+                                          height: 1.1,
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(height: 2),
+
+                                    const SizedBox(height: 6),
+
+                                    /// Helper Text (Responsive)
                                     Text(
-                                      'Receivable Balance',
-                                      textAlign: TextAlign.center,
+                                      'Amount you can request to withdraw',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color: const Color(0xFF212121),
-                                        fontSize: 14,
+                                        color: Colors.black.withOpacity(0.55),
+                                        fontSize: 12,
                                         fontFamily: 'Albert Sans',
                                         fontWeight: FontWeight.w500,
-                                        height: 1.40,
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
-                            )),
+                            )
                           ],
                         ),
                       ),
@@ -745,110 +916,289 @@ class _PaiseScreenState extends State<PaiseScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            // Expanded(
+                            //     child: Container(
+                            //   decoration: ShapeDecoration(
+                            //     color: const Color(0xFFE9F2F6),
+                            //     shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(5)),
+                            //   ),
+                            //   padding: EdgeInsets.symmetric(
+                            //       vertical: 10, horizontal: 10),
+                            //   child: Center(
+                            //     child: Column(
+                            //       mainAxisAlignment:
+                            //           MainAxisAlignment.spaceBetween,
+                            //       children: [
+                            //         Text(
+                            //           '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.balancePending ?? 0}',
+                            //           textAlign: TextAlign.center,
+                            //           style: TextStyle(
+                            //             color: primaryColor,
+                            //             fontSize: 20,
+                            //             fontFamily: 'Albert Sans',
+                            //             fontWeight: FontWeight.w700,
+                            //             height: 1.40,
+                            //           ),
+                            //         ),
+                            //         SizedBox(height: 2),
+                            //         Text(
+                            //           'Pending Withdrawn',
+                            //           textAlign: TextAlign.center,
+                            //           style: TextStyle(
+                            //             color: const Color(0xFF212121),
+                            //             fontSize: 14,
+                            //             fontFamily: 'Albert Sans',
+                            //             fontWeight: FontWeight.w500,
+                            //             height: 1.40,
+                            //           ),
+                            //         )
+                            //       ],
+                            //     ),
+                            //   ),
+                            // )),
+
                             Expanded(
-                                child: Container(
-                              decoration: ShapeDecoration(
-                                color: const Color(0xFFE9F2F6),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 10),
-                              child: Center(
+                              child: Container(
+                                padding: const EdgeInsets.all(14),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                      color: Colors.black.withOpacity(0.06)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
                                 child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.balancePending ?? 0}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: const Color(0xFF207FA7),
-                                        fontSize: 20,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w700,
-                                        height: 1.40,
+                                    /// Label Row (Responsive)
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.hourglass_bottom_rounded,
+                                          size: 18,
+                                          color: primaryColor.withOpacity(0.8),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        const Expanded(
+                                          child: Text(
+                                            'Pending Withdrawn',
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: Color(0xFF212121),
+                                              fontSize: 13,
+                                              fontFamily: 'Albert Sans',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 10),
+
+                                    /// Amount (Wrap Safe)
+                                    FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.balancePending ?? 0}',
+                                        style: const TextStyle(
+                                          color: primaryColor,
+                                          fontSize: 24,
+                                          fontFamily: 'Albert Sans',
+                                          fontWeight: FontWeight.w800,
+                                          height: 1.1,
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(height: 2),
+
+                                    const SizedBox(height: 6),
+
+                                    /// Helper text (optional, clean)
                                     Text(
-                                      'Pending Withdrawn',
-                                      textAlign: TextAlign.center,
+                                      'Withdrawal request under process',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color: const Color(0xFF212121),
-                                        fontSize: 14,
+                                        color: Colors.black.withOpacity(0.55),
+                                        fontSize: 12,
                                         fontFamily: 'Albert Sans',
                                         fontWeight: FontWeight.w500,
-                                        height: 1.40,
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
-                            )),
+                            ),
                             SizedBox(
                               width: 10,
                             ),
+                            // Expanded(
+                            //     child: Container(
+                            //   decoration: ShapeDecoration(
+                            //     color: const Color(0xFFE9F2F6),
+                            //     shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(5)),
+                            //   ),
+                            //   padding: EdgeInsets.symmetric(
+                            //       vertical: 10, horizontal: 10),
+                            //   child: Center(
+                            //     child: Column(
+                            //       mainAxisAlignment:
+                            //           MainAxisAlignment.spaceBetween,
+                            //       children: [
+                            //         Text(
+                            //           '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.totalWithdrawn ?? 0}',
+                            //           textAlign: TextAlign.center,
+                            //           style: TextStyle(
+                            //             color: primaryColor,
+                            //             fontSize: 20,
+                            //             fontFamily: 'Albert Sans',
+                            //             fontWeight: FontWeight.w700,
+                            //             height: 1.40,
+                            //           ),
+                            //         ),
+                            //         SizedBox(height: 2),
+                            //         Text(
+                            //           'Already Withdrawn',
+                            //           textAlign: TextAlign.center,
+                            //           style: TextStyle(
+                            //             color: const Color(0xFF212121),
+                            //             fontSize: 14,
+                            //             fontFamily: 'Albert Sans',
+                            //             fontWeight: FontWeight.w500,
+                            //             height: 1.40,
+                            //           ),
+                            //         )
+                            //       ],
+                            //     ),
+                            //   ),
+                            // )),
+
                             Expanded(
-                                child: Container(
-                              decoration: ShapeDecoration(
-                                color: const Color(0xFFE9F2F6),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 10),
-                              child: Center(
+                              child: Container(
+                                padding: const EdgeInsets.all(14),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                      color: Colors.black.withOpacity(0.06)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
                                 child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.totalWithdrawn ?? 0}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: const Color(0xFF207FA7),
-                                        fontSize: 20,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w700,
-                                        height: 1.40,
+                                    /// Label Row (Responsive)
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.check_circle_outline_rounded,
+                                          size: 18,
+                                          color: primaryColor.withOpacity(0.8),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        const Expanded(
+                                          child: Text(
+                                            'Already Withdrawn',
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: Color(0xFF212121),
+                                              fontSize: 13,
+                                              fontFamily: 'Albert Sans',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 10),
+
+                                    /// Amount (Overflow Safe)
+                                    FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '₹ ${controller.providerDashboardModel.content?.providerInfo?.owner?.account?.totalWithdrawn ?? 0}',
+                                        style: const TextStyle(
+                                          color: primaryColor,
+                                          fontSize: 24,
+                                          fontFamily: 'Albert Sans',
+                                          fontWeight: FontWeight.w800,
+                                          height: 1.1,
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(height: 2),
+
+                                    const SizedBox(height: 6),
+
+                                    /// Helper text
                                     Text(
-                                      'Already Withdrawn',
-                                      textAlign: TextAlign.center,
+                                      'Total amount successfully withdrawn',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color: const Color(0xFF212121),
-                                        fontSize: 14,
+                                        color: Colors.black.withOpacity(0.55),
+                                        fontSize: 12,
                                         fontFamily: 'Albert Sans',
                                         fontWeight: FontWeight.w500,
-                                        height: 1.40,
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
-                            )),
+                            )
                           ],
                         ),
                       ),
 
                       SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Wallet Transactions',
-                            style: TextStyle(
-                              color: primaryAppColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.receipt_long_rounded,
+                                size: 18,
+                                color: primaryAppColor.withOpacity(0.9),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Wallet Transactions',
+                                style: TextStyle(
+                                  color: primaryAppColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
+                      ),
+                      const SizedBox(
+                        height: 5,
                       ),
                       GetBuilder<AccountController>(
                         builder: (accController) {
@@ -974,7 +1324,7 @@ class _PaiseScreenState extends State<PaiseScreen> {
             ),
             Positioned(
               right: 0,
-              bottom: MediaQuery.of(context).size.height * 0.40,
+              bottom: MediaQuery.of(context).size.height * 0.07,
               child: GestureDetector(
                 onTap: () {
                   showRechargeBottomSheet(context);

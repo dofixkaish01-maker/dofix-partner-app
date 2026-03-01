@@ -83,25 +83,25 @@ class _ShuruKareState extends State<ShuruKare> {
         debugPrint(
             "ShuruKare===> ${Get.find<DashBoardController>().isBookingDetailsLoading}");
 
-        return SafeArea(
-          child: Scaffold(
-            appBar: CustomAppBar(
-              title: "Booking Details",
-              isSearchButtonExist: false,
-              isTitleExist: false,
-              isBackButtonExist: true,
-              drawerButton: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Image.asset(
-                  Images.iclogo,
-                  height: 70,
-                  width: 70,
-                ),
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: "Booking Details",
+            isSearchButtonExist: false,
+            isTitleExist: false,
+            isBackButtonExist: true,
+            drawerButton: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Image.asset(
+                Images.iclogo,
+                height: 70,
+                width: 70,
               ),
             ),
-            body: !(Get.find<DashBoardController>().isBookingDetailsLoading ??
-                    true)
-                ? SingleChildScrollView(
+          ),
+          body: !(Get.find<DashBoardController>().isBookingDetailsLoading ??
+                  true)
+              ? SafeArea(
+                child: SingleChildScrollView(
                     child: Column(
                       children: [
                         Row(
@@ -545,8 +545,8 @@ class _ShuruKareState extends State<ShuruKare> {
                                                   null)
                                           ? Container(
                                               width: double.infinity,
-                                              height:
-                                                  200, // or any height you want for the video area
+                                              height: 200,
+                                              // or any height you want for the video area
                                               color: Colors.black,
                                               child: Stack(
                                                 alignment: Alignment.center,
@@ -731,8 +731,8 @@ class _ShuruKareState extends State<ShuruKare> {
                                                   null)
                                           ? Container(
                                               width: double.infinity,
-                                              height:
-                                                  200, // or any height you want for the video area
+                                              height: 200,
+                                              // or any height you want for the video area
                                               color: Colors.black,
                                               child: Stack(
                                                 alignment: Alignment.center,
@@ -794,30 +794,30 @@ class _ShuruKareState extends State<ShuruKare> {
                         ),
                       ],
                     ),
-                  )
-                : Center(
-                    child: Text("Fetching Data..."),
                   ),
-            bottomNavigationBar: SingleChildScrollView(
-              child:
-                  !(Get.find<DashBoardController>().isBookingDetailsLoading ??
-                          true)
-                      ? GetBuilder<DashBoardController>(
-                          builder: (controller) {
-                            return controller.bookingDetails != null
-                                ? CustomBottomContainer(
-                                    booking: controller.bookingDetails!,
-                                    onBookingUpdated: () {
-                                      if (widget.onBookingUpdated != null) {
-                                        widget.onBookingUpdated!();
-                                      }
-                                    },
-                                  )
-                                : SizedBox.shrink();
-                          },
-                        )
-                      : Container(),
-            ),
+              )
+              : Center(
+                  child: Text("Fetching Data..."),
+                ),
+          bottomNavigationBar: SingleChildScrollView(
+            child:
+                !(Get.find<DashBoardController>().isBookingDetailsLoading ??
+                        true)
+                    ? GetBuilder<DashBoardController>(
+                        builder: (controller) {
+                          return controller.bookingDetails != null
+                              ? CustomBottomContainer(
+                                  booking: controller.bookingDetails!,
+                                  onBookingUpdated: () {
+                                    if (widget.onBookingUpdated != null) {
+                                      widget.onBookingUpdated!();
+                                    }
+                                  },
+                                )
+                              : SizedBox.shrink();
+                        },
+                      )
+                    : Container(),
           ),
         );
       },
@@ -1645,15 +1645,15 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                   child: GestureDetector(
                                     onTap: () async {
                                       final dashboardController =
-                                      Get.find<DashBoardController>();
+                                          Get.find<DashBoardController>();
                                       final authController =
-                                      Get.find<AuthController>();
+                                          Get.find<AuthController>();
 
-                                      /// 1️⃣ validate media
+                                      ///  validate media
                                       if (!dashboardController
                                           .validateJobStartImages()) return;
 
-                                      /// 2️⃣ upload media
+                                      /// upload media
                                       Map<String, String> body = {
                                         "booking_id": widget.booking.content!.id
                                             .toString(),
@@ -1664,35 +1664,35 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                           .updateBookingStatus(
                                         body,
                                         images:
-                                        dashboardController.jobStartImages,
+                                            dashboardController.jobStartImages,
                                         videos:
-                                        dashboardController.jobStartVideo,
+                                            dashboardController.jobStartVideo,
                                         postImageName: 'evidence_photos',
                                         postVideoName: 'post_work_video',
                                       );
 
-                                      /// 3️⃣ send OTP
+                                      ///  send OTP
                                       await authController.sendCustomerOtpApi(
                                         phone: widget.booking.content?.customer
-                                            ?.phone ??
+                                                ?.phone ??
                                             "",
                                         bookingId:
-                                        widget.booking.content?.id ?? "",
+                                            widget.booking.content?.id ?? "",
                                         token: authController
                                             .authRepo.apiClient.token
                                             .toString(),
                                       );
 
-                                      /// 4️⃣ go to OTP screen ✅
+                                      ///  go to OTP screen
                                       Get.to(
-                                              () => CustomerOtpVerificationScreen(
-                                            phoneNo: widget.booking.content
-                                                ?.customer?.phone ??
-                                                "",
-                                            bookingId: widget
-                                                .booking.content!.id
-                                                .toString(),
-                                          ));
+                                          () => CustomerOtpVerificationScreen(
+                                                phoneNo: widget.booking.content
+                                                        ?.customer?.phone ??
+                                                    "",
+                                                bookingId: widget
+                                                    .booking.content!.id
+                                                    .toString(),
+                                              ));
 
                                       Get.snackbar("Success",
                                           "Media uploaded & OTP sent");
