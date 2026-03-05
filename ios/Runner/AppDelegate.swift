@@ -3,7 +3,6 @@ import Flutter
 import GoogleMaps
 import FBSDKCoreKit
 
-
 @main
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(

@@ -2,7 +2,7 @@
 <resources>
     <string name="facebook_app_id">1393151865889842</string>
     <string name="fb_login_protocol_scheme">fb1393151865889842</string>
-    <string name="facebook_client_token">YOUR_CLIENT_TOKEN</string>
+    <string name="facebook_client_token">086b7f8826c38bb691fcade0a8eef2e3</string>
     <!-- Theme applied to the Android Window while the process is starting when the OS's Dark Mode setting is off -->
     <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <!-- Show a splash screen on the activity. Automatically removed when
