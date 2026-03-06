@@ -238,320 +238,310 @@ class DashboardScreenState extends State<DashboardScreen> {
                           _setPage(index);
                         },
                       ),
-                body: RefreshIndicator(
-                  onRefresh: _onRefresh,
-                  color: const Color(0xFF207FA7),
-                  child: SafeArea(
-                    child: NestedScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      headerSliverBuilder: (context, innerBoxIsScrolled) {
-                        return [
-                          SliverToBoxAdapter(
-                            child: Column(
-                              children: [
-                                // minimum balance
-                                Obx(() {
-                                  final category =
-                                      authController.categoryInfo.value;
-                                  if (category == null) return const SizedBox();
+                body: SafeArea(
+                  child: NestedScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
+                      return [
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              // minimum balance
+                              Obx(() {
+                                final category =
+                                    authController.categoryInfo.value;
+                                if (category == null) return const SizedBox();
 
-                                  final dashCtrl =
-                                      Get.find<DashBoardController>();
+                                final dashCtrl =
+                                    Get.find<DashBoardController>();
 
-                                  double receivableAmount = double.tryParse(
-                                          dashCtrl
-                                                  .providerDashboardModel
-                                                  ?.content
-                                                  ?.providerInfo
-                                                  ?.owner
-                                                  ?.account
-                                                  ?.accountReceivable
-                                                  ?.toString() ??
-                                              "0") ??
-                                      0;
+                                double receivableAmount = double.tryParse(
+                                        dashCtrl
+                                                .providerDashboardModel
+                                                ?.content
+                                                ?.providerInfo
+                                                ?.owner
+                                                ?.account
+                                                ?.accountReceivable
+                                                ?.toString() ??
+                                            "0") ??
+                                    0;
 
-                                  double transactionAmount =
-                                      dashCtrl.getTransactionAmountAmount(
-                                          0.0, receivableAmount);
+                                double transactionAmount =
+                                    dashCtrl.getTransactionAmountAmount(
+                                        0.0, receivableAmount);
 
-                                  double currentBalance =
-                                      transactionAmount.floorToDouble();
-                                  double minimumBalance = category
-                                      .minimumBalance
-                                      .toDouble()
-                                      .floorToDouble();
+                                double currentBalance =
+                                    transactionAmount.floorToDouble();
+                                double minimumBalance = category
+                                    .minimumBalance
+                                    .toDouble()
+                                    .floorToDouble();
 
-                                  if (currentBalance >= minimumBalance) {
-                                    return const SizedBox();
-                                  }
+                                if (currentBalance >= minimumBalance) {
+                                  return const SizedBox();
+                                }
 
-                                  double shortAmount =
-                                      minimumBalance - currentBalance;
+                                double shortAmount =
+                                    minimumBalance - currentBalance;
 
-                                  return Container(
-                                    width: double.infinity,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 14, vertical: 8),
-                                    padding: const EdgeInsets.all(14),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.85),
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        color:
-                                            Colors.redAccent.withOpacity(0.25),
-                                        width: 1,
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.redAccent
-                                              .withOpacity(0.040),
-                                          blurRadius: 12,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ],
+                                return Container(
+                                  width: double.infinity,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 14, vertical: 8),
+                                  padding: const EdgeInsets.all(14),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.85),
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                      color:
+                                          Colors.redAccent.withOpacity(0.25),
+                                      width: 1,
                                     ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                            color: Colors.redAccent
-                                                .withOpacity(0.12),
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: const Icon(
-                                            Icons.warning_amber_rounded,
-                                            color: Colors.redAccent,
-                                            size: 24,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.redAccent
+                                            .withOpacity(0.040),
+                                        blurRadius: 12,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: Colors.redAccent
+                                              .withOpacity(0.12),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.warning_amber_rounded,
+                                          color: Colors.redAccent,
+                                          size: 24,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "Low Balance Warning",
+                                              style: TextStyle(
+                                                color: Color(0xFFB71C1C),
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 15,
+                                                letterSpacing: 0.2,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Text(
+                                              "Current Balance  ₹${currentBalance.toStringAsFixed(0)}",
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.black87,
+                                                height: 1.3,
+                                              ),
+                                            ),
+                                            Text(
+                                              "Minimum Required  ₹${minimumBalance.toStringAsFixed(0)}",
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.black87,
+                                                height: 1.3,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 8),
+                                              decoration: BoxDecoration(
+                                                gradient:
+                                                    const LinearGradient(
+                                                  colors: [
+                                                    Color(0xFFFFF3E0),
+                                                    Color(0xFFFFE0B2),
+                                                  ],
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text(
+                                                "Bookings receive karte rehne ke liye ₹${shortAmount.toStringAsFixed(0)} aur add karein",
+                                                style: const TextStyle(
+                                                  color: Color(0xFFE65100),
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 13,
+                                                  height: 1.3,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+
+                              /// ================= CATEGORY INFO =================
+                              Obx(() {
+                                final category =
+                                    authController.categoryInfo.value;
+
+                                if (category == null) {
+                                  return const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8),
+                                    child: CircularProgressIndicator(
+                                        strokeWidth: 2),
+                                  );
+                                }
+
+                                final dashCtrl =
+                                    Get.find<DashBoardController>();
+
+                                double receivableAmount = double.tryParse(
+                                        dashCtrl
+                                                .providerDashboardModel
+                                                ?.content
+                                                ?.providerInfo
+                                                ?.owner
+                                                ?.account
+                                                ?.accountReceivable
+                                                ?.toString() ??
+                                            "0") ??
+                                    0;
+
+                                double transactionAmount =
+                                    dashCtrl.getTransactionAmountAmount(
+                                        0.0, receivableAmount);
+
+                                double currentBalance =
+                                    transactionAmount.floorToDouble();
+                                double minimumBalance = category
+                                    .minimumBalance
+                                    .toDouble()
+                                    .floorToDouble();
+
+                                final bool isBalanceOk =
+                                    currentBalance >= minimumBalance;
+
+                                return Container(
+                                  width: double.infinity,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 6),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.miscellaneous_services,
+                                          color: Color(0xFF207FA7)),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          category.categoryName,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 14, vertical: 7),
+                                          decoration: BoxDecoration(
+                                            color: isBalanceOk
+                                                ? const Color(0xFFEAF7EF)
+                                                : const Color(0xFFFFF0F0),
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            border: Border.all(
+                                              color: isBalanceOk
+                                                  ? const Color(0xFFB7E3C4)
+                                                  : const Color(0xFFFFC1C1),
+                                              width: 0.8,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              const Text(
-                                                "Low Balance Warning",
-                                                style: TextStyle(
-                                                  color: Color(0xFFB71C1C),
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 15,
-                                                  letterSpacing: 0.2,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 6),
-                                              Text(
-                                                "Current Balance  ₹${currentBalance.toStringAsFixed(0)}",
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  color: Colors.black87,
-                                                  height: 1.3,
-                                                ),
-                                              ),
-                                              Text(
-                                                "Minimum Required  ₹${minimumBalance.toStringAsFixed(0)}",
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  color: Colors.black87,
-                                                  height: 1.3,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 10),
                                               Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 12,
-                                                        vertical: 8),
+                                                width: 6,
+                                                height: 6,
                                                 decoration: BoxDecoration(
-                                                  gradient:
-                                                      const LinearGradient(
-                                                    colors: [
-                                                      Color(0xFFFFF3E0),
-                                                      Color(0xFFFFE0B2),
-                                                    ],
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
+                                                  color: isBalanceOk
+                                                      ? const Color(
+                                                          0xFF2E7D32)
+                                                      : const Color(
+                                                          0xFFD32F2F),
+                                                  shape: BoxShape.circle,
                                                 ),
-                                                child: Text(
-                                                  "Bookings receive karte rehne ke liye ₹${shortAmount.toStringAsFixed(0)} aur add karein",
-                                                  style: const TextStyle(
-                                                    color: Color(0xFFE65100),
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 13,
-                                                    height: 1.3,
-                                                  ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    const TextSpan(
+                                                      text: "Min Balance ",
+                                                      style: TextStyle(
+                                                        fontSize: 13,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color:
+                                                            Color(0xFF1C1C1E),
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          "₹${category.minimumBalance}",
+                                                      style: TextStyle(
+                                                        fontSize: 13,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: isBalanceOk
+                                                            ? const Color(
+                                                                0xFF2E7D32)
+                                                            : const Color(
+                                                                0xFFD32F2F),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                }),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
 
-                                /// ================= CATEGORY INFO =================
-                                Obx(() {
-                                  final category =
-                                      authController.categoryInfo.value;
-
-                                  if (category == null) {
-                                    return const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 8),
-                                      child: CircularProgressIndicator(
-                                          strokeWidth: 2),
-                                    );
-                                  }
-
-                                  final dashCtrl =
-                                      Get.find<DashBoardController>();
-
-                                  double receivableAmount = double.tryParse(
-                                          dashCtrl
-                                                  .providerDashboardModel
-                                                  ?.content
-                                                  ?.providerInfo
-                                                  ?.owner
-                                                  ?.account
-                                                  ?.accountReceivable
-                                                  ?.toString() ??
-                                              "0") ??
-                                      0;
-
-                                  double transactionAmount =
-                                      dashCtrl.getTransactionAmountAmount(
-                                          0.0, receivableAmount);
-
-                                  double currentBalance =
-                                      transactionAmount.floorToDouble();
-                                  double minimumBalance = category
-                                      .minimumBalance
-                                      .toDouble()
-                                      .floorToDouble();
-
-                                  final bool isBalanceOk =
-                                      currentBalance >= minimumBalance;
-
-                                  return Container(
-                                    width: double.infinity,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 6),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 8),
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.miscellaneous_services,
-                                            color: Color(0xFF207FA7)),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: Text(
-                                            category.categoryName,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                              fontFamily: 'Albert Sans',
-                                              fontWeight: FontWeight.w600,
-                                              decoration: TextDecoration.none,
-                                            ),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 14, vertical: 7),
-                                            decoration: BoxDecoration(
-                                              color: isBalanceOk
-                                                  ? const Color(0xFFEAF7EF)
-                                                  : const Color(0xFFFFF0F0),
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              border: Border.all(
-                                                color: isBalanceOk
-                                                    ? const Color(0xFFB7E3C4)
-                                                    : const Color(0xFFFFC1C1),
-                                                width: 0.8,
-                                              ),
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Container(
-                                                  width: 6,
-                                                  height: 6,
-                                                  decoration: BoxDecoration(
-                                                    color: isBalanceOk
-                                                        ? const Color(
-                                                            0xFF2E7D32)
-                                                        : const Color(
-                                                            0xFFD32F2F),
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Text.rich(
-                                                  TextSpan(
-                                                    children: [
-                                                      const TextSpan(
-                                                        text: "Min Balance ",
-                                                        style: TextStyle(
-                                                          fontSize: 13,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color:
-                                                              Color(0xFF1C1C1E),
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                        text:
-                                                            "₹${category.minimumBalance}",
-                                                        style: TextStyle(
-                                                          fontSize: 13,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: isBalanceOk
-                                                              ? const Color(
-                                                                  0xFF2E7D32)
-                                                              : const Color(
-                                                                  0xFFD32F2F),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }),
-
-                                const SizedBox(height: 6),
-                              ],
-                            ),
+                              const SizedBox(height: 6),
+                            ],
                           ),
-                        ];
-                      },
-                      body: RefreshIndicator(
-                        onRefresh: () => _onRefresh(),
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: controller.screens.length,
-                          // physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return controller.screens[index];
-                          },
                         ),
-                      ),
+                      ];
+                    },
+                    body: PageView.builder(
+                      controller: _pageController,
+                      itemCount: controller.screens.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return controller.screens[index];
+                      },
                     ),
                   ),
                 ),
@@ -977,20 +967,20 @@ class DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  Future<void> _onRefresh() async {
-    final dashCtrl = Get.find<DashBoardController>();
-    final accCtrl = Get.find<AccountController>();
-
-    // 1. Latest account info
-    await dashCtrl.getAccountInfo(true);
-
-    // 2. Latest category info
-    await accCtrl.fetchCategory();
-
-    // 3. Latest bookings
-    await dashCtrl.getListOfBookings(isRefresh: true);
-
-    // 4. Optional: unpaid refresh
-    await dashCtrl.refreshAndNavigateIfUnpaid();
-  }
+  // Future<void> _onRefresh() async {
+  //   final dashCtrl = Get.find<DashBoardController>();
+  //   final accCtrl = Get.find<AccountController>();
+  //
+  //   // 1. Latest account info
+  //   await dashCtrl.getAccountInfo(true);
+  //
+  //   // 2. Latest category info
+  //   await accCtrl.fetchCategory();
+  //
+  //   // 3. Latest bookings
+  //   await dashCtrl.getListOfBookings(isRefresh: true);
+  //
+  //   // 4. Optional: unpaid refresh
+  //   await dashCtrl.refreshAndNavigateIfUnpaid();
+  // }
 }

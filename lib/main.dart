@@ -32,38 +32,6 @@ Future<void> main() async {
   /// DI init
   await di.init();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   Get.put(NetworkService(), permanent: true);
 
   runApp(const MyApp());

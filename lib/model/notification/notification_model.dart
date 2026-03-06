@@ -9,7 +9,7 @@ class NotificationModel {
     return NotificationModel(
         data['response_code'],
         data['message'],
-        (data['content'] as List)
+        (data['content'] as List<dynamic>? ?? [])
             .map((e) => NotificationContentModel.convertToModel(e))
             .toList());
   }

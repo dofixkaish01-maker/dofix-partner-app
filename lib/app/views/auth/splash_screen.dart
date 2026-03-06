@@ -1,38 +1,58 @@
 import 'dart:async';
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dofix_technichian/app/views/auth/registration_fee_screen.dart';
-import 'package:dofix_technichian/utils/dimensions.dart';
 import 'package:dofix_technichian/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:facebook_app_events/facebook_app_events.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/dashboard_controller.dart';
 import '../../../controllers/tracking_controller.dart';
 import '../../../helper/route_helper.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({
-    super.key,
-  });
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
+  late AppsflyerSdk _appsFlyerSdk;
+
   @override
   void initState() {
     super.initState();
+    _initApp();
+  }
+
+  Future<void> _initApp() async {
+
+    ///  Request Tracking Permission
+    await TrackingController.requestTracking();
+
+    /// Facebook App Events
+    final facebookAppEvents = FacebookAppEvents();
+    facebookAppEvents.setAdvertiserTracking(enabled: true);
+    facebookAppEvents.logEvent(name: "amrit_test_event");
+
+    /// AppsFlyer Init
+    await initAppsFlyer();
+
+    /// Dashboard Data Preload
     Get.find<DashBoardController>().getPagesData(isLogin: true);
-    checkForAppUpdate();
-    Future.delayed(Duration(seconds: 3), () {
-      _route();
-      TrackingController.requestTracking();
-    });
+
+    ///  Check App Update
+    await checkForAppUpdate();
+
+    /// Delay & Route
+    await Future.delayed(const Duration(seconds: 3));
+    _route();
   }
 
   Future<void> _route() async {
-    await const Duration(seconds: 2);
 
     final authController = Get.find<AuthController>();
     final dashboardController = Get.find<DashBoardController>();
@@ -44,9 +64,9 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
 
-    // Registration fee logic handled in DashboardController
+    /// Registration Fee Check
     final int registrationFeeStatus =
-        await dashboardController.isRegistrationFees();
+    await dashboardController.isRegistrationFees();
 
     if (registrationFeeStatus == 0) {
       Get.offAll(() => const RegistrationFeeScreen());
@@ -55,19 +75,33 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  // For checking latest update
+  Future<void> initAppsFlyer() async {
+
+    final AppsFlyerOptions options = AppsFlyerOptions(
+      afDevKey: "QPsc9zfWKAjutYjJgPVLWi",
+      appId: "com.dofix.technician",
+      showDebug: true,
+    );
+
+    _appsFlyerSdk = AppsflyerSdk(options);
+
+    await _appsFlyerSdk.initSdk(
+      registerConversionDataCallback: true,
+      registerOnAppOpenAttributionCallback: true,
+    );
+  }
+
+  /// App Update Check
   Future<void> checkForAppUpdate() async {
     try {
       AppUpdateInfo updateInfo = await InAppUpdate.checkForUpdate();
 
-      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-        // FORCE UPDATE
+      if (updateInfo.updateAvailability ==
+          UpdateAvailability.updateAvailable) {
+
         if (updateInfo.immediateUpdateAllowed) {
           await InAppUpdate.performImmediateUpdate();
-        }
-
-        // OPTIONAL UPDATE
-        else if (updateInfo.flexibleUpdateAllowed) {
+        } else if (updateInfo.flexibleUpdateAllowed) {
           await InAppUpdate.startFlexibleUpdate();
           await InAppUpdate.completeFlexibleUpdate();
         }
@@ -102,5 +136,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-
