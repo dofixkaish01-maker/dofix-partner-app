@@ -40,81 +40,81 @@ class _WithdrawRequestScreenState extends State<WithdrawRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: CustomAppBar(
-        title: "Withdraw Request",
-        isSearchButtonExist: false,
-        isTitleExist: false,
-        isBackButtonExist: true,
-        drawerButton: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Image.asset(
-            Images.iclogo,
-            height: 70,
-            width: 70,
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: CustomAppBar(
+          title: "Withdraw Request",
+          isSearchButtonExist: false,
+          isTitleExist: false,
+          isBackButtonExist: true,
+          drawerButton: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Image.asset(
+              Images.iclogo,
+              height: 70,
+              width: 70,
+            ),
           ),
         ),
-      ),
 
-      bottomNavigationBar: AnimatedPadding(
-        duration: const Duration(milliseconds: 200),
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: GetBuilder<AccountController>(
-          builder: (controller) {
-            final minWithdraw = dashboardController
-                    .configModel.content?.minimumWithdrawAmount ??
-                0;
+        bottomNavigationBar: AnimatedPadding(
+          duration: const Duration(milliseconds: 200),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: GetBuilder<AccountController>(
+            builder: (controller) {
+              final minWithdraw = dashboardController
+                      .configModel.content?.minimumWithdrawAmount ??
+                  0;
 
-            final maxWithdraw = dashboardController
-                    .configModel.content?.maximumWithdrawAmount ??
-                0;
+              final maxWithdraw = dashboardController
+                      .configModel.content?.maximumWithdrawAmount ??
+                  0;
 
-            final enteredAmount =
-                int.tryParse(controller.withdrawAmountController.text) ?? 0;
+              final enteredAmount =
+                  int.tryParse(controller.withdrawAmountController.text) ?? 0;
 
-            final isValidAmount =
-                enteredAmount >= minWithdraw && enteredAmount <= maxWithdraw;
+              final isValidAmount =
+                  enteredAmount >= minWithdraw && enteredAmount <= maxWithdraw;
 
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      isValidAmount ? primaryAppColor : Colors.grey,
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        isValidAmount ? primaryAppColor : Colors.grey,
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  ),
+                  onPressed: isValidAmount
+                      ? () async {
+                          await accountController.withdrawMyBalance(
+                              context: context);
+                        }
+                      : null,
+                  child: const Text('Withdraw'),
                 ),
-                onPressed: isValidAmount
-                    ? () async {
-                        await accountController.withdrawMyBalance(
-                            context: context);
-                      }
-                    : null,
-                child: const Text('Withdraw'),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ),
 
-      // ================= HISTORY FAB =================
+        // ================= HISTORY FAB =================
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await accountController.fetchWithdrawListing();
-          Get.to(() => const WithdrawHistoryScreen());
-        },
-        backgroundColor: primaryAppColor,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.history, color: Colors.white),
-      ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            await accountController.fetchWithdrawListing();
+            Get.to(() => const WithdrawHistoryScreen());
+          },
+          backgroundColor: primaryAppColor,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.history, color: Colors.white),
+        ),
 
-      // ================= BODY =================
-      body: SafeArea(
-        child: SingleChildScrollView(
+        // ================= BODY =================
+        body: SingleChildScrollView(
           child: GetBuilder<AccountController>(
             builder: (controller) {
               final minWithdraw = dashboardController

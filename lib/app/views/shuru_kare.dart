@@ -919,7 +919,8 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                           ),
                         ),
                       if ((dashBoardController.capturedImage == null &&
-                              widget.booking.content?.bookingStatus == "accepted")
+                              widget.booking.content?.bookingStatus ==
+                                  "accepted")
                           //         ||
                           // widget.booking.content?.bookingStatus == "completed"
                           )
@@ -1017,7 +1018,7 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                         SizedBox(
                           height: 20,
                         ),
-      
+
                       // in-voice Download
                       if (widget.booking.content?.bookingStatus == "completed")
                         GestureDetector(
@@ -1112,7 +1113,8 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Visibility(
-                                visible: widget.booking.content?.bookingStatus ==
+                                visible: widget
+                                            .booking.content?.bookingStatus ==
                                         "completed"
                                     ? false
                                     : widget.booking.content?.bookingStatus ==
@@ -1161,13 +1163,15 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                 width: 10,
                               ),
                               Visibility(
-                                visible: widget.booking.content?.bookingStatus ==
+                                visible: widget
+                                            .booking.content?.bookingStatus ==
                                         "ongoing"
                                     ? false
                                     : widget.booking.content?.bookingStatus ==
                                             "completed"
                                         ? false
-                                        : widget.booking.content?.bookingStatus ==
+                                        : widget.booking.content
+                                                    ?.bookingStatus ==
                                                 "canceled"
                                             ? false
                                             : true,
@@ -1177,7 +1181,8 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                       if (dashBoardController.capturedImage !=
                                           null) {
                                         Map<String, String> body = {
-                                          "booking_id": widget.booking.content!.id
+                                          "booking_id": widget
+                                              .booking.content!.id
                                               .toString(),
                                           "booking_status": "ongoing"
                                         };
@@ -1189,7 +1194,8 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                           widget.onBookingUpdated!();
                                         }
                                         await Get.find<DashBoardController>()
-                                            .getListOfBookings(isRefresh: false);
+                                            .getListOfBookings(
+                                                isRefresh: false);
                                         Get.back();
                                         Get.snackbar(
                                           "Success",
@@ -1256,13 +1262,13 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                       debugPrint("File path: $value");
                                       final files = (value['files'] ?? []);
                                       final isMultiple = files is List;
-      
+
                                       Map<String, String> body = {
-                                        "booking_id":
-                                            widget.booking.content!.id.toString(),
+                                        "booking_id": widget.booking.content!.id
+                                            .toString(),
                                         "booking_status": "completed"
                                       };
-      
+
                                       if (isMultiple) {
                                         // Handle multiple image files
                                         debugPrint("File path: $files");
@@ -1339,7 +1345,7 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                           "https://www.google.com/maps/search/?api=1&query=$lat,$lon";
                                       String appleMapsUrl =
                                           "http://maps.apple.com/?ll=$lat,$lon";
-      
+
                                       if (Platform.isIOS) {
                                         // Try Google Maps first
                                         final googleMapsSchemeUrl = Uri.parse(
@@ -1354,8 +1360,8 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                         } else {
                                           await launchUrl(
                                               Uri.parse(googleMapsUrl),
-                                              mode:
-                                                  LaunchMode.externalApplication);
+                                              mode: LaunchMode
+                                                  .externalApplication);
                                         }
                                       } else {
                                         // Android or others: open Google Maps in browser/app
@@ -1363,8 +1369,8 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                             Uri.parse(googleMapsUrl))) {
                                           await launchUrl(
                                               Uri.parse(googleMapsUrl),
-                                              mode:
-                                                  LaunchMode.externalApplication);
+                                              mode: LaunchMode
+                                                  .externalApplication);
                                         } else {
                                           debugPrint(
                                               "Could not launch map for $lat, $lon");
@@ -1446,8 +1452,9 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                     ),
                                   ),
                                 ),
-      
-                                if (widget.booking.content?.bookingStatus ==
+
+                                if (widget
+                                            .booking.content?.bookingStatus ==
                                         "ongoing" &&
                                     widget.booking.content
                                             ?.isPreWorkMediaUploaded ==
@@ -1472,24 +1479,26 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                           onPressed: () async {
                                             final controller =
                                                 Get.find<DashBoardController>();
-      
+
                                             // validation (same jo tum already use kar rahe ho)
                                             if (!controller
-                                                .validateJobStartImages()) return;
-      
+                                                .validateJobStartImages())
+                                              return;
+
                                             Map<String, String> body = {
                                               "booking_id": widget
                                                   .booking.content!.id
                                                   .toString(),
                                               "booking_status": "ongoing",
                                             };
-      
-                                            await controller.updateBookingStatus(
+
+                                            await controller
+                                                .updateBookingStatus(
                                               body,
                                               images: controller.jobStartImages,
                                               videos: controller.jobStartVideo,
                                             );
-      
+
                                             controller.clearJobStartMedia();
                                           },
                                           child: const Text(
@@ -1504,7 +1513,7 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                       ),
                                     ),
                                   ),
-      
+
                                 if (Get.find<DashBoardController>()
                                             .bookingDetails
                                             ?.content
@@ -1525,7 +1534,7 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                       onTap: () async {
                                         final controller =
                                             Get.find<DashBoardController>();
-      
+
                                         /// validation pass
                                         await controller.getExtraServicesList(
                                           categoryid: widget
@@ -1535,15 +1544,16 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                               .booking.content!.subCategoryId
                                               .toString(),
                                         );
-      
+
                                         await controller.getSavedAddOns(
                                           bookingId: widget.booking.content!.id
                                               .toString(),
                                         );
-      
+
                                         Get.to(
                                           () => AddOnServicesScreen(
-                                            bookingId: widget.booking.content!.id
+                                            bookingId: widget
+                                                .booking.content!.id
                                                 .toString(),
                                           ),
                                         );
@@ -1552,13 +1562,15 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                         height: 40,
                                         decoration: BoxDecoration(
                                           color: primaryAppColor,
-                                          borderRadius: BorderRadius.circular(5),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         ),
                                         padding: const EdgeInsets.all(8),
                                         child: const Center(
                                           child: Text(
                                             "Addon Service",
-                                            style: TextStyle(color: Colors.white),
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ),
@@ -1648,33 +1660,34 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                             Get.find<DashBoardController>();
                                         final authController =
                                             Get.find<AuthController>();
-      
+
                                         ///  validate media
                                         if (!dashboardController
                                             .validateJobStartImages()) return;
-      
+
                                         /// upload media
                                         Map<String, String> body = {
-                                          "booking_id": widget.booking.content!.id
+                                          "booking_id": widget
+                                              .booking.content!.id
                                               .toString(),
                                           "booking_status": "ongoing",
                                         };
-      
+
                                         await dashboardController
                                             .updateBookingStatus(
                                           body,
-                                          images:
-                                              dashboardController.jobStartImages,
+                                          images: dashboardController
+                                              .jobStartImages,
                                           videos:
                                               dashboardController.jobStartVideo,
                                           postImageName: 'evidence_photos',
                                           postVideoName: 'post_work_video',
                                         );
-      
+
                                         ///  send OTP
                                         await authController.sendCustomerOtpApi(
-                                          phone: widget.booking.content?.customer
-                                                  ?.phone ??
+                                          phone: widget.booking.content
+                                                  ?.customer?.phone ??
                                               "",
                                           bookingId:
                                               widget.booking.content?.id ?? "",
@@ -1682,18 +1695,21 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                               .authRepo.apiClient.token
                                               .toString(),
                                         );
-      
+
                                         ///  go to OTP screen
                                         Get.to(
                                             () => CustomerOtpVerificationScreen(
-                                                  phoneNo: widget.booking.content
-                                                          ?.customer?.phone ??
+                                                  phoneNo: widget
+                                                          .booking
+                                                          .content
+                                                          ?.customer
+                                                          ?.phone ??
                                                       "",
                                                   bookingId: widget
                                                       .booking.content!.id
                                                       .toString(),
                                                 ));
-      
+
                                         Get.snackbar("Success",
                                             "Media uploaded & OTP sent");
                                       },
@@ -1701,40 +1717,42 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                         height: 40,
                                         decoration: BoxDecoration(
                                           color: primaryAppColor,
-                                          borderRadius: BorderRadius.circular(5),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         ),
                                         padding: const EdgeInsets.all(8),
                                         child: const Center(
                                           child: Text(
                                             "Share Work & OTP",
-                                            style: TextStyle(color: Colors.white),
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-      
+
                                 Visibility(
-                                  visible:
-                                      (widget.booking.content?.bookingStatus ==
-                                                  "ongoing" &&
-                                              Get.find<DashBoardController>()
-                                                      .bookingDetails
-                                                      ?.content
-                                                      ?.isPreWorkMediaUploaded ==
-                                                  true &&
-                                              Get.find<DashBoardController>()
-                                                      .bookingDetails
-                                                      ?.content
-                                                      ?.isPostWorkMediaUploaded ==
-                                                  false)
-                                          ? true
-                                          : false,
+                                  visible: (widget.booking.content
+                                                  ?.bookingStatus ==
+                                              "ongoing" &&
+                                          Get.find<DashBoardController>()
+                                                  .bookingDetails
+                                                  ?.content
+                                                  ?.isPreWorkMediaUploaded ==
+                                              true &&
+                                          Get.find<DashBoardController>()
+                                                  .bookingDetails
+                                                  ?.content
+                                                  ?.isPostWorkMediaUploaded ==
+                                              false)
+                                      ? true
+                                      : false,
                                   child: SizedBox(
                                     width: 10,
                                   ),
                                 ),
-      
+
                                 /// mark as complete
                                 // Visibility(
                                 //   visible: widget.booking.content?.bookingStatus ==

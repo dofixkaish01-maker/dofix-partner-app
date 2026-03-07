@@ -1390,7 +1390,6 @@ class DashBoardController extends GetxController implements GetxService {
   //   }
   // }
 
-
   bool isBookingsLoading = false;
 
   Future<void> getListOfBookings({required bool isRefresh}) async {
@@ -1488,6 +1487,7 @@ class DashBoardController extends GetxController implements GetxService {
       }
     }
   }
+
   // Future<void> getListOfBookings({required bool isRefresh}) async {
   //   if (!isRefresh) {
   //     showLoading(); // loader open

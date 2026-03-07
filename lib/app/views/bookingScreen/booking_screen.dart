@@ -1,5 +1,7 @@
 import 'package:dofix_technichian/utils/theme.dart';
 import 'package:dofix_technichian/widgets/common_loading.dart';
+import 'package:dofix_technichian/widgets/orbit_loader.dart';
+import 'package:dofix_technichian/widgets/dot_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -328,7 +330,11 @@ class _BookingScreenState extends State<BookingScreen>
 
   Widget buildListView() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(
+          child: Padding(
+        padding: const EdgeInsets.only(top: 70),
+        child: DotWaveLoader(),
+      ));
     }
 
     if (_items.isEmpty) {

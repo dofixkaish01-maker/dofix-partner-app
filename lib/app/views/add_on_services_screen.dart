@@ -86,7 +86,7 @@ class _AddOnServicesScreenState extends State<AddOnServicesScreen> {
           return RefreshIndicator(
               color: const Color(0xFF207FA8),
               onRefresh: () async {
-                log("🔄 Pull to refresh triggered");
+                log("Pull to refresh triggered");
 
                 await dashboardController.clearAddonCart();
                 await dashboardController.getSavedAddOns(
