@@ -258,7 +258,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                 double receivableAmount = double.tryParse(
                                         dashCtrl
                                                 .providerDashboardModel
-                                                ?.content
+                                                .content
                                                 ?.providerInfo
                                                 ?.owner
                                                 ?.account
@@ -273,8 +273,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
                                 double currentBalance =
                                     transactionAmount.floorToDouble();
-                                double minimumBalance = category
-                                    .minimumBalance
+                                double minimumBalance = category.minimumBalance
                                     .toDouble()
                                     .floorToDouble();
 
@@ -294,14 +293,13 @@ class DashboardScreenState extends State<DashboardScreen> {
                                     color: Colors.white.withOpacity(0.85),
                                     borderRadius: BorderRadius.circular(16),
                                     border: Border.all(
-                                      color:
-                                          Colors.redAccent.withOpacity(0.25),
+                                      color: Colors.redAccent.withOpacity(0.25),
                                       width: 1,
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.redAccent
-                                            .withOpacity(0.040),
+                                        color:
+                                            Colors.redAccent.withOpacity(0.040),
                                         blurRadius: 12,
                                         offset: const Offset(0, 4),
                                       ),
@@ -363,8 +361,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                       horizontal: 12,
                                                       vertical: 8),
                                               decoration: BoxDecoration(
-                                                gradient:
-                                                    const LinearGradient(
+                                                gradient: const LinearGradient(
                                                   colors: [
                                                     Color(0xFFFFF3E0),
                                                     Color(0xFFFFE0B2),
@@ -398,8 +395,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
                                 if (category == null) {
                                   return const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 8),
+                                    padding: EdgeInsets.symmetric(vertical: 8),
                                     child: CircularProgressIndicator(
                                         strokeWidth: 2),
                                   );
@@ -426,8 +422,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
                                 double currentBalance =
                                     transactionAmount.floorToDouble();
-                                double minimumBalance = category
-                                    .minimumBalance
+                                double minimumBalance = category.minimumBalance
                                     .toDouble()
                                     .floorToDouble();
 
@@ -482,10 +477,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                 height: 6,
                                                 decoration: BoxDecoration(
                                                   color: isBalanceOk
-                                                      ? const Color(
-                                                          0xFF2E7D32)
-                                                      : const Color(
-                                                          0xFFD32F2F),
+                                                      ? const Color(0xFF2E7D32)
+                                                      : const Color(0xFFD32F2F),
                                                   shape: BoxShape.circle,
                                                 ),
                                               ),
@@ -967,20 +960,20 @@ class DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  // Future<void> _onRefresh() async {
-  //   final dashCtrl = Get.find<DashBoardController>();
-  //   final accCtrl = Get.find<AccountController>();
-  //
-  //   // 1. Latest account info
-  //   await dashCtrl.getAccountInfo(true);
-  //
-  //   // 2. Latest category info
-  //   await accCtrl.fetchCategory();
-  //
-  //   // 3. Latest bookings
-  //   await dashCtrl.getListOfBookings(isRefresh: true);
-  //
-  //   // 4. Optional: unpaid refresh
-  //   await dashCtrl.refreshAndNavigateIfUnpaid();
-  // }
+// Future<void> _onRefresh() async {
+//   final dashCtrl = Get.find<DashBoardController>();
+//   final accCtrl = Get.find<AccountController>();
+//
+//   // 1. Latest account info
+//   await dashCtrl.getAccountInfo(true);
+//
+//   // 2. Latest category info
+//   await accCtrl.fetchCategory();
+//
+//   // 3. Latest bookings
+//   await dashCtrl.getListOfBookings(isRefresh: true);
+//
+//   // 4. Optional: unpaid refresh
+//   await dashCtrl.refreshAndNavigateIfUnpaid();
+// }
 }

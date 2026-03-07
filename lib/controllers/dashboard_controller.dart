@@ -1390,21 +1390,36 @@ class DashBoardController extends GetxController implements GetxService {
   //   }
   // }
 
+
+  bool isBookingsLoading = false;
+
   Future<void> getListOfBookings({required bool isRefresh}) async {
+    /// duplicate API call rokne ke liye
+    if (isBookingsLoading) return;
+
+    /// agar refresh nahi hai aur data already available hai
+    /// to dobara API call mat karo
+    if (!isRefresh &&
+        bookingModel.data != null &&
+        bookingModel.data!.isNotEmpty) {
+      return;
+    }
+
+    isBookingsLoading = true;
+
     if (!isRefresh) {
-      showLoading(); // loader open
+      showLoading();
     }
 
     try {
-      // Prepare API client and headers
       ApiClient apiClient = ApiClient(
         appBaseUrl: AppConstants.baseUrl,
         sharedPreferences: sharedPreferences,
       );
+
       String? token = sharedPreferences.getString(AppConstants.token);
       apiClient.updateHeader(token);
 
-      // Prepare request body
       Map<String, String> body = {
         "limit": "100",
         "offset": "1",
@@ -1415,7 +1430,6 @@ class DashBoardController extends GetxController implements GetxService {
       log("Request Body: $body");
       log("Headers: ${apiClient.mainHeaders}");
 
-      // Make API call
       Response response = await apiClient.postData(
         AppConstants.getTodaysBooking,
         body,
@@ -1428,43 +1442,127 @@ class DashBoardController extends GetxController implements GetxService {
 
         if (responseData['content'] != null &&
             responseData['content']['bookings'] != null) {
-          // bookingModel =
-          //     booking.BookingList.fromJson(responseData['content']['bookings']);
           var bookingsJson = responseData['content']?['bookings'];
           bookingModel = booking.BookingList.fromJson(bookingsJson);
 
           if (!isRefresh) {
             getProviderInfo();
           }
+
           update();
         } else {
           log("Error: Invalid response structure");
         }
       } else {
         log("${response.statusText} issue error ${response.statusCode}");
+
         if (response.statusText == 'Unauthorized') {
           closeSnackBarIfActive();
-          showCustomSnackBar("Your session has expired. Please login again.",
-              isError: true);
+          showCustomSnackBar(
+            "Your session has expired. Please login again.",
+            isError: true,
+          );
           Get.find<AuthController>().logout();
         } else {
           closeSnackBarIfActive();
-          showCustomSnackBar("Failed to fetch bookings. Please try again.",
-              isError: true);
+          showCustomSnackBar(
+            "Failed to fetch bookings. Please try again.",
+            isError: true,
+          );
         }
+
         update();
       }
     } catch (e) {
       log("Error fetching bookings: $e");
       closeSnackBarIfActive();
-      showCustomSnackBar("Something went wrong. Please try again. $e",
-          isError: true);
+      showCustomSnackBar(
+        "Something went wrong. Please try again.",
+        isError: true,
+      );
     } finally {
+      isBookingsLoading = false;
+
       if (!isRefresh) {
-        hideLoading(); // YAHI PE HAMESHA CLOSE
+        hideLoading();
       }
     }
   }
+  // Future<void> getListOfBookings({required bool isRefresh}) async {
+  //   if (!isRefresh) {
+  //     showLoading(); // loader open
+  //   }
+  //
+  //   try {
+  //     // Prepare API client and headers
+  //     ApiClient apiClient = ApiClient(
+  //       appBaseUrl: AppConstants.baseUrl,
+  //       sharedPreferences: sharedPreferences,
+  //     );
+  //     String? token = sharedPreferences.getString(AppConstants.token);
+  //     apiClient.updateHeader(token);
+  //
+  //     // Prepare request body
+  //     Map<String, String> body = {
+  //       "limit": "100",
+  //       "offset": "1",
+  //       "booking_status": "all",
+  //       "service_type": "all"
+  //     };
+  //
+  //     log("Request Body: $body");
+  //     log("Headers: ${apiClient.mainHeaders}");
+  //
+  //     // Make API call
+  //     Response response = await apiClient.postData(
+  //       AppConstants.getTodaysBooking,
+  //       body,
+  //       headers: apiClient.mainHeaders,
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       var responseData = jsonDecode(response.body);
+  //       log("$responseData today booking data");
+  //
+  //       if (responseData['content'] != null &&
+  //           responseData['content']['bookings'] != null) {
+  //         // bookingModel =
+  //         //     booking.BookingList.fromJson(responseData['content']['bookings']);
+  //         var bookingsJson = responseData['content']?['bookings'];
+  //         bookingModel = booking.BookingList.fromJson(bookingsJson);
+  //
+  //         if (!isRefresh) {
+  //           getProviderInfo();
+  //         }
+  //         update();
+  //       } else {
+  //         log("Error: Invalid response structure");
+  //       }
+  //     } else {
+  //       log("${response.statusText} issue error ${response.statusCode}");
+  //       if (response.statusText == 'Unauthorized') {
+  //         closeSnackBarIfActive();
+  //         showCustomSnackBar("Your session has expired. Please login again.",
+  //             isError: true);
+  //         Get.find<AuthController>().logout();
+  //       } else {
+  //         closeSnackBarIfActive();
+  //         showCustomSnackBar("Failed to fetch bookings. Please try again.",
+  //             isError: true);
+  //       }
+  //       update();
+  //     }
+  //   } catch (e) {
+  //     log("Error fetching bookings: $e");
+  //     closeSnackBarIfActive();
+  //     showCustomSnackBar("Something went wrong. Please try again. $e",
+  //         isError: true);
+  //   } finally {
+  //     if (!isRefresh) {
+  //       hideLoading(); // YAHI PE HAMESHA CLOSE
+  //     }
+  //   }
+  // }
 
   List<Widget> screens = [
     const HomeScreen(

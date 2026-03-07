@@ -2,6 +2,7 @@ import 'package:dofix_technichian/firebase_options.dart';
 import 'package:dofix_technichian/utils/app_constants.dart';
 import 'package:dofix_technichian/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -29,6 +30,10 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(
       firebaseMessagingBackgroundHandler);
 
+  // await SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]);
+  //
   /// DI init
   await di.init();
 

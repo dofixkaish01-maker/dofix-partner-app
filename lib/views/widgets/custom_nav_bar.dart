@@ -41,7 +41,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          /// ❌ OLD POSITION LOGIC (Fragile - commented only)
+          ///  OLD POSITION LOGIC (Fragile - commented only)
           /*
           Positioned(
             top: -10,
@@ -57,7 +57,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           ),
           */
 
-          /// ✅ NEW RESPONSIVE INDICATOR (Same UI, Proper Alignment)
+          ///  NEW RESPONSIVE INDICATOR (Same UI, Proper Alignment)
           Positioned(
             top: -10,
             left: 0,
@@ -99,7 +99,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             AssetImage(icon),
             size: 28,
             color: isSelected
-                ? const Color(0xFF207FA8) // ✅ fixed hex
+                ? const Color(0xFF207FA8) //  fixed hex
                 : Colors.grey,
           ),
           const SizedBox(height: 4),

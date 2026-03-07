@@ -54,9 +54,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             left: _indicatorLeft(w),
             child: const CustomIndicator(),
           ),
-
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
