@@ -168,8 +168,7 @@ class _ShuruKareState extends State<ShuruKare> {
                               String phone = Get.find<DashBoardController>()
                                       .bookingDetails
                                       ?.content
-                                      ?.customer
-                                      ?.phone ??
+                                      ?.serviceAssignCustomerPhone ??
                                   "";
                               if (phone.isNotEmpty) {
                                 final Uri phoneUri = Uri(
@@ -896,7 +895,7 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  widget.booking.content?.customer?.firstName ??
+                                  widget.booking.content?.serviceAssignCustomerName ??
                                       "No Name Provided",
                                   style: TextStyle(
                                     color: Colors.white,
@@ -937,8 +936,7 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                 width: 10,
                               ),
                               Expanded(
-                                child: Text(
-                                  widget.booking.content?.customer?.phone ?? "",
+                                child: Text(widget.booking.content?.serviceAssignCustomerPhone ?? "",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14,
@@ -947,28 +945,42 @@ class _CustomBottomContainerState extends State<CustomBottomContainer> {
                                   ),
                                 ),
                               ),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    minimumSize: Size(0, 0)),
+                              OutlinedButton(
                                 onPressed: () {
                                   _launchDialer(
-                                      widget.booking.content?.customer?.phone ??
-                                          "");
+                                    widget.booking.content?.serviceAssignCustomerPhone ?? "",
+                                  );
                                 },
-                                child: Text(
-                                  'Call Karein',
-                                  style: TextStyle(
-                                    color: const Color(0xFF64D64D),
-                                    fontSize: 14,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(color: primaryAppColor.withOpacity(0.6), width: 1.4),
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), // smaller
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap, // compact height
                                 ),
-                              )
-                            ],
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.call,
+                                      color: primaryAppColor,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    const Text(
+                                      'Call Karein',
+                                      style: TextStyle(
+                                        color: primaryAppColor,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )                            ],
                           ),
                         ),
                       if ((dashBoardController.capturedImage == null &&
