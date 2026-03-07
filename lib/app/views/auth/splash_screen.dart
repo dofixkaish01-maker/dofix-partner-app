@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     final AppsFlyerOptions options = AppsFlyerOptions(
       afDevKey: "QPsc9zfWKAjutYjJgPVLWi",
-      appId: "com.dofix.technician",
+      appId: "6758930323",
       showDebug: true,
     );
 
