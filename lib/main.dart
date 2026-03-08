@@ -30,10 +30,10 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(
       firebaseMessagingBackgroundHandler);
 
-  // await SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  // ]);
-  //
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
   /// DI init
   await di.init();
 
