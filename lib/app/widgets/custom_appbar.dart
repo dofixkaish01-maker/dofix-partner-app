@@ -162,7 +162,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           children: [
                             Icon(Icons.arrow_back,
                                 color: iconColor ?? Colors.black,
-                                size: Dimensions.fontSize18),
+                                size: Dimensions.fontSize20),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
@@ -170,7 +170,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: albertSansRegular.copyWith(
-                                  fontSize: Dimensions.fontSize14,
+                                  fontSize: Dimensions.fontSize15,
                                   color: Theme.of(context).hintColor,
                                 ),
                               ),
