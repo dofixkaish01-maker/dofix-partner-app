@@ -218,6 +218,7 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                                 final categories = authController
                                         .serviceCategoryModel.value?.content ??
                                     [];
+                                print('All service: $categories');
                                 return DropdownButtonFormField<String>(
                                   decoration: const InputDecoration(
                                     labelText: 'Service Category',
