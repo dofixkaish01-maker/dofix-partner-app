@@ -150,7 +150,7 @@ class RegistrationFeeScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar:Container(
+      bottomNavigationBar: Container(
         height: 100,
         color: Colors.white,
         child: _bottomPaySection(context),
@@ -336,7 +336,7 @@ class RegistrationFeeScreen extends StatelessWidget {
               ),
               Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
                   color: const Color(0xFF227FA8).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
@@ -381,6 +381,7 @@ class RegistrationFeeScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
           /// ICON BOX
           Container(
             height: 36,
@@ -496,7 +497,8 @@ class RegistrationFeeScreen extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20)),
                   ),
                   builder: (context) {
                     return Padding(
@@ -516,14 +518,16 @@ class RegistrationFeeScreen extends StatelessWidget {
 
                           const Text(
                             "Choose Payment Method",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
 
                           const SizedBox(height: 20),
 
                           /// Razorpay
                           ListTile(
-                            leading: const Icon(Icons.payment, color: Colors.blue),
+                            leading: const Icon(
+                                Icons.payment, color: Colors.blue),
                             title: const Text("Pay with Razorpay"),
                             subtitle: const Text("Cards, UPI, Netbanking"),
                             onTap: () async {
@@ -535,7 +539,8 @@ class RegistrationFeeScreen extends StatelessWidget {
                               await authCtrl.userWalletRecharge(
                                 amount: registrationFee,
                                 providerId: dashCtrl
-                                    .providerDashboardModel.content?.providerInfo?.id ??
+                                    .providerDashboardModel.content
+                                    ?.providerInfo?.id ??
                                     "",
                               );
 
@@ -557,7 +562,8 @@ class RegistrationFeeScreen extends StatelessWidget {
 
                           /// UPI
                           ListTile(
-                            leading: const Icon(Icons.qr_code, color: Colors.green),
+                            leading: const Icon(
+                                Icons.qr_code, color: Colors.green),
                             title: const Text("QR with UPI"),
                             subtitle: const Text("GPay, PhonePe, Paytm"),
                             onTap: () async {
@@ -576,11 +582,11 @@ class RegistrationFeeScreen extends StatelessWidget {
                               );
 
                               try {
-                                await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                await launchUrl(
+                                    uri, mode: LaunchMode.externalApplication);
                               } catch (e) {
                                 showCustomSnackBar("Unable to open UPI app");
                               }
-
                             },
                           ),
 
@@ -694,7 +700,10 @@ void _openUpiQrScanner(BuildContext context) {
     backgroundColor: Colors.black,
     builder: (context) {
       return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.9,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.9,
         child: Stack(
           children: [
             MobileScanner(
@@ -866,7 +875,10 @@ class PayScreen extends StatelessWidget {
   final String amount = '1416';
 
   Future<void> _payWithUpi(BuildContext context) async {
-    final String txnRef = DateTime.now().millisecondsSinceEpoch.toString();
+    final String txnRef = DateTime
+        .now()
+        .millisecondsSinceEpoch
+        .toString();
 
     final Uri uri = Uri(
       scheme: 'upi',

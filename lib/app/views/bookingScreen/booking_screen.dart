@@ -75,7 +75,7 @@ class _BookingScreenState extends State<BookingScreen>
             removedItem?.bookingStatus == "completed",
             removedItem?.bookingStatus == "canceled",
             removedItem?.bookingStatus == "ongoing",
-            removedItem?.bookingStatus == "accepted",
+            removedItem?.bookingStatus == "pending", ///
             i,
           ),
         ),

@@ -54,7 +54,6 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
   @override
   void initState() {
     super.initState();
-    Get.find<DashBoardController>().fetchCategoryDropdown();
     try {
       Get.find<AuthController>().contactNumber = widget.phone;
       _contactNumberController.text = widget.phone;
@@ -213,31 +212,30 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                                 ),
                               ),
                               sizedBox30(),
-                              Obx(() {
-                                final categories = dashBoardController.categoryDropdownList;
 
+                              /// Service Category Dropdown
+                              Obx(() {
+                                final categories = authController
+                                        .serviceCategoryModel.value?.content ??
+                                    [];
                                 return DropdownButtonFormField<String>(
                                   decoration: const InputDecoration(
                                     labelText: 'Service Category',
                                     border: OutlineInputBorder(),
                                   ),
-
-                                  value: dashBoardController.selectedCategoryId.value.isEmpty
-                                      ? null
-                                      : dashBoardController.selectedCategoryId.value,
-
+                                  value: authController
+                                      .selectedServiceCategoryId.value,
                                   items: categories.map((cat) {
                                     return DropdownMenuItem<String>(
                                       value: cat.id,
                                       child: Text(cat.name ?? ''),
                                     );
                                   }).toList(),
-
                                   onChanged: (val) {
-                                    dashBoardController.selectedCategoryId.value = val ?? "";
-                                    log("Selected Category Id: ${dashBoardController.selectedCategoryId.value}");
+                                    authController
+                                        .selectedServiceCategoryId.value = val;
+                                    log("Id is ${authController.selectedServiceCategoryId.value}");
                                   },
-
                                   validator: (val) {
                                     if (val == null || val.isEmpty) {
                                       return 'Please select a service category';
@@ -246,38 +244,6 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                                   },
                                 );
                               }),
-
-                              // /// Service Category Dropdown
-                              // Obx(() {
-                              //   final categories = authController
-                              //           .serviceCategoryModel.value?.content ??
-                              //       [];
-                              //   return DropdownButtonFormField<String>(
-                              //     decoration: const InputDecoration(
-                              //       labelText: 'Service Category',
-                              //       border: OutlineInputBorder(),
-                              //     ),
-                              //     value: authController
-                              //         .selectedServiceCategoryId.value,
-                              //     items: categories.map((cat) {
-                              //       return DropdownMenuItem<String>(
-                              //         value: cat.id,
-                              //         child: Text(cat.name ?? ''),
-                              //       );
-                              //     }).toList(),
-                              //     onChanged: (val) {
-                              //       authController
-                              //           .selectedServiceCategoryId.value = val;
-                              //       log("Id is ${authController.selectedServiceCategoryId.value}");
-                              //     },
-                              //     validator: (val) {
-                              //       if (val == null || val.isEmpty) {
-                              //         return 'Please select a service category';
-                              //       }
-                              //       return null;
-                              //     },
-                              //   );
-                              // }),
                               sizedBox30(),
 
                               /// Company Name
