@@ -31,6 +31,7 @@ import '../app/widgets/custom_wallet_balance.dart';
 import '../data/api/api.dart';
 import '../data/repo/auth_repo.dart';
 import '../helper/route_helper.dart';
+import '../model/CategoryModel/category_dropdown_model.dart';
 import '../model/ConfigModel/config_model.dart';
 import '../model/MonthlyStats/monthly_stats.dart';
 import '../model/booking_details_content/booking_details_content.dart';
@@ -163,6 +164,30 @@ class DashBoardController extends GetxController implements GetxService {
       return 0;
     }
   }
+
+  RxList<CategoryDD> categoryDropdownList = <CategoryDD>[].obs;
+  RxString selectedCategoryId = "".obs;
+
+  Future<void> fetchCategoryDropdown() async {
+    try {
+      Response response = await authRepo.getCategoryDropdown();
+
+      if (response.statusCode == 200) {
+        final body = response.body;
+
+        if (body['response_code'] == "default_200") {
+          categoryDropdownList.assignAll(
+            (body['content'] as List)
+                .map((e) => CategoryDD.fromJson(e))
+                .toList(),
+          );
+        }
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
 
   Future<void> refreshAndNavigateIfPaid() async {
     try {
