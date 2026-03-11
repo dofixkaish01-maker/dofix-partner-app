@@ -103,4 +103,6 @@ class AppConstants {
 
   static const String verifyProviderOtp =
       "api/v1/provider/booking/verify/otp-provider";
+
+  static const String categoryDropdown = "api/v1/provider/category-dd";
 }

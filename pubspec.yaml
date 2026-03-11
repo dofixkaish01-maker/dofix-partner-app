@@ -1,7 +1,7 @@
 name: dofix_technichian
 description: "A new Flutter project."
 publish_to: 'none'
-version: 1.4.6+43
+version: 1.4.7+44
 
 environment:
   sdk: ^3.6.0
@@ -47,7 +47,7 @@ dependencies:
   in_app_update: ^4.2.5
   google_fonts: ^8.0.0
   firebase_messaging: ^16.1.1
-  firebase_core: ^4.4.0
+  firebase_core: ^4.5.0
   mobile_scanner: ^7.1.4
   glassmorphism: ^3.0.0
   lottie: ^3.3.2

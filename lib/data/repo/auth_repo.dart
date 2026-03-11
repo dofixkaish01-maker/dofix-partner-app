@@ -104,6 +104,13 @@ class AuthRepo {
     });
   }
 
+  Future<Response> getCategoryDropdown() async {
+    return await apiClient.getData(
+      AppConstants.categoryDropdown,
+      method: "GET",
+    );
+  }
+
   Future<Response> register(
       {required String companyName,
       required String fullName,
