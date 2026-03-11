@@ -18,9 +18,9 @@ class _TopComponentState extends State<TopComponent> {
     hideLoading();
 
     return GetBuilder<DashBoardController>(builder: (controller) {
-      // final pendingBookings = (controller.bookingModel.data ?? [])
-      //     .where((b) => b.bookingStatus == "accepted")
-      //     .toList();
+      final completedBookings = (controller.bookingModel.data ?? [])
+          .where((b) => b.bookingStatus == "completed")
+          .toList();
 
       debugPrint("TopComponent: ${controller.providerModel.content?.avgRating}");
 
@@ -212,9 +212,7 @@ class _TopComponentState extends State<TopComponent> {
                         iconColor: Colors.green,
                         title: "Jobs Delivered",
                         // same logic, same data
-                        primary: controller.bookingCountResponse.content
-                            ?.bookingsCount?.completed
-                            .toString(),
+                        primary: '${completedBookings.length}',
                         secondary:
                         '/${controller.bookingCountResponse.content?.bookingsCount?.total.toString() == "null" ? "0" : controller.bookingCountResponse.content?.bookingsCount?.total.toString()}',
                       ),

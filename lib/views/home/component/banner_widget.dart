@@ -28,7 +28,7 @@ class _ThirdComponentState extends State<ThirdComponent> {
   Widget build(BuildContext context) {
     return GetBuilder<DashBoardController>(builder: (controller) {
       final pendingBookings = (controller.bookingModel.data ?? [])
-          .where((b) => b.bookingStatus == "accepted")
+          .where((b) => b.bookingStatus == "pending")
           .toList();
 
       return Container(
