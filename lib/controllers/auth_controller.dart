@@ -41,7 +41,6 @@ class AuthController extends GetxController implements GetxService {
     update();
   }
 
-
   Future<void> verifyCustomerOtp({
     required String phoneNumber,
     required String otp,
@@ -143,7 +142,7 @@ class AuthController extends GetxController implements GetxService {
 
         /// TURANT OTP VERIFY SCREEN
         Get.to(
-              () => CustomerOtpVerificationScreen(
+          () => CustomerOtpVerificationScreen(
             phoneNo: phone,
             bookingId: bookingId,
           ),
@@ -202,11 +201,8 @@ class AuthController extends GetxController implements GetxService {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        showCustomSnackBar(
-            data["message"] ??
-            "OTP verified successfully",
-            isError: false
-        );
+        showCustomSnackBar(data["message"] ?? "OTP verified successfully",
+            isError: false);
         return true;
       } else {
         showCustomSnackBar(
@@ -330,7 +326,6 @@ class AuthController extends GetxController implements GetxService {
     }
   }
 
-
   /// old version of verify otp
 
   /* Future<void> VerifyOtp(String phone, String otp) async {
@@ -412,8 +407,7 @@ class AuthController extends GetxController implements GetxService {
 
   Future<void> VerifyOtp(String phone, String otp) async {
     ApiClient apiClient = ApiClient(
-        appBaseUrl: AppConstants.baseUrl,
-        sharedPreferences: sharedPreferences);
+        appBaseUrl: AppConstants.baseUrl, sharedPreferences: sharedPreferences);
 
     if (otp.length != 4) {
       showCustomSnackBar("Please enter a valid 4-digit OTP", isError: true);
@@ -441,7 +435,6 @@ class AuthController extends GetxController implements GetxService {
         if (responseData["message"]
             .toString()
             .contains("Successfully registered")) {
-
           hideLoading();
 
           //  STEP 3: Token refresh listener (VERY IMPORTANT)
@@ -462,10 +455,9 @@ class AuthController extends GetxController implements GetxService {
             await authRepo.saveUserToken(responseData['content']['token']);
             await apiClient.updateHeader(responseData['content']['token']);
 
-            final dashboardController =
-            Get.find<DashBoardController>();
+            final dashboardController = Get.find<DashBoardController>();
             final int feeStatus =
-            await dashboardController.isRegistrationFees();
+                await dashboardController.isRegistrationFees();
 
             if (feeStatus == 0) {
               Get.offAll(() => const RegistrationFeeScreen());
@@ -494,13 +486,10 @@ class AuthController extends GetxController implements GetxService {
     }
   }
 
-
   Future<void> register() async {
     showLoading();
     update();
-    ApiClient apiClient = ApiClient(
-        appBaseUrl: AppConstants.baseUrl, sharedPreferences: sharedPreferences);
-    update();
+
     try {
       var response = await authRepo.register(
         categoryId: selectedServiceCategoryId.value ?? "",
@@ -525,55 +514,74 @@ class AuthController extends GetxController implements GetxService {
         passbookImage: passbookImage,
         lat: Get.find<DashBoardController>().lat,
         long: Get.find<DashBoardController>().long,
-        //TODO : Need to update the ZONE ID later for area wise zoneId
-        // zoneId: Get.find<DashBoardController>().zoneIdForRegisteration,
         zoneId: "e8554d44-dcf2-47c7-8cf9-400d05a1340f",
         companyAddress: Get.find<DashBoardController>().addressController.text,
       );
-      var responseData = response.body;
-      debugPrint("Response: ${response.body}");
-      debugPrint("Response DATA: $responseData");
-      if (response.statusCode == 200) {
-        debugPrint("OTP: ${responseData['message']}");
-        if (responseData["message"].toString().contains("Successfully added")) {
-          showCustomSnackBar(responseData['message'],
-              isError: false, isSuccess: true);
 
-          log(token ?? "", name: "Token after registration");
-          if ((token ?? "").isNotEmpty) {
-            // await authRepo.saveUserToken(token ?? "");
-            // await apiClient.updateHeader(token, "");
+      debugPrint("Status Code: ${response.statusCode}");
+      debugPrint("Response Body: ${response.body}");
+      debugPrint("Response Body String: ${response.bodyString}");
 
-            hideLoading();
-            closeSnackBarIfActive();
-            logout();
-            update();
-            showCustomSnackBar(
-                "Registration successful! Login to your account.",
-                isError: false,
-                isSuccess: true);
-            // Get.offAllNamed(RouteHelper.login);
-            // Get.offAllNamed(RouteHelper.dashboard);
-            Get.offAll(() => const RegistrationFeeScreen());
-          }
-          // update();
+      final responseData = response.body;
+
+      if (response.statusCode == 200 && responseData != null) {
+        final message = responseData["message"]?.toString() ?? "";
+
+        if (message.contains("Successfully added")) {
+          showCustomSnackBar(
+            message,
+            isError: false,
+            isSuccess: true,
+          );
+
+          hideLoading();
+          closeSnackBarIfActive();
+          logout();
+          update();
+
+          showCustomSnackBar(
+            "Registration successful! Login to your account.",
+            isError: false,
+            isSuccess: true,
+          );
+
+          Get.offAll(() => const RegistrationFeeScreen());
         } else {
           hideLoading();
           closeSnackBarIfActive();
-          showCustomSnackBar(responseData['message'], isError: true);
+          showCustomSnackBar(
+              message.isNotEmpty ? message : "Something went wrong",
+              isError: true);
         }
       } else {
+        String errorMessage = "Something went wrong";
+
+        if (responseData != null) {
+          errorMessage = responseData["message"]?.toString() ?? errorMessage;
+
+          if (responseData["errors"] != null &&
+              responseData["errors"] is List &&
+              (responseData["errors"] as List).isNotEmpty) {
+            errorMessage = responseData["errors"][0]["message"]?.toString() ??
+                errorMessage;
+          }
+        } else if (response.bodyString != null &&
+            response.bodyString!.isNotEmpty) {
+          errorMessage = response.bodyString!;
+        }
+
         hideLoading();
         closeSnackBarIfActive();
-        showCustomSnackBar(responseData['message'], isError: true);
+        showCustomSnackBar(errorMessage, isError: true);
         update();
       }
     } catch (e) {
-      print("Error sending OTP: $e");
+      debugPrint("Register Error: $e");
       hideLoading();
-      // closeSnackBarIfActive();
-      showCustomSnackBar("Something went wrong. Please try again.",
-          isError: true);
+      showCustomSnackBar(
+        "Something went wrong. Please try again.",
+        isError: true,
+      );
     } finally {
       hideLoading();
       update();

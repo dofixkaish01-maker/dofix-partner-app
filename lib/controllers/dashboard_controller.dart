@@ -955,14 +955,31 @@ class DashBoardController extends GetxController implements GetxService {
   }
 
   Future<void> getBooking(Map<String, String> query) async {
-    bookingModelSecond.data?.clear();
+    // bookingModelSecond.data?.clear();
+    bookingModelSecond = BookingModel(data: []);
     // showLoading();
     update();
     try {
       log("Query: $query");
       Response response = await authRepo.bookings(query);
       var responseData = response.body;
+      //----------------------------------------------------------------
+      log("Response data booking: $responseData");
+      log("Query: $query");
+      log("Status Code: ${response.statusCode}");
+      log("Raw Response: ${response.body}");
 
+      if (response.body != null && response.body['content'] != null) {
+        log("Response content: ${response.body['content'].toString()}");
+      }
+
+      if (responseData['content'] is List) {
+        final List contentList = responseData['content'] as List;
+        log("Response content: $contentList");
+        log("Response data list length: ${contentList.length}");
+        log("Response data list: $contentList");
+      }
+//-------------------------------------------------------------------------------
       if (responseData == null) {
         throw Exception("Response data is null");
       }
@@ -973,6 +990,10 @@ class DashBoardController extends GetxController implements GetxService {
             .toString()
             .contains("Successfully data fetched")) {
           bookingModelSecond = BookingModel.fromJson(responseData);
+          log("Parsed booking count: ${bookingModelSecond.data?.length}");
+          for (var item in bookingModelSecond.data ?? []) {
+            log("Parsed BOOKING ID => ${item.id}, STATUS => ${item.bookingStatus}");
+          }
           // hideLoading();
           // update();
         } else {
