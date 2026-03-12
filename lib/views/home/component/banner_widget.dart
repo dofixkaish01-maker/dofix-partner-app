@@ -27,9 +27,8 @@ class _ThirdComponentState extends State<ThirdComponent> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<DashBoardController>(builder: (controller) {
-      final pendingBookings = (controller.bookingModel.data ?? [])
-          .where((b) => b.bookingStatus == "pending")
-          .toList();
+      final pendingCount =
+          controller.bookingCountResponse.content?.bookingsCount?.pending ?? 0;
 
       return Container(
         margin: const EdgeInsets.only(bottom: 10),
@@ -89,11 +88,10 @@ class _ThirdComponentState extends State<ThirdComponent> {
               const SizedBox(height: 14),
 
               Visibility(
-                visible: pendingBookings.isNotEmpty,
+                visible: pendingCount > 0,
                 child: Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFF1F1),
                     borderRadius: BorderRadius.circular(12),
@@ -101,21 +99,16 @@ class _ThirdComponentState extends State<ThirdComponent> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.error_outline,
-                          size: 18, color: Color(0xFFC61414)),
+                      const Icon(Icons.error_outline, size: 18, color: Color(0xFFC61414)),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Aaj ke ${pendingBookings.length} kaam pending hai',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                          'Aaj ke $pendingCount kaam pending hai',
                           style: const TextStyle(
                             color: Color(0xFFC61414),
                             fontSize: 14,
                             fontFamily: 'Albert Sans',
                             fontWeight: FontWeight.w500,
-                            height: 1.35,
-                            decoration: TextDecoration.none,
                           ),
                         ),
                       ),
@@ -126,12 +119,12 @@ class _ThirdComponentState extends State<ThirdComponent> {
 
               /// spacing after pending msg
               Visibility(
-                visible: pendingBookings.isNotEmpty,
+                visible: pendingCount > 0,
                 child: const SizedBox(height: 14),
               ),
 
               Visibility(
-                visible: pendingBookings.isEmpty,
+                visible: pendingCount == 0,
                 child: Container(
                   height: 74,
                   width: double.infinity,
@@ -148,7 +141,6 @@ class _ThirdComponentState extends State<ThirdComponent> {
                         fontSize: 14,
                         fontFamily: 'Albert Sans',
                         fontWeight: FontWeight.w500,
-                        decoration: TextDecoration.none,
                       ),
                     ),
                   ),

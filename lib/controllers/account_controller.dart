@@ -323,30 +323,72 @@ Future<bool> userWalletRecharge({
   }
 
   //Provider Reviews
-  List<ProviderReview>? providerReviews;
+  ProviderReviewModel? providerReviewModel;
+  List<ProviderReview> providerReviews = [];
+  bool isReviewLoading = false;
 
   Future<void> fetchProviderReviews() async {
-    showLoading();
+    debugPrint("fetchProviderReviews called");
     try {
       Response response = await accountRepo.getProviderReviews();
-      if (response.statusCode == 200) {
-        log("Provider Reviews : ${response.body}");
-        final List<dynamic> reviewsJson =
-            response.body['content']['reviews'] ?? [];
-        providerReviews =
-            reviewsJson.map((e) => ProviderReview.fromJson(e)).toList();
+
+      debugPrint("====> Status: ${response.statusCode}");
+      debugPrint("====> Body runtimeType: ${response.body.runtimeType}");
+      debugPrint("====> Body: ${response.body}");
+
+      if (response.statusCode == 200 && response.body != null) {
+        providerReviewModel = ProviderReviewModel.fromJson(response.body);
+
+        providerReviews = providerReviewModel?.content?.reviews?.data ?? [];
+
+        debugPrint("providerReviewModel null? => ${providerReviewModel == null}");
+        debugPrint(
+            "parsed avgRating => ${providerReviewModel?.content?.rating?.averageRating}");
+        debugPrint(
+            "parsed reviewCount => ${providerReviewModel?.content?.rating?.reviewCount}");
+        debugPrint(
+            "parsed reviews length => ${providerReviewModel?.content?.reviews?.data?.length}");
       } else {
-        log("Provider Reviews : ${response.body} in else block");
+        providerReviewModel = null;
         providerReviews = [];
       }
     } catch (e) {
-      log("Provider Reviews : catch : $e");
+      debugPrint("Provider Reviews error => $e");
+      providerReviewModel = null;
       providerReviews = [];
-    } finally {
-      hideLoading();
-      update();
     }
+    update();
   }
+  // Future<void> fetchProviderReviews() async {
+  //   try {
+  //     debugPrint("fetchProviderReviews called");
+  //     Response response = await accountRepo.getProviderReviews(
+  //       limit: "10",
+  //       offset: "1",
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       providerReviewModel = ProviderReviewModel.fromJson(response.body);
+  //       providerReviews = providerReviewModel?.content?.reviews?.data ?? [];
+  //
+  //       debugPrint(
+  //           "Fetched avgRating => ${providerReviewModel?.content?.rating?.averageRating}");
+  //       debugPrint(
+  //           "Fetched reviewCount => ${providerReviewModel?.content?.rating?.reviewCount}");
+  //       debugPrint("Fetched reviews length => ${providerReviews.length}");
+  //     } else {
+  //       providerReviewModel = null;
+  //       providerReviews = [];
+  //     }
+  //   } catch (e) {
+  //     debugPrint("Provider Reviews error => $e");
+  //     providerReviewModel = null;
+  //     providerReviews = [];
+  //   }
+  //
+  //   update();
+  // }
+
 
   List<PackageModel>? packages;
 

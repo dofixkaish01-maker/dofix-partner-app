@@ -56,6 +56,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       await dashCtrl.getAccountInfo(true);
       await dashCtrl.fetchNotifications();
       await accCtrl.fetchCategory();
+      await accCtrl.fetchProviderReviews();
 
       if (dashCtrl.bookingModel.data == null ||
           dashCtrl.bookingModel.data!.isEmpty) {
