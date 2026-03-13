@@ -61,6 +61,7 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
       debugPrint("Catch error :  $e");
     }
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await dashBoardController.fetchCategoryDropdown();
       await authController.getServiceCategoryListing();
     });
   }
@@ -215,27 +216,30 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
 
                               /// Service Category Dropdown
                               Obx(() {
-                                final categories = authController
-                                        .serviceCategoryModel.value?.content ??
-                                    [];
+                                final categories = dashBoardController.categoryDropdownList;
+
                                 return DropdownButtonFormField<String>(
                                   decoration: const InputDecoration(
                                     labelText: 'Service Category',
                                     border: OutlineInputBorder(),
                                   ),
-                                  value: authController
-                                      .selectedServiceCategoryId.value,
+
+                                  value: dashBoardController.selectedCategoryId.value.isEmpty
+                                      ? null
+                                      : dashBoardController.selectedCategoryId.value,
+
                                   items: categories.map((cat) {
                                     return DropdownMenuItem<String>(
                                       value: cat.id,
                                       child: Text(cat.name ?? ''),
                                     );
                                   }).toList(),
+
                                   onChanged: (val) {
-                                    authController
-                                        .selectedServiceCategoryId.value = val;
-                                    log("Id is ${authController.selectedServiceCategoryId.value}");
+                                    dashBoardController.selectedCategoryId.value = val ?? "";
+                                    log("Selected Category Id: ${dashBoardController.selectedCategoryId.value}");
                                   },
+
                                   validator: (val) {
                                     if (val == null || val.isEmpty) {
                                       return 'Please select a service category';
