@@ -223,23 +223,20 @@ class _AccountSetupScreenState extends State<AccountSetupScreen> {
                                     labelText: 'Service Category',
                                     border: OutlineInputBorder(),
                                   ),
-
-                                  value: dashBoardController.selectedCategoryId.value.isEmpty
-                                      ? null
-                                      : dashBoardController.selectedCategoryId.value,
-
+                                  value: authController.selectedServiceCategoryId.value != null &&
+                                      authController.selectedServiceCategoryId.value!.isNotEmpty
+                                      ? authController.selectedServiceCategoryId.value
+                                      : null,
                                   items: categories.map((cat) {
                                     return DropdownMenuItem<String>(
                                       value: cat.id,
                                       child: Text(cat.name ?? ''),
                                     );
                                   }).toList(),
-
                                   onChanged: (val) {
-                                    dashBoardController.selectedCategoryId.value = val ?? "";
-                                    log("Selected Category Id: ${dashBoardController.selectedCategoryId.value}");
+                                    authController.selectedServiceCategoryId.value = val ?? "";
+                                    log("Selected Category Id: ${authController.selectedServiceCategoryId.value}");
                                   },
-
                                   validator: (val) {
                                     if (val == null || val.isEmpty) {
                                       return 'Please select a service category';
