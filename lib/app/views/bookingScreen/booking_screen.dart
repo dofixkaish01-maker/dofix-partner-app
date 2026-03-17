@@ -1,7 +1,4 @@
 import 'package:dofix_technichian/utils/theme.dart';
-
-// import 'package:dofix_technichian/widgets/common_loading.dart'; // unused
-// import 'package:dofix_technichian/widgets/orbit_loader.dart'; // unused
 import 'package:dofix_technichian/widgets/dot_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

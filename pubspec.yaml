@@ -56,6 +56,7 @@ dependencies:
   connectivity_plus: ^7.0.0
   appsflyer_sdk: ^6.17.8
   dotted_line: ^3.2.3
+  sqflite: ^2.4.2
 
 dev_dependencies:
   flutter_test:

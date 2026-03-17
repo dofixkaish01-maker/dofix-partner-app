@@ -4,6 +4,7 @@ class DetailsComponent extends StatelessWidget {
   final String title;
   final String subTitel;
   final String? image;
+
   const DetailsComponent({
     super.key,
     required this.title,
@@ -53,7 +54,7 @@ class DetailsComponent extends StatelessWidget {
               ),
               Text(
                 subTitel,
-                maxLines: 1,
+                maxLines: 2,
                 style: TextStyle(
                   color: Colors.black.withOpacity(0.50),
                   fontSize: 14,
