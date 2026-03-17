@@ -109,12 +109,15 @@ class AccountRepo {
     );
   }
 
-  Future<Response> getProviderReviews() async {
+  Future<Response> getProviderReviews({
+    String limit = "10",
+    String offset = "1",
+  }) async {
     return await apiClient.getData(
       AppConstants.getProviderReview,
       query: {
-        "limit": "11",
-        "offset": "11",
+        "limit": limit,
+        "offset": offset,
       },
       method: "GET",
     );

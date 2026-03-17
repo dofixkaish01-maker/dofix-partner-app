@@ -39,6 +39,8 @@ class Content {
   final String? paymentMethod;
   final String? transactionId;
   final double? totalBookingAmount;
+  String? serviceAssignCustomerName;
+  String? serviceAssignCustomerPhone;
   final double? totalTaxAmount;
   final int? totalDiscountAmount;
   final DateTime? serviceSchedule;
@@ -93,6 +95,8 @@ class Content {
     this.paymentMethod,
     this.transactionId,
     this.totalBookingAmount,
+    this.serviceAssignCustomerName,
+    this.serviceAssignCustomerPhone,
     this.totalTaxAmount,
     this.totalDiscountAmount,
     this.serviceSchedule,
@@ -154,6 +158,9 @@ class Content {
         totalBookingAmount: json['total_booking_amount'] is double
             ? json['total_booking_amount']
             : double.tryParse(json['total_booking_amount']?.toString() ?? ''),
+        serviceAssignCustomerName: json['assign_customer_name']?.toString(),
+        serviceAssignCustomerPhone:
+            json['assign_customer_phone']?.toString(),
         totalTaxAmount: json['total_tax_amount'] is double
             ? json['total_tax_amount']
             : double.tryParse(json['total_tax_amount']?.toString() ?? ''),
@@ -268,6 +275,8 @@ class Content {
         'payment_method': paymentMethod,
         'transaction_id': transactionId,
         'total_booking_amount': totalBookingAmount,
+        'assign_customer_name': serviceAssignCustomerName,
+        'assign_customer_phone': serviceAssignCustomerPhone,
         'total_tax_amount': totalTaxAmount,
         'total_discount_amount': totalDiscountAmount,
         'service_schedule': serviceSchedule?.toIso8601String(),

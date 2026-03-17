@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dofix_technichian/app/views/auth/registration_fee_screen.dart';
 import 'package:dofix_technichian/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
-import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/dashboard_controller.dart';
 import '../../../controllers/tracking_controller.dart';
@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     final AppsFlyerOptions options = AppsFlyerOptions(
       afDevKey: "QPsc9zfWKAjutYjJgPVLWi",
-      appId: "com.dofix.technician",
+      appId: "6758930323",
       showDebug: true,
     );
 

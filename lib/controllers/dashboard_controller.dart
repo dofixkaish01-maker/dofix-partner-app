@@ -31,6 +31,7 @@ import '../app/widgets/custom_wallet_balance.dart';
 import '../data/api/api.dart';
 import '../data/repo/auth_repo.dart';
 import '../helper/route_helper.dart';
+import '../model/CategoryModel/category_dropdown_model.dart';
 import '../model/ConfigModel/config_model.dart';
 import '../model/MonthlyStats/monthly_stats.dart';
 import '../model/booking_details_content/booking_details_content.dart';
@@ -163,6 +164,30 @@ class DashBoardController extends GetxController implements GetxService {
       return 0;
     }
   }
+
+  RxList<CategoryDD> categoryDropdownList = <CategoryDD>[].obs;
+  RxString selectedCategoryId = "".obs;
+
+  Future<void> fetchCategoryDropdown() async {
+    try {
+      Response response = await authRepo.getCategoryDropdown();
+
+      if (response.statusCode == 200) {
+        final body = response.body;
+
+        if (body['response_code'] == "default_200") {
+          categoryDropdownList.assignAll(
+            (body['content'] as List)
+                .map((e) => CategoryDD.fromJson(e))
+                .toList(),
+          );
+        }
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
 
   Future<void> refreshAndNavigateIfPaid() async {
     try {
@@ -930,14 +955,31 @@ class DashBoardController extends GetxController implements GetxService {
   }
 
   Future<void> getBooking(Map<String, String> query) async {
-    bookingModelSecond.data?.clear();
+    // bookingModelSecond.data?.clear();
+    bookingModelSecond = BookingModel(data: []);
     // showLoading();
     update();
     try {
       log("Query: $query");
       Response response = await authRepo.bookings(query);
       var responseData = response.body;
+      //----------------------------------------------------------------
+      log("Response data booking: $responseData");
+      log("Query: $query");
+      log("Status Code: ${response.statusCode}");
+      log("Raw Response: ${response.body}");
 
+      if (response.body != null && response.body['content'] != null) {
+        log("Response content: ${response.body['content'].toString()}");
+      }
+
+      if (responseData['content'] is List) {
+        final List contentList = responseData['content'] as List;
+        log("Response content: $contentList");
+        log("Response data list length: ${contentList.length}");
+        log("Response data list: $contentList");
+      }
+//-------------------------------------------------------------------------------
       if (responseData == null) {
         throw Exception("Response data is null");
       }
@@ -948,6 +990,10 @@ class DashBoardController extends GetxController implements GetxService {
             .toString()
             .contains("Successfully data fetched")) {
           bookingModelSecond = BookingModel.fromJson(responseData);
+          log("Parsed booking count: ${bookingModelSecond.data?.length}");
+          for (var item in bookingModelSecond.data ?? []) {
+            log("Parsed BOOKING ID => ${item.id}, STATUS => ${item.bookingStatus}");
+          }
           // hideLoading();
           // update();
         } else {
@@ -1078,11 +1124,11 @@ class DashBoardController extends GetxController implements GetxService {
         hideLoading();
         showCustomSnackBar(responseData['message'], isError: true);
       }
-    }  catch (e, st) {
-  debugPrint("Error fetching providerInfo: $e\n$st");
-  closeSnackBarIfActive();
-  // showCustomSnackBar("Something went wrong. Please try again.", isError: true);
-} finally {
+    } catch (e, st) {
+      debugPrint("Error fetching providerInfo: $e\n$st");
+      closeSnackBarIfActive();
+      // showCustomSnackBar("Something went wrong. Please try again.", isError: true);
+    } finally {
       _isLoginLoading = false;
       // showCustomSnackBar("Something went wrong. Please try again.", isError: true);
       hideLoading();
@@ -1390,21 +1436,35 @@ class DashBoardController extends GetxController implements GetxService {
   //   }
   // }
 
+  bool isBookingsLoading = false;
+
   Future<void> getListOfBookings({required bool isRefresh}) async {
+    /// duplicate API call rokne ke liye
+    if (isBookingsLoading) return;
+
+    /// agar refresh nahi hai aur data already available hai
+    /// to dobara API call mat karo
+    if (!isRefresh &&
+        bookingModel.data != null &&
+        bookingModel.data!.isNotEmpty) {
+      return;
+    }
+
+    isBookingsLoading = true;
+
     if (!isRefresh) {
-      showLoading(); // loader open
+      showLoading();
     }
 
     try {
-      // Prepare API client and headers
       ApiClient apiClient = ApiClient(
         appBaseUrl: AppConstants.baseUrl,
         sharedPreferences: sharedPreferences,
       );
+
       String? token = sharedPreferences.getString(AppConstants.token);
       apiClient.updateHeader(token);
 
-      // Prepare request body
       Map<String, String> body = {
         "limit": "100",
         "offset": "1",
@@ -1415,7 +1475,6 @@ class DashBoardController extends GetxController implements GetxService {
       log("Request Body: $body");
       log("Headers: ${apiClient.mainHeaders}");
 
-      // Make API call
       Response response = await apiClient.postData(
         AppConstants.getTodaysBooking,
         body,
@@ -1428,43 +1487,128 @@ class DashBoardController extends GetxController implements GetxService {
 
         if (responseData['content'] != null &&
             responseData['content']['bookings'] != null) {
-          // bookingModel =
-          //     booking.BookingList.fromJson(responseData['content']['bookings']);
           var bookingsJson = responseData['content']?['bookings'];
           bookingModel = booking.BookingList.fromJson(bookingsJson);
 
           if (!isRefresh) {
             getProviderInfo();
           }
+
           update();
         } else {
           log("Error: Invalid response structure");
         }
       } else {
         log("${response.statusText} issue error ${response.statusCode}");
+
         if (response.statusText == 'Unauthorized') {
           closeSnackBarIfActive();
-          showCustomSnackBar("Your session has expired. Please login again.",
-              isError: true);
+          showCustomSnackBar(
+            "Your session has expired. Please login again.",
+            isError: true,
+          );
           Get.find<AuthController>().logout();
         } else {
           closeSnackBarIfActive();
-          showCustomSnackBar("Failed to fetch bookings. Please try again.",
-              isError: true);
+          showCustomSnackBar(
+            "Failed to fetch bookings. Please try again.",
+            isError: true,
+          );
         }
+
         update();
       }
     } catch (e) {
       log("Error fetching bookings: $e");
       closeSnackBarIfActive();
-      showCustomSnackBar("Something went wrong. Please try again. $e",
-          isError: true);
+      showCustomSnackBar(
+        "Something went wrong. Please try again.",
+        isError: true,
+      );
     } finally {
+      isBookingsLoading = false;
+
       if (!isRefresh) {
-        hideLoading(); // YAHI PE HAMESHA CLOSE
+        hideLoading();
       }
     }
   }
+
+  // Future<void> getListOfBookings({required bool isRefresh}) async {
+  //   if (!isRefresh) {
+  //     showLoading(); // loader open
+  //   }
+  //
+  //   try {
+  //     // Prepare API client and headers
+  //     ApiClient apiClient = ApiClient(
+  //       appBaseUrl: AppConstants.baseUrl,
+  //       sharedPreferences: sharedPreferences,
+  //     );
+  //     String? token = sharedPreferences.getString(AppConstants.token);
+  //     apiClient.updateHeader(token);
+  //
+  //     // Prepare request body
+  //     Map<String, String> body = {
+  //       "limit": "100",
+  //       "offset": "1",
+  //       "booking_status": "all",
+  //       "service_type": "all"
+  //     };
+  //
+  //     log("Request Body: $body");
+  //     log("Headers: ${apiClient.mainHeaders}");
+  //
+  //     // Make API call
+  //     Response response = await apiClient.postData(
+  //       AppConstants.getTodaysBooking,
+  //       body,
+  //       headers: apiClient.mainHeaders,
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       var responseData = jsonDecode(response.body);
+  //       log("$responseData today booking data");
+  //
+  //       if (responseData['content'] != null &&
+  //           responseData['content']['bookings'] != null) {
+  //         // bookingModel =
+  //         //     booking.BookingList.fromJson(responseData['content']['bookings']);
+  //         var bookingsJson = responseData['content']?['bookings'];
+  //         bookingModel = booking.BookingList.fromJson(bookingsJson);
+  //
+  //         if (!isRefresh) {
+  //           getProviderInfo();
+  //         }
+  //         update();
+  //       } else {
+  //         log("Error: Invalid response structure");
+  //       }
+  //     } else {
+  //       log("${response.statusText} issue error ${response.statusCode}");
+  //       if (response.statusText == 'Unauthorized') {
+  //         closeSnackBarIfActive();
+  //         showCustomSnackBar("Your session has expired. Please login again.",
+  //             isError: true);
+  //         Get.find<AuthController>().logout();
+  //       } else {
+  //         closeSnackBarIfActive();
+  //         showCustomSnackBar("Failed to fetch bookings. Please try again.",
+  //             isError: true);
+  //       }
+  //       update();
+  //     }
+  //   } catch (e) {
+  //     log("Error fetching bookings: $e");
+  //     closeSnackBarIfActive();
+  //     showCustomSnackBar("Something went wrong. Please try again. $e",
+  //         isError: true);
+  //   } finally {
+  //     if (!isRefresh) {
+  //       hideLoading(); // YAHI PE HAMESHA CLOSE
+  //     }
+  //   }
+  // }
 
   List<Widget> screens = [
     const HomeScreen(

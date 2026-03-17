@@ -17,10 +17,23 @@ class _Naya_kaamState extends State<Naya_kaam> {
   @override
   void initState() {
     super.initState();
+    debugPrint("Naya_kaam initState called");
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.find<DashBoardController>().getListOfBookings(isRefresh: false);
+      final controller = Get.find<DashBoardController>();
+
+      if (controller.bookingModel.data == null ||
+          controller.bookingModel.data!.isEmpty) {
+        controller.getListOfBookings(isRefresh: false);
+      }
     });
   }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     Get.find<DashBoardController>().getListOfBookings(isRefresh: false);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

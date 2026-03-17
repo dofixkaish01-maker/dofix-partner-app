@@ -51,7 +51,7 @@ class _SecondComponentsState extends State<SecondComponents> {
   Widget build(BuildContext context) {
     return GetBuilder<DashBoardController>(builder: (dashBoardController) {
       final pendingBookings = (dashBoardController.bookingModel.data ?? [])
-          .where((b) => b.bookingStatus == "accepted")
+          .where((b) => b.bookingStatus == "pending")
           .toList();
 
       return ((dashBoardController.bookingModel.data ?? []).isNotEmpty &&

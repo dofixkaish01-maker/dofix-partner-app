@@ -52,267 +52,276 @@ class _PaiseScreenState extends State<PaiseScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            /// ================= CATEGORY DATA =================
-            final category = authCtrl.categoryInfo.value;
-            int minAmount = category?.minimumBalance ?? 0;
-            String categoryName = category?.categoryName ?? "Service";
+        return SafeArea(
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              /// ================= CATEGORY DATA =================
+              final category = authCtrl.categoryInfo.value;
+              int minAmount = category?.minimumBalance ?? 0;
+              String categoryName = category?.categoryName ?? "Service";
 
-            /// ================= CURRENT BALANCE =================
-            double receivableAmount = double.tryParse(
-                  dashCtrl.providerDashboardModel.content?.providerInfo?.owner
-                          ?.account?.accountReceivable
-                          ?.toString() ??
-                      "0",
-                ) ??
-                0;
+              /// ================= CURRENT BALANCE =================
+              double receivableAmount = double.tryParse(
+                    dashCtrl.providerDashboardModel.content?.providerInfo?.owner
+                            ?.account?.accountReceivable
+                            ?.toString() ??
+                        "0",
+                  ) ??
+                  0;
 
-            int currentBalance = dashCtrl
-                .getTransactionAmountAmount(0.0, receivableAmount)
-                .toInt();
+              int currentBalance = dashCtrl
+                  .getTransactionAmountAmount(0.0, receivableAmount)
+                  .toInt();
 
-            int amount = int.tryParse(amountController.text) ?? 0;
-            int totalBalance = currentBalance + amount;
+              int amount = int.tryParse(amountController.text) ?? 0;
+              int totalBalance = currentBalance + amount;
 
-            bool isValidAmount = totalBalance >= minAmount;
-            int remainingAmount = isValidAmount ? 0 : minAmount - totalBalance;
+              bool isValidAmount = totalBalance >= minAmount;
+              int remainingAmount =
+                  isValidAmount ? 0 : minAmount - totalBalance;
 
-            return Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /// ================= HEADER =================
-                      Row(
-                        children: [
-                          const Icon(Icons.account_balance_wallet,
-                              color: primaryColor),
-                          const SizedBox(width: 8),
-                          const Expanded(
-                            child: Text(
-                              "Recharge Wallet",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () => Navigator.pop(context),
-                            child: const Icon(Icons.close),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      /// ================= SERVICE INFO =================
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: primaryColor.withOpacity(0.08),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(24)),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// ================= HEADER =================
+                        Row(
                           children: [
-                            const Icon(Icons.miscellaneous_services,
+                            const Icon(Icons.account_balance_wallet,
                                 color: primaryColor),
                             const SizedBox(width: 8),
-                            Expanded(
+                            const Expanded(
                               child: Text(
-                                "$categoryName Service",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
+                                "Recharge Wallet",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
+                            ),
+                            InkWell(
+                              onTap: () => Navigator.pop(context),
+                              child: const Icon(Icons.close),
                             ),
                           ],
                         ),
-                      ),
 
-                      const SizedBox(height: 12),
+                        const SizedBox(height: 16),
 
-                      /// ================= MIN BALANCE INFO =================
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.orange.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.info_outline,
-                                color: Colors.orange),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                "Minimum wallet balance required is ₹$minAmount",
-                                style: const TextStyle(
-                                  color: Colors.orange,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 18),
-
-                      /// ================= WALLET CARD =================
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              primaryColor,
-                              Color(0xFF3FA9D6),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Wallet Balance",
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 13,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              "₹ $currentBalance",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _balanceItem(
-                                  title: "Existing",
-                                  amount: currentBalance,
-                                  icon: Icons.account_balance_wallet_outlined,
-                                ),
-                                _balanceItem(
-                                  title: "Recharge",
-                                  amount: amount,
-                                  icon: Icons.add_circle_outline,
-                                ),
-                                _balanceItem(
-                                  title: "After Pay",
-                                  amount: totalBalance,
-                                  icon: Icons.trending_up,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 18),
-
-                      /// ================= AMOUNT FIELD =================
-                      TextField(
-                        controller: amountController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        decoration: InputDecoration(
-                          prefixText: "₹ ",
-                          labelText: "Enter Recharge Amount",
-                          border: OutlineInputBorder(
+                        /// ================= SERVICE INFO =================
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: primaryColor.withOpacity(0.08),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                        ),
-                        onChanged: (_) => setState(() {}),
-                      ),
-
-                      const SizedBox(height: 14),
-
-                      /// ================= STATUS =================
-                      Row(
-                        children: [
-                          Icon(
-                            isValidAmount
-                                ? Icons.check_circle
-                                : Icons.warning_amber_rounded,
-                            color:
-                                isValidAmount ? Colors.green : Colors.redAccent,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              isValidAmount
-                                  ? "You're good to go"
-                                  : "Add ₹$remainingAmount more",
-                              style: TextStyle(
-                                color: isValidAmount
-                                    ? Colors.green
-                                    : Colors.redAccent,
-                                fontWeight: FontWeight.w600,
+                          child: Row(
+                            children: [
+                              const Icon(Icons.miscellaneous_services,
+                                  color: primaryColor),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  "$categoryName Service",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
 
-                      const SizedBox(height: 22),
+                        const SizedBox(height: 12),
 
-                      /// ================= BUTTON =================
-                      SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColor,
-                            shape: RoundedRectangleBorder(
+                        /// ================= MIN BALANCE INFO =================
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.info_outline,
+                                  color: Colors.orange),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  "Minimum wallet balance required is ₹$minAmount",
+                                  style: const TextStyle(
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        /// ================= WALLET CARD =================
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                primaryColor,
+                                Color(0xFF3FA9D6),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Wallet Balance",
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                "₹ $currentBalance",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  _balanceItem(
+                                    title: "Existing",
+                                    amount: currentBalance,
+                                    icon: Icons.account_balance_wallet_outlined,
+                                  ),
+                                  _balanceItem(
+                                    title: "Recharge",
+                                    amount: amount,
+                                    icon: Icons.add_circle_outline,
+                                  ),
+                                  _balanceItem(
+                                    title: "After Pay",
+                                    amount: totalBalance,
+                                    icon: Icons.trending_up,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        /// ================= AMOUNT FIELD =================
+                        TextField(
+                          controller: amountController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          decoration: InputDecoration(
+                            prefixText: "₹ ",
+                            labelText: "Enter Recharge Amount",
+                            border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          onPressed: isValidAmount
-                              ? () async {
-                                  Navigator.pop(context);
-                                  await authCtrl.userWalletRecharge(
-                                    amount: amount.toString(),
-                                    providerId: dashCtrl.providerDashboardModel
-                                            .content?.providerInfo?.id ??
-                                        "",
-                                  );
-                                }
-                              : null,
-                          child: const Text(
-                            "Proceed to Pay",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          onChanged: (_) => setState(() {}),
+                        ),
+
+                        const SizedBox(height: 14),
+
+                        /// ================= STATUS =================
+                        Row(
+                          children: [
+                            Icon(
+                              isValidAmount
+                                  ? Icons.check_circle
+                                  : Icons.warning_amber_rounded,
+                              color: isValidAmount
+                                  ? Colors.green
+                                  : Colors.redAccent,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                isValidAmount
+                                    ? "You're good to go"
+                                    : "Add ₹$remainingAmount more",
+                                style: TextStyle(
+                                  color: isValidAmount
+                                      ? Colors.green
+                                      : Colors.redAccent,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 22),
+
+                        /// ================= BUTTON =================
+                        SizedBox(
+                          width: double.infinity,
+                          height: 48,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            onPressed: isValidAmount
+                                ? () async {
+                                    Navigator.pop(context);
+                                    await authCtrl.userWalletRecharge(
+                                      amount: amount.toString(),
+                                      providerId: dashCtrl
+                                              .providerDashboardModel
+                                              .content
+                                              ?.providerInfo
+                                              ?.id ??
+                                          "",
+                                    );
+                                  }
+                                : null,
+                            child: const Text(
+                              "Proceed to Pay",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         );
       },
     );
@@ -381,7 +390,6 @@ class _PaiseScreenState extends State<PaiseScreen> {
                     "0")
                 .toString()) ??
             0;
-        // TODO : Not required now in App
         // double payableAmount = double.tryParse((controller
         //                 .providerDashboardModel
         //                 .content
@@ -442,219 +450,441 @@ class _PaiseScreenState extends State<PaiseScreen> {
                         height: 20,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.all(14),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(14),
-                                  border: Border.all(
-                                      color: Colors.black.withOpacity(0.06)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.05),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 4),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width >= 768 ? 12 : 8,
+                        ),
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final double width = constraints.maxWidth;
+                            final bool isSmall = width < 360;
+                            final bool isTablet = width >= 768;
+
+                            final double containerPadding = isTablet ? 20 : (isSmall ? 12 : 14);
+                            final double headerHorizontal = isTablet ? 14 : 12;
+                            final double headerVertical = isTablet ? 12 : 10;
+                            final double titleFont = isTablet ? 15 : (isSmall ? 13 : 14);
+                            final double amountFont = isTablet ? 30 : (isSmall ? 22 : 26);
+                            final double helperFont = isTablet ? 13 : 12;
+                            final double iconSize = isTablet ? 20 : 18;
+                            final double radius = isTablet ? 16 : 14;
+
+                            return Row(
+                              children: [
+                                Expanded(
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth: isTablet ? 700 : double.infinity,
                                     ),
-                                  ],
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    /// Header strip (small tag style)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 10),
+                                    child: Container(
+                                      padding: EdgeInsets.all(containerPadding),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFFE9F2F6),
-                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(radius),
                                         border: Border.all(
-                                            color:
-                                                Colors.black.withOpacity(0.05)),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons
-                                                .account_balance_wallet_rounded,
-                                            size: 18,
-                                            color: primaryAppColor
-                                                .withOpacity(0.9),
+                                          color: Colors.black.withOpacity(0.06),
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.05),
+                                            blurRadius: isTablet ? 14 : 10,
+                                            offset: const Offset(0, 4),
                                           ),
-                                          const SizedBox(width: 10),
-                                          Expanded(
-                                            child: Text(
-                                              transactionType ==
-                                                      TransactionType.payable
-                                                  ? "Payable balance".tr
-                                                  : transactionType ==
-                                                          TransactionType
-                                                              .withdrawAble
-                                                      ? "Available balance".tr
-                                                      : transactionType ==
-                                                              TransactionType
-                                                                  .adjustAndPayable
-                                                          ? "Final payable balance"
-                                                              .tr
-                                                          : transactionType ==
-                                                                  TransactionType
-                                                                      .adjustWithdrawAble
-                                                              ? "Final receivable balance"
-                                                                  .tr
-                                                              : transactionType ==
-                                                                      TransactionType
-                                                                          .adjust
-                                                                  ? "Adjustable balance"
-                                                                      .tr
-                                                                  : "Empty Balance"
-                                                                      .tr,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                color: Color(0xFF212121),
-                                                fontSize: 14,
-                                                fontFamily: 'Albert Sans',
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.3,
+                                        ],
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          /// Header strip
+                                          Container(
+                                            width: double.infinity,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: headerHorizontal,
+                                              vertical: headerVertical,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFE9F2F6),
+                                              borderRadius: BorderRadius.circular(12),
+                                              border: Border.all(
+                                                color: Colors.black.withOpacity(0.05),
                                               ),
+                                            ),
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 1),
+                                                  child: Icon(
+                                                    Icons.account_balance_wallet_rounded,
+                                                    size: iconSize,
+                                                    color: primaryAppColor.withOpacity(0.9),
+                                                  ),
+                                                ),
+                                                SizedBox(width: isTablet ? 12 : 10),
+                                                Expanded(
+                                                  child: Text(
+                                                    transactionType == TransactionType.payable
+                                                        ? "Payable balance".tr
+                                                        : transactionType ==
+                                                        TransactionType.withdrawAble
+                                                        ? "Available balance".tr
+                                                        : transactionType ==
+                                                        TransactionType.adjustAndPayable
+                                                        ? "Final payable balance".tr
+                                                        : transactionType ==
+                                                        TransactionType
+                                                            .adjustWithdrawAble
+                                                        ? "Final receivable balance".tr
+                                                        : transactionType ==
+                                                        TransactionType.adjust
+                                                        ? "Adjustable balance".tr
+                                                        : "Empty Balance".tr,
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      color: const Color(0xFF212121),
+                                                      fontSize: titleFont,
+                                                      fontFamily: 'Albert Sans',
+                                                      fontWeight: FontWeight.w600,
+                                                      height: 1.3,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+
+                                          SizedBox(height: isTablet ? 18 : 14),
+
+                                          /// Amount
+                                          FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              '₹ $transactionAmount',
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                color: primaryAppColor,
+                                                fontSize: amountFont,
+                                                fontFamily: 'Albert Sans',
+                                                fontWeight: FontWeight.w800,
+                                                height: 1.1,
+                                              ),
+                                            ),
+                                          ),
+
+                                          SizedBox(height: isTablet ? 8 : 6),
+
+                                          /// Helper line
+                                          Text(
+                                            "Tap the button below to continue",
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: Colors.black.withOpacity(0.55),
+                                              fontSize: helperFont,
+                                              fontFamily: 'Albert Sans',
+                                              fontWeight: FontWeight.w500,
+                                              height: 1.4,
+                                            ),
+                                          ),
+
+                                          SizedBox(height: isTablet ? 18 : 14),
+
+                                          /// Button
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: CustomButtonWidget(
+                                              buttonText: transactionType == TransactionType.payable
+                                                  ? "Pay Now".tr
+                                                  : transactionType ==
+                                                  TransactionType.withdrawAble
+                                                  ? "withdraw".tr
+                                                  : transactionType ==
+                                                  TransactionType.adjustAndPayable
+                                                  ? "Adjust and Pay".tr
+                                                  : transactionType ==
+                                                  TransactionType
+                                                      .adjustWithdrawAble
+                                                  ? "Withdraw".tr
+                                                  : transactionType ==
+                                                  TransactionType.adjust
+                                                  ? "Adjust".tr
+                                                  : "Empty balance".tr,
+                                              onPressed: transactionType == TransactionType.none
+                                                  ? () {
+                                                showCustomSnackBar("No amount to withdraw.");
+                                              }
+                                                  : () async {
+                                                await Get.find<DashBoardController>()
+                                                    .getConfigData();
+                                                var config = Get.find<DashBoardController>()
+                                                    .configModel
+                                                    .content;
+                                                if (transactionType ==
+                                                    TransactionType.payable ||
+                                                    transactionType ==
+                                                        TransactionType.adjustAndPayable) {
+                                                  if (config?.digitalPayment == 0) {
+                                                    showCustomSnackBar(
+                                                      "no_payment_option_available".tr,
+                                                    );
+                                                  } else if ((config?.minimumPayableAmount ??
+                                                      0) <=
+                                                      transactionAmount) {
+                                                    Get.find<DashBoardController>()
+                                                        .updateIndex(-1, isUpdate: false);
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      useRootNavigator: true,
+                                                      isScrollControlled: true,
+                                                      backgroundColor: Colors.transparent,
+                                                      builder: (context) =>
+                                                          PaymentMethodDialog(
+                                                            amount: transactionAmount,
+                                                          ),
+                                                    );
+                                                  } else {
+                                                    showCustomSnackBar(
+                                                      "${'Minimum Payable Amount'.tr} ${config?.minimumPayableAmount ?? 0}",
+                                                    );
+                                                  }
+                                                } else if (transactionType ==
+                                                    TransactionType.withdrawAble ||
+                                                    transactionType ==
+                                                        TransactionType.adjustWithdrawAble) {
+                                                  await accountController.adjustMyBalance();
+                                                  Get.to(WithdrawRequestScreen());
+                                                } else if (transactionType ==
+                                                    TransactionType.adjust) {
+                                                  await accountController.adjustMyBalance();
+                                                }
+                                              },
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-
-                                    const SizedBox(height: 14),
-
-                                    /// Amount
-                                    Text(
-                                      '₹ $transactionAmount',
-                                      style: const TextStyle(
-                                        color: primaryAppColor,
-                                        fontSize: 26,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w800,
-                                        height: 1.1,
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 6),
-
-                                    /// Helper line
-                                    Text(
-                                      "Tap the button below to continue",
-                                      style: TextStyle(
-                                        color: Colors.black.withOpacity(0.55),
-                                        fontSize: 12,
-                                        fontFamily: 'Albert Sans',
-                                        fontWeight: FontWeight.w500,
-                                        height: 1.4,
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 14),
-
-                                    /// Button (full width)
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: CustomButtonWidget(
-                                        buttonText: transactionType ==
-                                                TransactionType.payable
-                                            ? "Pay Now".tr
-                                            : transactionType ==
-                                                    TransactionType.withdrawAble
-                                                ? "withdraw".tr
-                                                : transactionType ==
-                                                        TransactionType
-                                                            .adjustAndPayable
-                                                    ? "Adjust and Pay".tr
-                                                    : transactionType ==
-                                                            TransactionType
-                                                                .adjustWithdrawAble
-                                                        // ? "Adjust and Withdraw".tr
-                                                        ? "Withdraw".tr
-                                                        : transactionType ==
-                                                                TransactionType
-                                                                    .adjust
-                                                            ? "Adjust".tr
-                                                            : "Empty balance"
-                                                                .tr,
-                                        onPressed: transactionType ==
-                                                TransactionType.none
-                                            ? () {
-                                                showCustomSnackBar(
-                                                    "No amount to withdraw.");
-                                              }
-                                            : () async {
-                                                await Get.find<
-                                                        DashBoardController>()
-                                                    .getConfigData();
-                                                var config = Get.find<
-                                                        DashBoardController>()
-                                                    .configModel
-                                                    .content;
-                                                if (transactionType ==
-                                                        TransactionType
-                                                            .payable ||
-                                                    transactionType ==
-                                                        TransactionType
-                                                            .adjustAndPayable) {
-                                                  if (config?.digitalPayment ==
-                                                      0) {
-                                                    showCustomSnackBar(
-                                                        "no_payment_option_available"
-                                                            .tr);
-                                                  } else if ((config
-                                                              ?.minimumPayableAmount ??
-                                                          0) <=
-                                                      transactionAmount) {
-                                                    Get.find<
-                                                            DashBoardController>()
-                                                        .updateIndex(-1,
-                                                            isUpdate: false);
-                                                    showModalBottomSheet(
-                                                      context: context,
-                                                      useRootNavigator: true,
-                                                      isScrollControlled: true,
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      builder: (context) =>
-                                                          PaymentMethodDialog(
-                                                              amount:
-                                                                  transactionAmount),
-                                                    );
-                                                  } else {
-                                                    showCustomSnackBar(
-                                                        "${'Minimum Payable Amount'.tr} ${config?.minimumPayableAmount ?? 0}");
-                                                  }
-                                                } else if (transactionType ==
-                                                        TransactionType
-                                                            .withdrawAble ||
-                                                    transactionType ==
-                                                        TransactionType
-                                                            .adjustWithdrawAble) {
-                                                  await accountController
-                                                      .adjustMyBalance();
-                                                  Get.to(
-                                                      WithdrawRequestScreen());
-                                                } else if (transactionType ==
-                                                    TransactionType.adjust) {
-                                                  await accountController
-                                                      .adjustMyBalance();
-                                                }
-                                              },
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
+                              ],
+                            );
+                          },
                         ),
                       ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Expanded(
+                      //         child: Container(
+                      //           padding: const EdgeInsets.all(14),
+                      //           decoration: BoxDecoration(
+                      //             color: Colors.white,
+                      //             borderRadius: BorderRadius.circular(14),
+                      //             border: Border.all(
+                      //                 color: Colors.black.withOpacity(0.06)),
+                      //             boxShadow: [
+                      //               BoxShadow(
+                      //                 color: Colors.black.withOpacity(0.05),
+                      //                 blurRadius: 10,
+                      //                 offset: const Offset(0, 4),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //           child: Column(
+                      //             crossAxisAlignment: CrossAxisAlignment.start,
+                      //             children: [
+                      //               /// Header strip (small tag style)
+                      //               Container(
+                      //                 padding: const EdgeInsets.symmetric(
+                      //                     horizontal: 12, vertical: 10),
+                      //                 decoration: BoxDecoration(
+                      //                   color: const Color(0xFFE9F2F6),
+                      //                   borderRadius: BorderRadius.circular(12),
+                      //                   border: Border.all(
+                      //                       color:
+                      //                           Colors.black.withOpacity(0.05)),
+                      //                 ),
+                      //                 child: Row(
+                      //                   children: [
+                      //                     Icon(
+                      //                       Icons
+                      //                           .account_balance_wallet_rounded,
+                      //                       size: 18,
+                      //                       color: primaryAppColor
+                      //                           .withOpacity(0.9),
+                      //                     ),
+                      //                     const SizedBox(width: 10),
+                      //                     Expanded(
+                      //                       child: Text(
+                      //                         transactionType ==
+                      //                                 TransactionType.payable
+                      //                             ? "Payable balance".tr
+                      //                             : transactionType ==
+                      //                                     TransactionType
+                      //                                         .withdrawAble
+                      //                                 ? "Available balance".tr
+                      //                                 : transactionType ==
+                      //                                         TransactionType
+                      //                                             .adjustAndPayable
+                      //                                     ? "Final payable balance"
+                      //                                         .tr
+                      //                                     : transactionType ==
+                      //                                             TransactionType
+                      //                                                 .adjustWithdrawAble
+                      //                                         ? "Final receivable balance"
+                      //                                             .tr
+                      //                                         : transactionType ==
+                      //                                                 TransactionType
+                      //                                                     .adjust
+                      //                                             ? "Adjustable balance"
+                      //                                                 .tr
+                      //                                             : "Empty Balance"
+                      //                                                 .tr,
+                      //                         maxLines: 2,
+                      //                         overflow: TextOverflow.ellipsis,
+                      //                         style: const TextStyle(
+                      //                           color: Color(0xFF212121),
+                      //                           fontSize: 14,
+                      //                           fontFamily: 'Albert Sans',
+                      //                           fontWeight: FontWeight.w600,
+                      //                           height: 1.3,
+                      //                         ),
+                      //                       ),
+                      //                     ),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //
+                      //               const SizedBox(height: 14),
+                      //
+                      //               /// Amount
+                      //               Text(
+                      //                 '₹ $transactionAmount',
+                      //                 style: const TextStyle(
+                      //                   color: primaryAppColor,
+                      //                   fontSize: 26,
+                      //                   fontFamily: 'Albert Sans',
+                      //                   fontWeight: FontWeight.w800,
+                      //                   height: 1.1,
+                      //                 ),
+                      //               ),
+                      //
+                      //               const SizedBox(height: 6),
+                      //
+                      //               /// Helper line
+                      //               Text(
+                      //                 "Tap the button below to continue",
+                      //                 style: TextStyle(
+                      //                   color: Colors.black.withOpacity(0.55),
+                      //                   fontSize: 12,
+                      //                   fontFamily: 'Albert Sans',
+                      //                   fontWeight: FontWeight.w500,
+                      //                   height: 1.4,
+                      //                 ),
+                      //               ),
+                      //
+                      //               const SizedBox(height: 14),
+                      //
+                      //               /// Button (full width)
+                      //               SizedBox(
+                      //                 width: double.infinity,
+                      //                 child: CustomButtonWidget(
+                      //                   buttonText: transactionType ==
+                      //                           TransactionType.payable
+                      //                       ? "Pay Now".tr
+                      //                       : transactionType ==
+                      //                               TransactionType.withdrawAble
+                      //                           ? "withdraw".tr
+                      //                           : transactionType ==
+                      //                                   TransactionType
+                      //                                       .adjustAndPayable
+                      //                               ? "Adjust and Pay".tr
+                      //                               : transactionType ==
+                      //                                       TransactionType
+                      //                                           .adjustWithdrawAble
+                      //                                   // ? "Adjust and Withdraw".tr
+                      //                                   ? "Withdraw".tr
+                      //                                   : transactionType ==
+                      //                                           TransactionType
+                      //                                               .adjust
+                      //                                       ? "Adjust".tr
+                      //                                       : "Empty balance"
+                      //                                           .tr,
+                      //                   onPressed: transactionType ==
+                      //                           TransactionType.none
+                      //                       ? () {
+                      //                           showCustomSnackBar(
+                      //                               "No amount to withdraw.");
+                      //                         }
+                      //                       : () async {
+                      //                           await Get.find<
+                      //                                   DashBoardController>()
+                      //                               .getConfigData();
+                      //                           var config = Get.find<
+                      //                                   DashBoardController>()
+                      //                               .configModel
+                      //                               .content;
+                      //                           if (transactionType ==
+                      //                                   TransactionType
+                      //                                       .payable ||
+                      //                               transactionType ==
+                      //                                   TransactionType
+                      //                                       .adjustAndPayable) {
+                      //                             if (config?.digitalPayment ==
+                      //                                 0) {
+                      //                               showCustomSnackBar(
+                      //                                   "no_payment_option_available"
+                      //                                       .tr);
+                      //                             } else if ((config
+                      //                                         ?.minimumPayableAmount ??
+                      //                                     0) <=
+                      //                                 transactionAmount) {
+                      //                               Get.find<
+                      //                                       DashBoardController>()
+                      //                                   .updateIndex(-1,
+                      //                                       isUpdate: false);
+                      //                               showModalBottomSheet(
+                      //                                 context: context,
+                      //                                 useRootNavigator: true,
+                      //                                 isScrollControlled: true,
+                      //                                 backgroundColor:
+                      //                                     Colors.transparent,
+                      //                                 builder: (context) =>
+                      //                                     PaymentMethodDialog(
+                      //                                         amount:
+                      //                                             transactionAmount),
+                      //                               );
+                      //                             } else {
+                      //                               showCustomSnackBar(
+                      //                                   "${'Minimum Payable Amount'.tr} ${config?.minimumPayableAmount ?? 0}");
+                      //                             }
+                      //                           } else if (transactionType ==
+                      //                                   TransactionType
+                      //                                       .withdrawAble ||
+                      //                               transactionType ==
+                      //                                   TransactionType
+                      //                                       .adjustWithdrawAble) {
+                      //                             await accountController
+                      //                                 .adjustMyBalance();
+                      //                             Get.to(
+                      //                                 WithdrawRequestScreen());
+                      //                           } else if (transactionType ==
+                      //                               TransactionType.adjust) {
+                      //                             await accountController
+                      //                                 .adjustMyBalance();
+                      //                           }
+                      //                         },
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 20,
                       ),

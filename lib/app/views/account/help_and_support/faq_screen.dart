@@ -139,44 +139,46 @@ class _PartnerFaqScreenState extends State<PartnerFaqScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          /// FAQ TYPE SELECTOR
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Container(
-              height: 45,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  _buildTab("General", 0),
-                  _buildTab("Payments", 1),
-                ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            /// FAQ TYPE SELECTOR
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Container(
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    _buildTab("General", 0),
+                    _buildTab("Payments", 1),
+                  ],
+                ),
               ),
             ),
-          ),
-
-          /// FAQ LIST
-          Expanded(
-            child: filteredFaqs.isEmpty
-                ? const Center(
-                    child: Text(
-                      "No FAQ Found",
-                      style: TextStyle(color: Colors.grey),
+        
+            /// FAQ LIST
+            Expanded(
+              child: filteredFaqs.isEmpty
+                  ? const Center(
+                      child: Text(
+                        "No FAQ Found",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: filteredFaqs.length,
+                      itemBuilder: (context, index) {
+                        return _FaqTile(faq: filteredFaqs[index]);
+                      },
                     ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: filteredFaqs.length,
-                    itemBuilder: (context, index) {
-                      return _FaqTile(faq: filteredFaqs[index]);
-                    },
-                  ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
