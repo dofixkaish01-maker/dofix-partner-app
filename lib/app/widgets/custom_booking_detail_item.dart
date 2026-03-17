@@ -1,4 +1,5 @@
 import 'package:dofix_technichian/model/booking_details_content/booking_details_model.dart';
+import 'package:dofix_technichian/utils/dimensions.dart';
 
 import 'package:dofix_technichian/widgets/custom_image_viewer.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +23,10 @@ class CustomBookingDetailsItems extends StatelessWidget {
           children: [
             CustomNetworkImageWidget(
               image: detail.service?.coverImageFullPath ?? "",
-              height: 53,
-              width: 69,
+              height: 55,
+              width: 70,
             ),
-            SizedBox(
-              width: 4,
-            ),
+            SizedBox(width: Dimensions.paddingSize8),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,33 +35,34 @@ class CustomBookingDetailsItems extends StatelessWidget {
                 Text(
                   detail.variantKey ?? "",
                   style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                      overflow: TextOverflow.ellipsis),
+                    fontSize: Dimensions.fontSize14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-                SizedBox(
-                  height: 3,
-                ),
+
+                SizedBox(height: Dimensions.paddingSize4),
+
                 Text(
                   detail.serviceName ?? "",
                   style: TextStyle(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black.withAlpha((0.3 * 255).toInt()),
+                    fontSize: Dimensions.fontSize12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black.withOpacity(0.6),
                   ),
                 ),
-                SizedBox(
-                  height: 3,
-                ),
+
+                SizedBox(height: Dimensions.paddingSize4),
+
                 Text(
                   "₹${detail.serviceCost.toString()}",
                   style: TextStyle(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w500,
+                    fontSize: Dimensions.fontSize13,
+                    fontWeight: FontWeight.w600,
                     color: Colors.black,
                   ),
-                )
+                ),
               ],
             )
           ],
@@ -88,16 +88,17 @@ class CustomBookingDetailsItems extends StatelessWidget {
                   Text(
                     "X ${detail.quantity ?? 0}",
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                      fontSize: Dimensions.fontSize13,
+                      fontWeight: FontWeight.w600,
                       color: Color(0xFF207FA8),
                     ),
                   ),
+
                   Text(
                     " = ${detail.totalCost.toString()}",
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                      fontSize: Dimensions.fontSize13,
+                      fontWeight: FontWeight.w600,
                       color: Color(0xFF207FA8),
                     ),
                   ),
