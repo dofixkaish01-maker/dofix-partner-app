@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dofix_technichian/app/views/shuru_kare.dart';
 import 'package:dofix_technichian/controllers/auth_controller.dart';
 import 'package:dofix_technichian/utils/dimensions.dart';
@@ -42,7 +41,6 @@ class _CustomerOtpVerificationScreenState
       builder: (controller) {
         return SafeArea(
           child: Scaffold(
-            resizeToAvoidBottomInset: false,
             body: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -52,6 +50,10 @@ class _CustomerOtpVerificationScreenState
               ),
               child: Form(
                 key: _formKey,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
                 child: Column(
                   children: [
                     /// LOGO
@@ -81,7 +83,6 @@ class _CustomerOtpVerificationScreenState
                           child: Column(
                             children: [
                               sizedBox40(),
-
                               /// TITLE
                               Text(
                                 "Booking verification",
@@ -324,9 +325,10 @@ class _CustomerOtpVerificationScreenState
                     ),
                   ],
                 ),
-              ),
+                                ),
             ),
           ),
+          )
         );
       },
     );
