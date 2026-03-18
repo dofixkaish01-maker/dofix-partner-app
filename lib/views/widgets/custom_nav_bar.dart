@@ -1,133 +1,133 @@
-import 'package:flutter/material.dart';
-import '../../utils/images.dart';
-
-class CustomBottomNavBar extends StatefulWidget {
-  final int currentIndex;
-  final Function(int) onTap;
-
-  const CustomBottomNavBar({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
-  });
-
-  @override
-  _CustomBottomNavBarState createState() => _CustomBottomNavBarState();
-}
-
-class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
-  Alignment _alignmentForIndex(int i) {
-    switch (i) {
-      case 0:
-        return const Alignment(-0.75, 0);
-      case 1:
-        return const Alignment(-0.25, 0);
-      case 2:
-        return const Alignment(0.25, 0);
-      default:
-        return const Alignment(0.75, 0);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 5),
-        ],
-      ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          ///  OLD POSITION LOGIC (Fragile - commented only)
-          /*
-          Positioned(
-            top: -10,
-            left: MediaQuery.of(context).size.width / 4 * widget.currentIndex +
-                (widget.currentIndex == 0
-                    ? 17
-                    : widget.currentIndex == 1
-                        ? 10
-                        : widget.currentIndex == 2
-                            ? 15
-                            : 20),
-            child: CustomIndicator(),
-          ),
-          */
-
-          ///  NEW RESPONSIVE INDICATOR (Same UI, Proper Alignment)
-          Positioned(
-            top: -10,
-            left: 0,
-            right: 0,
-            child: AnimatedAlign(
-              duration: const Duration(milliseconds: 220),
-              curve: Curves.easeOut,
-              alignment: _alignmentForIndex(widget.currentIndex),
-              child: CustomIndicator(),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(Images.icHome, "HOME", 0),
-                _buildNavItem(Images.icServices, "NAYA KAAM", 1),
-                _buildNavItem(Images.icBooking, "BOOKINGS", 2),
-                _buildNavItem(Images.icProfile, "PAISE", 3),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(String icon, String label, int index) {
-    bool isSelected = widget.currentIndex == index;
-
-    return GestureDetector(
-      onTap: () => widget.onTap(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ImageIcon(
-            AssetImage(icon),
-            size: 28,
-            color: isSelected
-                ? const Color(0xFF207FA8) //  fixed hex
-                : Colors.grey,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: isSelected ? const Color(0xFF207FA8) : Colors.grey,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CustomIndicator extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 50,
-      height: 25,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(Images.icIndicator),
-          fit: BoxFit.fill,
-        ),
-      ),
-    );
-  }
-}
+// import 'package:flutter/material.dart';
+// import '../../utils/images.dart';
+//
+// class CustomBottomNavBar extends StatefulWidget {
+//   final int currentIndex;
+//   final Function(int) onTap;
+//
+//   const CustomBottomNavBar({
+//     super.key,
+//     required this.currentIndex,
+//     required this.onTap,
+//   });
+//
+//   @override
+//   _CustomBottomNavBarState createState() => _CustomBottomNavBarState();
+// }
+//
+// class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
+//   Alignment _alignmentForIndex(int i) {
+//     switch (i) {
+//       case 0:
+//         return const Alignment(-0.75, 0);
+//       case 1:
+//         return const Alignment(-0.25, 0);
+//       case 2:
+//         return const Alignment(0.25, 0);
+//       default:
+//         return const Alignment(0.75, 0);
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       decoration: const BoxDecoration(
+//         color: Colors.white,
+//         boxShadow: [
+//           BoxShadow(color: Colors.black12, blurRadius: 5),
+//         ],
+//       ),
+//       child: Stack(
+//         clipBehavior: Clip.none,
+//         children: [
+//           ///  OLD POSITION LOGIC (Fragile - commented only)
+//           /*
+//           Positioned(
+//             top: -10,
+//             left: MediaQuery.of(context).size.width / 4 * widget.currentIndex +
+//                 (widget.currentIndex == 0
+//                     ? 17
+//                     : widget.currentIndex == 1
+//                         ? 10
+//                         : widget.currentIndex == 2
+//                             ? 15
+//                             : 20),
+//             child: CustomIndicator(),
+//           ),
+//           */
+//
+//           ///  NEW RESPONSIVE INDICATOR (Same UI, Proper Alignment)
+//           Positioned(
+//             top: -10,
+//             left: 0,
+//             right: 0,
+//             child: AnimatedAlign(
+//               duration: const Duration(milliseconds: 220),
+//               curve: Curves.easeOut,
+//               alignment: _alignmentForIndex(widget.currentIndex),
+//               child: CustomIndicator(),
+//             ),
+//           ),
+//
+//           Padding(
+//             padding: const EdgeInsets.symmetric(vertical: 12),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceAround,
+//               children: [
+//                 _buildNavItem(Images.icHome, "Home", 0),
+//                 _buildNavItem(Images.icServices, "Naya kaam", 1),
+//                 _buildNavItem(Images.icBooking, "Booking", 2),
+//                 _buildNavItem(Images.icProfile, "Paise", 3),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   Widget _buildNavItem(String icon, String label, int index) {
+//     bool isSelected = widget.currentIndex == index;
+//
+//     return GestureDetector(
+//       onTap: () => widget.onTap(index),
+//       child: Column(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           ImageIcon(
+//             AssetImage(icon),
+//             size: 28,
+//             color: isSelected
+//                 ? const Color(0xFF207FA8) //  fixed hex
+//                 : Colors.grey,
+//           ),
+//           const SizedBox(height: 4),
+//           Text(
+//             label,
+//             style: TextStyle(
+//               fontSize: 12,
+//               color: isSelected ? const Color(0xFF207FA8) : Colors.grey,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+//
+// class CustomIndicator extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: 50,
+//       height: 25,
+//       decoration: const BoxDecoration(
+//         image: DecorationImage(
+//           image: AssetImage(Images.icIndicator),
+//           fit: BoxFit.fill,
+//         ),
+//       ),
+//     );
+//   }
+// }

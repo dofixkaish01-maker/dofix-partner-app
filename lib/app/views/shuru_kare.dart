@@ -579,7 +579,7 @@ class _ShuruKareState extends State<ShuruKare> {
                                         qty: qty,
                                         total: total,
                                       );
-                                    }).toList(),
+                                    }),
 
                                     if (mainServiceDetails.isNotEmpty) ...[
                                       const Padding(

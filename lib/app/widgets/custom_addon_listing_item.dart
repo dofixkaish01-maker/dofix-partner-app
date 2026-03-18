@@ -17,95 +17,106 @@ class CustomAddonListingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // /// IMAGE (NEW ADD)
+          // ClipRRect(
+          //   borderRadius: BorderRadius.circular(8),
+          //   child:
+          //   // Image.network(
+          //   //   "https://via.placeholder.com/70", // replace with real addon image
+          //   //   height: 55,
+          //   //   width: 65,
+          //   //   fit: BoxFit.cover,
+          //   // ),
+          // ),
+          //
+          // const SizedBox(width: 12),
+
+          /// TEXT SECTION
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
               children: [
+                /// SERVICE NAME
+                Text(
+                  servicename,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                /// VARIANT
                 Text(
                   variantName,
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: Colors.black.withOpacity(0.6),
                   ),
                 ),
-                SizedBox(
-                  height: 3,
-                ),
-                Text(
-                  servicename,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black.withAlpha((0.3 * 255).toInt()),
-                  ),
-                ),
-                SizedBox(
-                  height: 3,
-                ),
+
+                const SizedBox(height: 6),
+
+                /// SINGLE PRICE
                 Text(
                   "₹$singleCost",
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
-                )
+                ),
               ],
-            )
-          ],
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: 34,
-              width: 100,
-              padding: EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 7,
-              ),
-              decoration: BoxDecoration(
-                color: Color(0xFF207FA8).withAlpha(
-                  (0.1 * 255).toInt(),
-                ),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "X $quantityCount",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF207FA8),
-                      ),
-                    ),
-                    Text(
-                      " = $totalCost",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF207FA8),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ),
-          ],
-        )
-      ],
+          ),
+
+          /// RIGHT SIDE (CLEAN CALCULATION)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                "x$quantityCount",
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.black.withOpacity(0.6),
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              Text(
+                "₹$totalCost",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF207FA7),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

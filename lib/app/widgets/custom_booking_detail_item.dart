@@ -1,4 +1,5 @@
 import 'package:dofix_technichian/model/booking_details_content/booking_details_model.dart';
+import 'package:dofix_technichian/utils/dimensions.dart';
 
 import 'package:dofix_technichian/widgets/custom_image_viewer.dart';
 import 'package:flutter/material.dart';
@@ -13,100 +14,105 @@ class CustomBookingDetailsItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomNetworkImageWidget(
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// IMAGE
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: CustomNetworkImageWidget(
               image: detail.service?.coverImageFullPath ?? "",
-              height: 53,
-              width: 69,
+              height: 60,
+              width: 70,
             ),
-            SizedBox(
-              width: 4,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+          ),
+
+          const SizedBox(width: 12),
+
+          /// TEXT SECTION
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
               children: [
+                /// SERVICE NAME (top priority)
+                Text(
+                  detail.serviceName ?? "",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                /// VARIANT
                 Text(
                   detail.variantKey ?? "",
                   style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                      overflow: TextOverflow.ellipsis),
-                ),
-                SizedBox(
-                  height: 3,
-                ),
-                Text(
-                  detail.serviceName ?? "",
-                  style: TextStyle(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black.withAlpha((0.3 * 255).toInt()),
+                    fontSize: 12,
+                    color: Colors.black.withOpacity(0.6),
                   ),
                 ),
-                SizedBox(
-                  height: 3,
-                ),
+
+                const SizedBox(height: 6),
+
+                /// PRICE
                 Text(
-                  "₹${detail.serviceCost.toString()}",
+                  "₹${detail.serviceCost}",
                   style: TextStyle(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
                     color: Colors.black,
                   ),
-                )
+                ),
               ],
-            )
-          ],
-        ),
-        Flexible(
-          child: Container(
-            height: 34,
-            width: 100,
-            padding: EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 7,
-            ),
-            decoration: BoxDecoration(
-              color: Color(0xFF207FA8).withAlpha(
-                (0.1 * 255).toInt(),
-              ),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "X ${detail.quantity ?? 0}",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF207FA8),
-                    ),
-                  ),
-                  Text(
-                    " = ${detail.totalCost.toString()}",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF207FA8),
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
-        ),
-      ],
+
+          /// RIGHT SIDE (CLEAN CALCULATION)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                "x${detail.quantity ?? 0}",
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black.withOpacity(0.6),
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              Text(
+                "₹${detail.totalCost}",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF207FA7),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

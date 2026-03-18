@@ -59,10 +59,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(Images.icHome, "HOME", 0),
-                _buildNavItem(Images.icServices, "NAYA KAAM", 1),
-                _buildNavItem(Images.icBooking, "BOOKINGS", 2),
-                _buildNavItem(Images.icWallet, "PAISE", 3),
+                _buildNavItem(Images.icHome, "Home", 0),
+                _buildNavItem(Images.icServices, "Naya Kaam", 1),
+                _buildNavItem(Images.icBooking, "Bookings", 2),
+                _buildNavItem(Images.icWallet, "Paise", 3),
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,9 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
   CameraController? _controller;
   List<CameraDescription>? _cameras;
   bool _isRecording = false;
+  bool _isPaused = false;
+  int _seconds = 0;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -33,19 +37,49 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
     }
   }
 
+  Future<void> _pauseRecording() async {
+    if (_controller == null || !_isRecording || _isPaused) return;
+
+    await _controller!.pauseVideoRecording();
+    setState(() {
+      _isPaused = true;
+    });
+  }
+
+  Future<void> _resumeRecording() async {
+    if (_controller == null || !_isRecording || !_isPaused) return;
+
+    await _controller!.resumeVideoRecording();
+
+
+    setState(() {
+      _isPaused = false;
+    });
+  }
+
   Future<void> _startRecording() async {
     if (_controller == null || _isRecording) return;
+
     await _controller!.prepareForVideoRecording();
     await _controller!.startVideoRecording();
-    setState(() => _isRecording = true);
 
-    // Stop after maxSeconds
-    Future.delayed(
-      Duration(seconds: widget.maxSeconds),
-      () async {
-        if (_isRecording) await _stopRecording();
-      },
-    );
+    setState(() {
+      _isRecording = true;
+      _isPaused = false;
+      _seconds = widget.maxSeconds;
+    });
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (!_isPaused && _seconds > 0) {
+        setState(() {
+          _seconds--;
+        });
+      }
+
+      if (_seconds == 0) {
+        _stopRecording();
+      }
+    });
   }
 
   Future<void> _stopRecording() async {
@@ -54,7 +88,8 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
     setState(() {
       _isRecording = false;
     });
-
+    _timer?.cancel();
+    _timer = null;
     String path = file.path;
     if (path.endsWith('.temp')) {
       final newPath = path.replaceAll('.temp', '.mp4');
@@ -64,9 +99,9 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
       Navigator.pop(context, File(path));
     }
   }
-
   @override
   void dispose() {
+    _timer?.cancel();
     _controller?.dispose();
     super.dispose();
   }
@@ -78,7 +113,7 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
     }
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text('Record Video')),
+        appBar: AppBar(title: Text('Record Video'),backgroundColor: Color(0xff3683ab),),
         body: Stack(
           children: [
             CameraPreview(_controller!),
@@ -87,21 +122,78 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: const EdgeInsets.all(32.0),
-                  child: FloatingActionButton(
-                    onPressed: _startRecording,
-                    child: Icon(Icons.videocam),
-                  ),
+                  child: GestureDetector(
+                    onTap: _startRecording,
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Color(0xff3683ab),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.videocam, color: Colors.white),
+                    ),
+                  )
                 ),
               ),
             if (_isRecording)
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Text(
-                    'Recording... (max ${widget.maxSeconds}sec)',
-                    style: TextStyle(color: Colors.red, fontSize: 18),
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        _isPaused ? 'Paused ($_seconds s)' : '$_seconds s',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 10),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        /// Pause / Resume Button
+                        GestureDetector(
+                          onTap: _isPaused ? _resumeRecording : _pauseRecording,
+                          child: Container(
+                            padding: EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: Color(0xe293c8e6),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              _isPaused ? Icons.play_arrow_rounded : Icons.pause,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 20),
+
+                        /// Stop Button
+                        GestureDetector(
+                          onTap: _stopRecording,
+                          child: Container(
+                            padding: EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: Color(0xff3683ab),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(Icons.stop, color: Colors.white),
+                          ),
+                        )                      ],
+                    ),
+                    SizedBox(height: 30),
+                  ],
                 ),
               ),
           ],
