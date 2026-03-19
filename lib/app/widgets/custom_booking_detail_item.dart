@@ -1,6 +1,4 @@
 import 'package:dofix_technichian/model/booking_details_content/booking_details_model.dart';
-import 'package:dofix_technichian/utils/dimensions.dart';
-
 import 'package:dofix_technichian/widgets/custom_image_viewer.dart';
 import 'package:flutter/material.dart';
 
