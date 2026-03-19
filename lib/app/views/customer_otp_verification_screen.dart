@@ -34,26 +34,25 @@ class _CustomerOtpVerificationScreenState
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _otpController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AuthController>(
       builder: (controller) {
         return SafeArea(
-          child: Scaffold(
-            body: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Images.icLoginBg),
-                  fit: BoxFit.cover,
-                ),
+            child: Scaffold(
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Images.icLoginBg),
+                fit: BoxFit.cover,
               ),
-              child: Form(
-                key: _formKey,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height,
-                  ),
+            ),
+            child: Form(
+              key: _formKey,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
+                ),
                 child: Column(
                   children: [
                     /// LOGO
@@ -73,8 +72,7 @@ class _CustomerOtpVerificationScreenState
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
-                            topLeft:
-                            Radius.circular(Dimensions.radius40),
+                            topLeft: Radius.circular(Dimensions.radius40),
                           ),
                         ),
                         child: Padding(
@@ -83,6 +81,7 @@ class _CustomerOtpVerificationScreenState
                           child: Column(
                             children: [
                               sizedBox40(),
+
                               /// TITLE
                               Text(
                                 "Booking verification",
@@ -117,7 +116,7 @@ class _CustomerOtpVerificationScreenState
                                   ],
                                   controller: _otpController,
                                   keyboardType: TextInputType.number,
-                                  maxLength: 10,
+                                  maxLength: 6,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     fontSize: 20,
@@ -133,35 +132,35 @@ class _CustomerOtpVerificationScreenState
                                     ),
                                     filled: true,
                                     fillColor: Colors.white,
-                                    contentPadding:
-                                    const EdgeInsets.symmetric(vertical: 14),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 14),
                                     enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(Dimensions.radius10),
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.radius10),
                                       borderSide: BorderSide(
                                         color: Theme.of(context).primaryColor,
                                         width: 1,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(Dimensions.radius10),
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.radius10),
                                       borderSide: BorderSide(
                                         color: Theme.of(context).primaryColor,
                                         width: 1.5,
                                       ),
                                     ),
                                     errorBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(Dimensions.radius10),
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.radius10),
                                       borderSide: const BorderSide(
                                         color: redColor,
                                         width: 1,
                                       ),
                                     ),
                                     focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(Dimensions.radius10),
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.radius10),
                                       borderSide: const BorderSide(
                                         color: redColor,
                                         width: 1.5,
@@ -169,8 +168,9 @@ class _CustomerOtpVerificationScreenState
                                     ),
                                   ),
                                   validator: (value) {
-                                    if (value == null || value.trim().length != 4) {
-                                      return "Enter valid 4-digit OTP";
+                                    if (value == null ||
+                                        value.trim().length != 6) {
+                                      return "Enter valid 6-digit OTP";
                                     }
                                     return null;
                                   },
@@ -179,145 +179,161 @@ class _CustomerOtpVerificationScreenState
 
                               sizedBox20(),
 
-                            // verify otp button
-                            // ElevatedButton(
-                            //   onPressed: () {
-                            //     var dashboardController=Get.find<DashBoardController>();
-                            //     String phone = dashboardController
-                            //         .providerDashboardModel
-                            //         .content
-                            //         ?.providerInfo
-                            //         ?.owner
-                            //         ?.phone ?? "";
-                            //
-                            //     // agar +91 already hai to dobara mat lagao
-                            //     if (!phone.startsWith('+')) {
-                            //       phone = '+91$phone';
-                            //     }
-                            //
-                            //     Get.find<AuthController>().verifyProviderOtpApi(
-                            //       // phone: "7645973958", // provider
-                            //       phone: phone, // correct provider phone
-                            //       otp: _otpController.text.trim(),
-                            //       // bookingId: "7814990a-328f-48b0-a5a9-f9ee64212f6d",
-                            //       bookingId: dashboardController.bookingDetails?.content?.id ?? "",
-                            //       token: dashboardController.authRepo.apiClient.token.toString(),
-                            //       // zoneId: "e8554d44-dcf2-47c7-8cf9-400d05a1340f",
-                            //       zoneId: dashboardController.providerDashboardModel.content?.providerInfo?.zoneId ?? "",
-                            //     );
-                            //   },
-                            //   child: const Text("Verify OTP"),
-                            // ),
+                              // verify otp button
+                              // ElevatedButton(
+                              //   onPressed: () {
+                              //     var dashboardController=Get.find<DashBoardController>();
+                              //     String phone = dashboardController
+                              //         .providerDashboardModel
+                              //         .content
+                              //         ?.providerInfo
+                              //         ?.owner
+                              //         ?.phone ?? "";
+                              //
+                              //     // agar +91 already hai to dobara mat lagao
+                              //     if (!phone.startsWith('+')) {
+                              //       phone = '+91$phone';
+                              //     }
+                              //
+                              //     Get.find<AuthController>().verifyProviderOtpApi(
+                              //       // phone: "7645973958", // provider
+                              //       phone: phone, // correct provider phone
+                              //       otp: _otpController.text.trim(),
+                              //       // bookingId: "7814990a-328f-48b0-a5a9-f9ee64212f6d",
+                              //       bookingId: dashboardController.bookingDetails?.content?.id ?? "",
+                              //       token: dashboardController.authRepo.apiClient.token.toString(),
+                              //       // zoneId: "e8554d44-dcf2-47c7-8cf9-400d05a1340f",
+                              //       zoneId: dashboardController.providerDashboardModel.content?.providerInfo?.zoneId ?? "",
+                              //     );
+                              //   },
+                              //   child: const Text("Verify OTP"),
+                              // ),
 
                               // verify otp button
 
-                            SizedBox(
-                              width: double.infinity,
-                              height: 45,
-                              child: ElevatedButton(
-                                style:ElevatedButton.styleFrom(
-                                  backgroundColor: primaryAppColor
-                                ) ,
-                                onPressed: () async {
-                                  var dashboardController = Get.find<DashBoardController>();
-                                  var authController = Get.find<AuthController>();
+                              SizedBox(
+                                width: double.infinity,
+                                height: 45,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: primaryAppColor),
+                                  onPressed: () async {
+                                    if (!_formKey.currentState!.validate())
+                                      return;
+                                    var dashboardController =
+                                        Get.find<DashBoardController>();
+                                    var authController =
+                                        Get.find<AuthController>();
 
-                                  String phone = dashboardController
-                                      .providerDashboardModel
-                                      .content
-                                      ?.providerInfo
-                                      ?.owner
-                                      ?.phone ??
-                                      "";
+                                    String phone = dashboardController
+                                            .providerDashboardModel
+                                            .content
+                                            ?.providerInfo
+                                            ?.owner
+                                            ?.phone ??
+                                        "";
 
-                                  if (!phone.startsWith('+')) {
-                                    phone = '+91$phone';
-                                  }
+                                    if (!phone.startsWith('+')) {
+                                      phone = '+91$phone';
+                                    }
 
-                                  bool isVerified = await authController.verifyProviderOtpApi(
-                                    phone: phone,
-                                    otp: _otpController.text.trim(),
-                                    bookingId:
-                                    dashboardController.bookingDetails?.content?.id ?? "",
-                                    token: dashboardController.authRepo.apiClient.token.toString(),
-                                    zoneId: dashboardController
-                                        .providerDashboardModel.content?.providerInfo?.zoneId ??
-                                        "",
-                                  );
+                                    bool isVerified = await authController
+                                        .verifyProviderOtpApi(
+                                      phone: phone,
+                                      otp: _otpController.text.trim(),
+                                      bookingId: dashboardController
+                                              .bookingDetails?.content?.id ??
+                                          "",
+                                      token: dashboardController
+                                          .authRepo.apiClient.token
+                                          .toString(),
+                                      zoneId: dashboardController
+                                              .providerDashboardModel
+                                              .content
+                                              ?.providerInfo
+                                              ?.zoneId ??
+                                          "",
+                                    );
 
-                                  if (!isVerified) {
-                                    Get.snackbar("Error", "OTP verify nahi hua");
-                                    return;
-                                  }
+                                    if (!isVerified) {
+                                      Get.snackbar(
+                                          "Error", "OTP verify nahi hua");
+                                      return;
+                                    }
 
-                                  /// ✅ now mark complete
-                                  Map<String, String> body = {
-                                    "booking_id": dashboardController.bookingDetails!.content!.id.toString(),
-                                    "booking_status": "completed"
-                                  };
+                                    /// ✅ now mark complete
+                                    Map<String, String> body = {
+                                      "booking_id": dashboardController
+                                          .bookingDetails!.content!.id
+                                          .toString(),
+                                      "booking_status": "completed"
+                                    };
 
-                                  await dashboardController.updateBookingStatus(
-                                    body,
-                                    images: dashboardController.jobStartImages,
-                                    videos: dashboardController.jobStartVideo,
-                                    postImageName: 'evidence_photos',
-                                    postVideoName: 'post_work_video',
-                                  );
+                                    await dashboardController
+                                        .updateBookingStatus(
+                                      body,
+                                      images:
+                                          dashboardController.jobStartImages,
+                                      videos: dashboardController.jobStartVideo,
+                                      postImageName: 'evidence_photos',
+                                      postVideoName: 'post_work_video',
+                                    );
 
-
-                                  Get.off(() => ShuruKare(
-                                    id: dashboardController.bookingDetails!.content!.id.toString(),
-                                  ));
-                                  // var dashboardController = Get.find<DashBoardController>();
-                                  // var authController = Get.find<AuthController>();
-                                  //
-                                  // String phone = dashboardController
-                                  //     .providerDashboardModel
-                                  //     .content
-                                  //     ?.providerInfo
-                                  //     ?.owner
-                                  //     ?.phone ??
-                                  //     "";
-                                  //
-                                  // if (!phone.startsWith('+')) {
-                                  //   phone = '+91$phone';
-                                  // }
-                                  //
-                                  // bool isVerified = await authController.verifyProviderOtpApi(
-                                  //   phone: phone,
-                                  //   otp: _otpController.text.trim(),
-                                  //   bookingId:
-                                  //   dashboardController.bookingDetails?.content?.id ?? "",
-                                  //   token: dashboardController.authRepo.apiClient.token.toString(),
-                                  //   zoneId: dashboardController.providerDashboardModel
-                                  //       .content
-                                  //       ?.providerInfo
-                                  //       ?.zoneId ??
-                                  //       "",
-                                  // );
-                                  // if (isVerified) {
-                                  //   /// 🔁 latest booking detail fetch karo
-                                  //   await dashboardController.getBookingDetails(
-                                  //     id: dashboardController.bookingDetails!.content!.id.toString(),
-                                  //   );
-                                  //
-                                  //   /// ❌ home mat bhejo
-                                  //   /// ✅ directly booking detail (Completed state)
-                                  //   Get.off(
-                                  //         () => ShuruKare(
-                                  //       id: dashboardController.bookingDetails!.content!.id.toString(),
-                                  //     ),
-                                  //   );
-                                  // }
-
-
-                                },
-                                child: const Text("Verify OTP",style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600
-                                ),),
+                                    Get.off(() => ShuruKare(
+                                          id: dashboardController
+                                              .bookingDetails!.content!.id
+                                              .toString(),
+                                        ));
+                                    // var dashboardController = Get.find<DashBoardController>();
+                                    // var authController = Get.find<AuthController>();
+                                    //
+                                    // String phone = dashboardController
+                                    //     .providerDashboardModel
+                                    //     .content
+                                    //     ?.providerInfo
+                                    //     ?.owner
+                                    //     ?.phone ??
+                                    //     "";
+                                    //
+                                    // if (!phone.startsWith('+')) {
+                                    //   phone = '+91$phone';
+                                    // }
+                                    //
+                                    // bool isVerified = await authController.verifyProviderOtpApi(
+                                    //   phone: phone,
+                                    //   otp: _otpController.text.trim(),
+                                    //   bookingId:
+                                    //   dashboardController.bookingDetails?.content?.id ?? "",
+                                    //   token: dashboardController.authRepo.apiClient.token.toString(),
+                                    //   zoneId: dashboardController.providerDashboardModel
+                                    //       .content
+                                    //       ?.providerInfo
+                                    //       ?.zoneId ??
+                                    //       "",
+                                    // );
+                                    // if (isVerified) {
+                                    //   /// 🔁 latest booking detail fetch karo
+                                    //   await dashboardController.getBookingDetails(
+                                    //     id: dashboardController.bookingDetails!.content!.id.toString(),
+                                    //   );
+                                    //
+                                    //   /// ❌ home mat bhejo
+                                    //   /// ✅ directly booking detail (Completed state)
+                                    //   Get.off(
+                                    //         () => ShuruKare(
+                                    //       id: dashboardController.bookingDetails!.content!.id.toString(),
+                                    //     ),
+                                    //   );
+                                    // }
+                                  },
+                                  child: const Text(
+                                    "Verify OTP",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
                               ),
-                            ),
                             ],
                           ),
                         ),
@@ -325,11 +341,10 @@ class _CustomerOtpVerificationScreenState
                     ),
                   ],
                 ),
-                                ),
+              ),
             ),
           ),
-          )
-        );
+        ));
       },
     );
   }

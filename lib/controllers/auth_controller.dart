@@ -117,10 +117,10 @@ class AuthController extends GetxController implements GetxService {
     required String bookingId,
     required String token,
   }) async {
-    if (phone.length != 10) {
-      showCustomSnackBar("Invalid customer phone number", isError: true);
-      return;
-    }
+    // if (phone.length != 1) {
+    //   showCustomSnackBar("Invalid customer phone number", isError: true);
+    //   return;
+    // }
 
     showLoading();
     update();
