@@ -4,12 +4,14 @@ class DetailsComponent extends StatelessWidget {
   final String title;
   final String subTitel;
   final String? image;
+  final Widget? trailing;
 
   const DetailsComponent({
     super.key,
     required this.title,
     required this.subTitel,
     this.image,
+    this.trailing
   });
 
   @override

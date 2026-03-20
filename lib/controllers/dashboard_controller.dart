@@ -2614,7 +2614,7 @@ class DashBoardController extends GetxController implements GetxService {
           savedAddonModelList.value = [SavedAddOnModel.fromJson(decoded)];
           log("API returned a single map, converted to list");
         } else {
-          log("Unexpected response type: " + decoded.runtimeType.toString());
+          log("Unexpected response type: ${decoded.runtimeType}");
           savedAddonModelList.value = [];
         }
         log("Final count: ${savedAddonModelList.length}");

@@ -11,6 +11,7 @@ class SavedAddOnModel {
   final int? id;
   final String? bookingId;
   final String? serviceId;
+  final String? thumbnailFullPath;
   final String? serviceName;
   final String? variantKey;
   final int? serviceCost;
@@ -29,6 +30,7 @@ class SavedAddOnModel {
     this.id,
     this.bookingId,
     this.serviceId,
+    this.thumbnailFullPath,
     this.serviceName,
     this.variantKey,
     this.serviceCost,
@@ -49,6 +51,7 @@ class SavedAddOnModel {
         id: json["id"],
         bookingId: json["booking_id"],
         serviceId: json["service_id"],
+        thumbnailFullPath: json["thumbnail_full_path"],
         serviceName: json["service_name"],
         variantKey: json["variant_key"],
         serviceCost: json["service_cost"],

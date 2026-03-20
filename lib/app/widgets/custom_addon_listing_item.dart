@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomAddonListingItem extends StatelessWidget {
+  final String thumbnailFullPath;
   final String servicename;
   final String variantName;
   final String singleCost;
@@ -8,6 +9,7 @@ class CustomAddonListingItem extends StatelessWidget {
   final String totalCost;
   const CustomAddonListingItem({
     super.key,
+    required this.thumbnailFullPath,
     required this.servicename,
     required this.variantName,
     required this.singleCost,
@@ -34,16 +36,22 @@ class CustomAddonListingItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // /// IMAGE (NEW ADD)
+          /// IMAGE (NEW ADD)
           // ClipRRect(
           //   borderRadius: BorderRadius.circular(8),
           //   child:
-          //   // Image.network(
-          //   //   "https://via.placeholder.com/70", // replace with real addon image
-          //   //   height: 55,
-          //   //   width: 65,
-          //   //   fit: BoxFit.cover,
-          //   // ),
+          //   thumbnailFullPath.isNotEmpty
+          //       ? Image.network(
+          //     thumbnailFullPath,
+          //           width: 70,
+          //           height: 70,
+          //           fit: BoxFit.cover,
+          //         )
+          //       : Container(
+          //           width: 70,
+          //           height: 70,
+          //           color: Colors.grey.withOpacity(0.2),
+          //       ),
           // ),
           //
           // const SizedBox(width: 12),

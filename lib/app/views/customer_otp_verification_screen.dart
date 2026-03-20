@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:dofix_technichian/app/views/shuru_kare.dart';
 import 'package:dofix_technichian/controllers/auth_controller.dart';
 import 'package:dofix_technichian/utils/dimensions.dart';
@@ -9,10 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../controllers/dashboard_controller.dart';
-import '../../helper/route_helper.dart';
-import '../../views/dashboard/dashboard_screen.dart';
 
 class CustomerOtpVerificationScreen extends StatefulWidget {
   final String phoneNo;

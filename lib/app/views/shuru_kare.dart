@@ -24,7 +24,6 @@ import '../../widgets/video_recorder_widget.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/media_upload_widget.dart';
 import 'package:video_player/video_player.dart';
-
 import 'customer_otp_verification_screen.dart';
 
 class ShuruKare extends StatefulWidget {
@@ -44,7 +43,6 @@ class ShuruKare extends StatefulWidget {
 class _ShuruKareState extends State<ShuruKare> {
   VideoPlayerController? _videoPlayerController;
   final dashboardController = Get.find<DashBoardController>();
-
   @override
   void dispose() {
     _videoPlayerController?.dispose();
@@ -163,7 +161,7 @@ class _ShuruKareState extends State<ShuruKare> {
 
         final int totalBreakdownItems =
             mainServiceDetails.length + addonServiceDetails.length;
-
+        final booking = Get.find<DashBoardController>().bookingDetails?.content;
         double itemTotal = 0;
 
         for (final item in mainServiceDetails) {
@@ -192,19 +190,6 @@ class _ShuruKareState extends State<ShuruKare> {
                   "0",
             ) ??
             0;
-        //
-        // final double taxAmount = double.tryParse(
-        //       controller.bookingDetails?.content?.totalTaxAmount?.toString() ??
-        //           "0",
-        //     ) ??
-        //     0;
-
-        // final double totalAmount = double.tryParse(
-        //       controller.bookingDetails?.content?.totalBookingAmount
-        //               ?.toString() ??
-        //           "0",
-        //     ) ??
-        //     0;
         final mainServices = details.where((d) => d.isAddOn == 0).toList();
         debugPrint(
             "ShuruKare===> ${Get.find<DashBoardController>().isBookingDetailsLoading}");
@@ -236,7 +221,7 @@ class _ShuruKareState extends State<ShuruKare> {
                               child: Container(
                                 height: 43,
                                 decoration:
-                                    BoxDecoration(color: Color(0xfffE9F2F6)),
+                                    BoxDecoration(color: Color(0xfffe9f2f6)),
                                 child: Row(
                                   children: [
                                     SizedBox(
@@ -258,22 +243,17 @@ class _ShuruKareState extends State<ShuruKare> {
                                         )
                                       ],
                                     )),
+
                                     Expanded(
                                       child: Text(
-                                        Get.find<DashBoardController>()
-                                                    .bookingDetails
-                                                    ?.content
-                                                    ?.isPaid ==
-                                                0
-                                            ? "Unpaid"
-                                            : "Paid",
+                                        booking?.isPaid == 0 ? "Unpaid" : "Paid",
                                         textAlign: TextAlign.end,
-                                        style: albertSansRegular.copyWith(
-                                          color: Color(0xff207FA8),
+                                        style: TextStyle(
+                                          color: booking?.isPaid == 0 ? Colors.orange : Colors.green,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
+                                    ),                                  SizedBox(
                                       width: 10,
                                     ),
                                   ],
@@ -282,63 +262,6 @@ class _ShuruKareState extends State<ShuruKare> {
                             )
                           ],
                         ),
-                        // const SizedBox(
-                        //   height: 15,
-                        // ),
-                        // Visibility(
-                        //   visible: (dashboardController
-                        //           .bookingDetails?.content?.bookingStatus !=
-                        //       'completed'),
-                        //   child: InkWell(
-                        //     onTap: () async {
-                        //       String phone = Get.find<DashBoardController>()
-                        //               .bookingDetails
-                        //               ?.content
-                        //               ?.serviceAssignCustomerPhone ??
-                        //           "";
-                        //       if (phone.isNotEmpty) {
-                        //         final Uri phoneUri = Uri(
-                        //           scheme: 'tel',
-                        //           path: phone,
-                        //         );
-                        //         if (await canLaunchUrl(
-                        //           phoneUri,
-                        //         )) {
-                        //           await launchUrl(
-                        //             phoneUri,
-                        //             mode: LaunchMode.externalApplication,
-                        //           );
-                        //         } else {}
-                        //       }
-                        //     },
-                        //     child: Padding(
-                        //       padding:
-                        //           const EdgeInsets.symmetric(horizontal: 16.0),
-                        //       child: Container(
-                        //         decoration: BoxDecoration(
-                        //           color: Colors.white,
-                        //           border: Border.all(
-                        //               color: primaryAppColor, width: 1),
-                        //           borderRadius: BorderRadius.circular(5),
-                        //         ),
-                        //         child: Padding(
-                        //           padding: const EdgeInsets.all(16.0),
-                        //           child: Center(
-                        //             child: Text(
-                        //               "Call Customer",
-                        //               style: TextStyle(
-                        //                 color: primaryAppColor,
-                        //                 fontSize: 14,
-                        //                 fontFamily: 'Albert Sans',
-                        //                 fontWeight: FontWeight.w500,
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                         const SizedBox(
                           height: 15,
                         ),
@@ -437,6 +360,9 @@ class _ShuruKareState extends State<ShuruKare> {
                                           padding: const EdgeInsets.only(
                                               bottom: 16.0),
                                           child: CustomAddonListingItem(
+                                            thumbnailFullPath : dashboardController
+                                                .savedAddonModelList[index]
+                                                .thumbnailFullPath.toString(),
                                             variantName: dashboardController
                                                 .savedAddonModelList[index]
                                                 .variantKey!,
@@ -519,12 +445,33 @@ class _ShuruKareState extends State<ShuruKare> {
                               SizedBox(
                                 height: 35,
                               ),
-                              DetailsComponent(
-                                title: 'Problem title',
-                                subTitel: controller.bookingDetails?.content
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  DetailsComponent(
+                                    title: 'Problem title',
+                                    subTitel: controller.bookingDetails?.content
                                         ?.detail?.first.service?.name ??
-                                    "No Title",
-                                image: 'assets/icons/ic_tool.png',
+                                        "No Title",
+                                    image: 'assets/icons/ic_tool.png',
+                                  ),
+
+                                  SizedBox(width: 10),
+
+                                  DetailsComponent(
+                                    title: 'Service status',
+                                    subTitel: controller.bookingDetails?.content?.bookingStatus ??
+                                        "No Status",
+                                    image: 'assets/icons/ic_tool.png',
+                                    trailing: _statusChip(
+                                      controller.bookingDetails?.content?.bookingStatus,
+                                      _bookingStatusColor(
+                                        controller.bookingDetails?.content?.bookingStatus,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(
                                 height: 25,
@@ -567,7 +514,7 @@ class _ShuruKareState extends State<ShuruKare> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      "Price Details ($totalBreakdownItems items)",
+                                      "Service status ($totalBreakdownItems items)",
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
@@ -668,67 +615,6 @@ class _ShuruKareState extends State<ShuruKare> {
                               const SizedBox(
                                 height: 30,
                               ),
-                              // Padding(
-                              //   padding: const EdgeInsets.only(bottom: 8),
-                              //   child: Row(
-                              //     children: [
-                              //       Text(
-                              //         "Price Details (${details.length} items)",
-                              //         style: const TextStyle(
-                              //           fontSize: 14,
-                              //           fontWeight: FontWeight.w600,
-                              //           color: Colors.black87,
-                              //         ),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
-                              //
-                              // /// BILLING CARD
-                              // Container(
-                              //     padding: const EdgeInsets.symmetric(
-                              //       horizontal: 16,
-                              //       vertical: 16,
-                              //     ),
-                              //     decoration: BoxDecoration(
-                              //       color: const Color(0xFFF7FAFC),
-                              //       borderRadius: BorderRadius.circular(7),
-                              //       border: Border.all(
-                              //           color: const Color(0xFFE6EBEF)),
-                              //     ),
-                              //     child: Column(
-                              //       children: [
-                              //         priceRow('Tax & Fee',booking.content
-                              //                 ?.),
-                              //         const SizedBox(height: 6),
-                              //
-                              //         Padding(
-                              //           padding: const EdgeInsets.symmetric(
-                              //               vertical: 14),
-                              //           child: DottedBorder(
-                              //             color: const Color(0xFFD0D7DE),
-                              //             strokeWidth: 1,
-                              //             dashPattern: const [6, 4],
-                              //             customPath: (size) {
-                              //               return Path()
-                              //                 ..moveTo(0, 0)
-                              //                 ..lineTo(size.width, 0);
-                              //             },
-                              //             child: const SizedBox(
-                              //               width: double.infinity,
-                              //               height: 1,
-                              //             ),
-                              //           ),
-                              //         ),
-                              //
-                              //         priceRow(
-                              //           "Total Amount",
-                              //           grandTotal,
-                              //           isBold: true,
-                              //           color: const Color(0xFF207FA7),
-                              //         ),
-                              //       ],
-                              //     ),
                               if (Get.find<DashBoardController>()
                                           .bookingDetails
                                           ?.content
@@ -3242,4 +3128,33 @@ Future<Map<String, dynamic>?> pickFromCamera(BuildContext context) async {
       );
     },
   );
+}
+
+Widget _statusChip(String? text, Color color) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+    decoration: BoxDecoration(
+      color: color.withOpacity(0.15),
+      borderRadius: BorderRadius.circular(20),
+    ),
+    child: Text(
+      text?.toUpperCase() ?? '',
+      style: TextStyle(
+        color: color,
+        fontSize: 12,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+  );
+}
+
+Color _bookingStatusColor(String? status) {
+  switch (status) {
+    case "completed":
+      return Colors.green;
+    case "ongoing":
+      return Colors.orange;
+    default:
+      return Colors.grey;
+  }
 }
